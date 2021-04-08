@@ -3,15 +3,14 @@ package project;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import api.ApiRequest;
 
 public class Dashboard extends JFrame {
 
@@ -63,19 +62,10 @@ public class Dashboard extends JFrame {
 	
 	private void create_subPanel() throws IOException, InterruptedException {
 		// retrieve all subject from API
-		String userUrl = API.Config.ROOT_URL + "/subject";
-		
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest
-				.newBuilder(URI.create(userUrl))
-				.setHeader("Authorization", API.Config.API_KEY)
-				.GET()
-				.build();
-		
-	    HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		HttpResponse<String> response = ApiRequest.get("/subject");
 
 	    System.out.println("Part 1\n----");
-	    System.out.println(request.uri());
+//	    System.out.println(request.uri());
 	    System.out.println("Response code: " + response.statusCode()); // Status code of 4xx or 5xx indicates an error with the request or with the server, respectively.
 	    System.out.println("Full JSON response: " + response.body());
 	    System.out.println("----\n\n");
