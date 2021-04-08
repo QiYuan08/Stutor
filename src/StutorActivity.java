@@ -1,3 +1,5 @@
+import project.Dashboard;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +10,10 @@ public class StutorActivity {
             @Override
             public void actionPerformed(ActionEvent e) {
                 activityTitle.setText("Login Successful!");
+                Dashboard dashboard = new Dashboard();
+                dashboard.setVisible(true);
+//                StutorApp stutorApp = new StutorApp();
+//                stutorApp.setVisi
             }
         });
     }
