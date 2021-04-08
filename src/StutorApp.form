@@ -7,7 +7,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="f8a0d" binding="loginPage" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="f8a0d" binding="loginPage" layout-manager="GridLayoutManager" row-count="7" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="10" left="15" bottom="15" right="15"/>
         <constraints>
           <card name="Card1"/>
@@ -52,18 +52,22 @@
               <text value="Password: "/>
             </properties>
           </component>
-          <component id="cdf5" class="javax.swing.JTextField" binding="passwordInput">
+          <vspacer id="ebdff">
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="24b90" class="javax.swing.JPasswordField" binding="passwordInput">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                <minimum-size width="25" height="-1"/>
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
             <properties/>
           </component>
-          <component id="c9b77" class="javax.swing.JButton" binding="loginUser">
+          <component id="c9b77" class="javax.swing.JButton" binding="loginUserButton">
             <constraints>
-              <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <enabled value="true"/>
@@ -71,14 +75,98 @@
               <text value="Log In"/>
             </properties>
           </component>
-          <vspacer id="ebdff">
+          <component id="c2f2b" class="javax.swing.JLabel">
             <constraints>
-              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
-          </vspacer>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="If you do not have a StuTor account, register for one instead here:"/>
+            </properties>
+          </component>
+          <component id="80ef8" class="javax.swing.JButton" binding="registerPageButton">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Register a StuTor Account"/>
+            </properties>
+          </component>
         </children>
       </grid>
-      <grid id="3a99f" binding="dashboardPage" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="836fd" binding="registrationPage" layout-manager="GridLayoutManager" row-count="5" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="10" left="15" bottom="15" right="15"/>
+        <constraints>
+          <card name="Card3"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c41a4" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <font name="Bahnschrift" size="20" style="1"/>
+              <text value="User Registration"/>
+            </properties>
+          </component>
+          <vspacer id="d5feb">
+            <constraints>
+              <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="ea1c6" class="javax.swing.JTextField" binding="regUsernameInput">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <minimum-size width="25" height="-1"/>
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="35948" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Username: "/>
+            </properties>
+          </component>
+          <component id="2ca0a" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Password: "/>
+            </properties>
+          </component>
+          <component id="f8cf1" class="javax.swing.JPasswordField" binding="regPasswordInput">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties/>
+          </component>
+          <component id="50b68" class="javax.swing.JButton" binding="registerUserButton">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="true"/>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Register"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="3a99f" binding="dashboardPage" layout-manager="GridLayoutManager" row-count="7" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="10" left="15" bottom="15" right="15"/>
         <constraints>
           <card name="Card2"/>
@@ -86,19 +174,226 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="8313b" class="javax.swing.JLabel">
+          <component id="13183" class="javax.swing.JLabel">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="I DID IT"/>
+              <enabled value="false"/>
+              <font name="Bahnschrift" size="20" style="1"/>
+              <text value="Stutor"/>
+            </properties>
+          </component>
+          <component id="21a41" class="javax.swing.JButton" binding="tutorial1Button">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Button"/>
+            </properties>
+          </component>
+          <component id="aa71" class="javax.swing.JButton" binding="tutorial2Button">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Button"/>
+            </properties>
+          </component>
+          <component id="c38db" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Tutorials:"/>
+            </properties>
+          </component>
+          <component id="69934" class="javax.swing.JButton" binding="tutorial3Button">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Button"/>
+            </properties>
+          </component>
+          <component id="1424c" class="javax.swing.JButton" binding="tutorial4Button">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Button"/>
+            </properties>
+          </component>
+          <component id="54213" class="javax.swing.JButton" binding="tutorial5Button">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Button"/>
+            </properties>
+          </component>
+          <component id="2441f" class="javax.swing.JButton" binding="editProfileButton">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Edit Profile"/>
             </properties>
           </component>
           <vspacer id="f1750">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
           </vspacer>
+        </children>
+      </grid>
+      <grid id="2adb5" binding="profilePage" layout-manager="GridLayoutManager" row-count="9" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="10" left="15" bottom="15" right="15"/>
+        <constraints>
+          <card name="Card4"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="231b0" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <font name="Bahnschrift" size="20" style="1"/>
+              <text value="Profile"/>
+            </properties>
+          </component>
+          <component id="d3f29" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Competencies: "/>
+            </properties>
+          </component>
+          <component id="cdeea" class="javax.swing.JList" binding="competenciesList">
+            <constraints>
+              <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+            </properties>
+          </component>
+          <component id="ab3d7" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Qualifications:"/>
+            </properties>
+          </component>
+          <component id="18c50" class="javax.swing.JList" binding="qualificationsList">
+            <constraints>
+              <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+            </properties>
+          </component>
+          <component id="d643d" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Initiated Bids:"/>
+            </properties>
+          </component>
+          <component id="fcb3d" class="javax.swing.JList" binding="initiatedBidsList">
+            <constraints>
+              <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="50"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+            </properties>
+          </component>
+          <component id="ca3ee" class="javax.swing.JLabel" binding="accountType">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="464f6" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Account Type:"/>
+            </properties>
+          </component>
+          <component id="11894" class="javax.swing.JLabel" binding="name">
+            <constraints>
+              <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="a7c4" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Name: "/>
+            </properties>
+          </component>
+          <component id="5d6ae" class="javax.swing.JLabel" binding="username">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="5af53" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Username: "/>
+            </properties>
+          </component>
+          <vspacer id="7a929">
+            <constraints>
+              <grid row="7" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </vspacer>
+          <component id="22ab8" class="javax.swing.JButton" binding="DashboardPageButton">
+            <constraints>
+              <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Bahnschrift" size="14" style="0"/>
+              <text value="Back to Dashboard"/>
+            </properties>
+          </component>
         </children>
       </grid>
     </children>
