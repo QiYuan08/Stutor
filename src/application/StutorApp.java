@@ -1,3 +1,5 @@
+package application;
+
 import api.ApiRequest;
 
 import javax.swing.*;
@@ -10,6 +12,7 @@ import java.net.http.HttpResponse;
 public class StutorApp {
     private JFrame frame;
     private CardLayout cardLayout;
+//    private LoginPage loginPage;
     private JPanel rootPanel, loginPage, dashboardPage, registrationPage, profilePage;
     private JLabel activityTitle, usernameField, passwordField, username, name, accountType;
     private JTextField usernameInput, regUsernameInput, gNameInput, fNameInput;
@@ -24,6 +27,7 @@ public class StutorApp {
         frame = new JFrame("StuTor");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 400);
+//        loginPage = new LoginPage();
 //        rootPanel = new JPanel();
 //        loginPage = new JPanel();
 //        dashboardPage = new JPanel();
@@ -76,9 +80,6 @@ public class StutorApp {
     }
 
     private void login() {
-//        cl.layoutContainer(rootPanel);
-//        System.out.println(dashboardPage.getName());
-//        cl.show(rootPanel, "dashboardPage");
         String username = usernameInput.getText();
         String password = passwordInput.getText();
         String jsonObj = "{ \"userName\": \"" + username +
@@ -87,6 +88,7 @@ public class StutorApp {
             response = ApiRequest.post("/user/login", jsonObj);
             if (response.statusCode() == 200) {
                 CardLayout cl = (CardLayout) rootPanel.getLayout();
+                cl.show(rootPanel, "dashboardPage");
                 cl.next(rootPanel);
                 cl.next(rootPanel);
             } else {
@@ -113,7 +115,8 @@ public class StutorApp {
             response = ApiRequest.post("/user", jsonObj);
             if (response.statusCode() == 201) {
                 CardLayout cl = (CardLayout) rootPanel.getLayout();
-                cl.next(rootPanel);
+                cl.show(rootPanel, "dashboardPage");
+//                cl.next(rootPanel);
             } else if (response.statusCode() == 409) {
                 JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
                         "Username Taken", JOptionPane.ERROR_MESSAGE);
