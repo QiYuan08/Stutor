@@ -1,37 +1,24 @@
+import api.ApiRequest;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.io.IOException;
+import java.net.http.HttpResponse;
 
 public class StutorApp {
     private JFrame frame;
     private CardLayout cardLayout;
-    private JPanel rootPanel, loginPage, dashboardPage;
-    private JLabel activityTitle, usernameField, passwordField;
-    private JTextField usernameInput;
-    private JButton loginUserButton;
-    private JPanel registrationPage;
-    private JPanel profilePage;
-    private JButton tutorial1Button;
-    private JButton tutorial2Button;
-    private JList competenciesList;
-    private JList qualificationsList;
-    private JList initiatedBidsList;
-    private JTextField regUsernameInput;
-    private JButton registerUserButton;
-    private JLabel username;
-    private JLabel name;
-    private JLabel accountType;
-    private JPasswordField regPasswordInput;
-    private JPasswordField passwordInput;
-    private JButton tutorial3Button;
-    private JButton tutorial4Button;
-    private JButton tutorial5Button;
-    private JButton editProfileButton;
-    private JButton registerPageButton;
-    private JButton DashboardPageButton;
+    private JPanel rootPanel, loginPage, dashboardPage, registrationPage, profilePage;
+    private JLabel activityTitle, usernameField, passwordField, username, name, accountType;
+    private JTextField usernameInput, regUsernameInput, gNameInput, fNameInput;
+    private JPasswordField passwordInput, regPasswordInput;
+    private JButton loginUserButton, registerUserButton, editProfileButton, registerPageButton, dashboardPageButton;
+    private JButton tutorial1Button, tutorial2Button, tutorial3Button, tutorial4Button, tutorial5Button;
+    private JList competenciesList, qualificationsList, initiatedBidsList;
+    private JCheckBox studentCheckBox, tutorCheckBox;
+    private HttpResponse<String> response;
 
     public StutorApp() {
         frame = new JFrame("StuTor");
@@ -48,7 +35,6 @@ public class StutorApp {
 //        rootPanel.add(loginPage, "Login Page");
 //        rootPanel.add(dashboardPage, "Dashboard");
 //        dashboardPage.setName("dashboardPage");
-
         loginUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {login();}
@@ -70,7 +56,7 @@ public class StutorApp {
             }
         });
 
-        DashboardPageButton.addActionListener(new ActionListener() {
+        dashboardPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 CardLayout cl = (CardLayout) rootPanel.getLayout();
@@ -81,11 +67,9 @@ public class StutorApp {
         registerUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout) rootPanel.getLayout();
-                cl.next(rootPanel);
+                register();
             }
         });
-
 
         frame.add(rootPanel);
         frame.setVisible(true);
@@ -95,9 +79,58 @@ public class StutorApp {
 //        cl.layoutContainer(rootPanel);
 //        System.out.println(dashboardPage.getName());
 //        cl.show(rootPanel, "dashboardPage");
-        CardLayout cl = (CardLayout) rootPanel.getLayout();
-        cl.next(rootPanel);
-        cl.next(rootPanel);
+        String username = usernameInput.getText();
+        String password = passwordInput.getText();
+        String jsonObj = "{ \"userName\": \"" + username +
+                "\", \"password\": \"" + password + "\"}";
+        try {
+            response = ApiRequest.post("/user/login", jsonObj);
+            if (response.statusCode() == 200) {
+                CardLayout cl = (CardLayout) rootPanel.getLayout();
+                cl.next(rootPanel);
+                cl.next(rootPanel);
+            } else {
+                System.out.println(response.statusCode());
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void register() {
+        String username = regUsernameInput.getText();
+        String password = regPasswordInput.getText();
+        String gName = gNameInput.getText();
+        String fName = fNameInput.getText();
+        boolean isStudent = studentCheckBox.isSelected();
+        boolean isTutor = tutorCheckBox.isSelected();
+        String jsonObj = "{ \"givenName\": \"" + gName + "\", \"familyName\": \"" + fName +
+                "\", \"userName\": \"" + username + "\", \"password\": \"" + password +
+                "\", \"isStudent\": \"" + isStudent + ", \"isTutor\": " + isTutor + "}";
+        try {
+            response = ApiRequest.post("/user", jsonObj);
+            if (response.statusCode() == 201) {
+                CardLayout cl = (CardLayout) rootPanel.getLayout();
+                cl.next(rootPanel);
+            } else if (response.statusCode() == 409) {
+                JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
+                        "Username Taken", JOptionPane.ERROR_MESSAGE);
+            } else {
+                System.out.println(response.statusCode());
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadProfile() {
+        response.body();
+        System.out.println(response.body());
+        java.util.Map<String, java.util.List<String>> data = response.headers().map();
     }
 
 
