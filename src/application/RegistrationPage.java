@@ -1,8 +1,13 @@
 package application;
 
+import api.ApiRequest;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.http.HttpResponse;
 
 public class RegistrationPage extends JPanel {
@@ -31,7 +36,6 @@ public class RegistrationPage extends JPanel {
         c.gridwidth = 3;
         c.fill = GridBagConstraints.HORIZONTAL;
         this.add(activityTitle, c);
-
 
         usernameField = new JLabel("Username: ");
         c.gridx = 0;
@@ -92,5 +96,38 @@ public class RegistrationPage extends JPanel {
         c.gridwidth = 3;
         this.add(registerUserButton, c);
 
+        registerUserButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                register();
+            }
+        });
+    }
+
+    private void register() {
+        String username = usernameInput.getText();
+        String password = passwordInput.getText();
+        String gName = gnameInput.getText();
+        String fName = fnameInput.getText();
+        boolean isStudent = studentCheckBox.isSelected();
+        boolean isTutor = tutorCheckBox.isSelected();
+        String jsonObj = "{ \"givenName\": \"" + gName + "\", \"familyName\": \"" + fName +
+                "\", \"userName\": \"" + username + "\", \"password\": \"" + password +
+                "\", \"isStudent\": \"" + isStudent + ", \"isTutor\": " + isTutor + "}";
+        try {
+            response = ApiRequest.post("/user", jsonObj);
+            if (response.statusCode() == 201) {
+                Application.loadPage(Application.DASHBOARD_PAGE);
+            } else if (response.statusCode() == 409) {
+                JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
+                        "Username Taken", JOptionPane.ERROR_MESSAGE);
+            } else {
+                System.out.println(response.statusCode());
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

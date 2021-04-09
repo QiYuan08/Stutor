@@ -3,6 +3,8 @@ package application;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 public class ProfilePage extends JPanel {
@@ -98,5 +100,15 @@ public class ProfilePage extends JPanel {
         c.gridwidth = 1;
         this.add(dashboardPageButton, c);
 
+        dashboardPageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadDashboard();
+            }
+        });
+    }
+
+    private void loadDashboard() {
+        Application.loadPage(Application.DASHBOARD_PAGE);
     }
 }

@@ -39,10 +39,10 @@ public class StutorApp {
 //        rootPanel.add(loginPage, "Login Page");
 //        rootPanel.add(dashboardPage, "Dashboard");
 //        dashboardPage.setName("dashboardPage");
-        loginUserButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {login();}
-        });
+//        loginUserButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {login();}
+//        });
 
         editProfileButton.addActionListener(new ActionListener() {
             @Override
@@ -68,67 +68,67 @@ public class StutorApp {
             }
         });
 
-        registerUserButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                register();
-            }
-        });
+//        registerUserButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                register();
+//            }
+//        });
 
         frame.add(rootPanel);
         frame.setVisible(true);
     }
 
-    private void login() {
-        String username = usernameInput.getText();
-        String password = passwordInput.getText();
-        String jsonObj = "{ \"userName\": \"" + username +
-                "\", \"password\": \"" + password + "\"}";
-        try {
-            response = ApiRequest.post("/user/login", jsonObj);
-            if (response.statusCode() == 200) {
-                CardLayout cl = (CardLayout) rootPanel.getLayout();
-                cl.show(rootPanel, "dashboardPage");
-                cl.next(rootPanel);
-                cl.next(rootPanel);
-            } else {
-                System.out.println(response.statusCode());
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void register() {
-        String username = regUsernameInput.getText();
-        String password = regPasswordInput.getText();
-        String gName = gNameInput.getText();
-        String fName = fNameInput.getText();
-        boolean isStudent = studentCheckBox.isSelected();
-        boolean isTutor = tutorCheckBox.isSelected();
-        String jsonObj = "{ \"givenName\": \"" + gName + "\", \"familyName\": \"" + fName +
-                "\", \"userName\": \"" + username + "\", \"password\": \"" + password +
-                "\", \"isStudent\": \"" + isStudent + ", \"isTutor\": " + isTutor + "}";
-        try {
-            response = ApiRequest.post("/user", jsonObj);
-            if (response.statusCode() == 201) {
-                CardLayout cl = (CardLayout) rootPanel.getLayout();
-                cl.show(rootPanel, "dashboardPage");
+//    private void login() {
+//        String username = usernameInput.getText();
+//        String password = passwordInput.getText();
+//        String jsonObj = "{ \"userName\": \"" + username +
+//                "\", \"password\": \"" + password + "\"}";
+//        try {
+//            response = ApiRequest.post("/user/login", jsonObj);
+//            if (response.statusCode() == 200) {
+//                CardLayout cl = (CardLayout) rootPanel.getLayout();
+//                cl.show(rootPanel, "dashboardPage");
 //                cl.next(rootPanel);
-            } else if (response.statusCode() == 409) {
-                JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
-                        "Username Taken", JOptionPane.ERROR_MESSAGE);
-            } else {
-                System.out.println(response.statusCode());
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//                cl.next(rootPanel);
+//            } else {
+//                System.out.println(response.statusCode());
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    private void register() {
+//        String username = regUsernameInput.getText();
+//        String password = regPasswordInput.getText();
+//        String gName = gNameInput.getText();
+//        String fName = fNameInput.getText();
+//        boolean isStudent = studentCheckBox.isSelected();
+//        boolean isTutor = tutorCheckBox.isSelected();
+//        String jsonObj = "{ \"givenName\": \"" + gName + "\", \"familyName\": \"" + fName +
+//                "\", \"userName\": \"" + username + "\", \"password\": \"" + password +
+//                "\", \"isStudent\": \"" + isStudent + ", \"isTutor\": " + isTutor + "}";
+//        try {
+//            response = ApiRequest.post("/user", jsonObj);
+//            if (response.statusCode() == 201) {
+//                CardLayout cl = (CardLayout) rootPanel.getLayout();
+//                cl.show(rootPanel, "dashboardPage");
+////                cl.next(rootPanel);
+//            } else if (response.statusCode() == 409) {
+//                JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
+//                        "Username Taken", JOptionPane.ERROR_MESSAGE);
+//            } else {
+//                System.out.println(response.statusCode());
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void loadProfile() {
         response.body();

@@ -3,6 +3,8 @@ package application;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 public class DashboardPage extends JPanel {
@@ -34,7 +36,6 @@ public class DashboardPage extends JPanel {
         c.gridwidth = 1;
         this.add(tutorials, c);
 
-
         tutorial1Button = new JButton("Add New Tutorial");
         c.gridx = 0;
         c.gridy = 2;
@@ -64,6 +65,17 @@ public class DashboardPage extends JPanel {
         c.gridx = 1;
         c.gridy = 5;
         this.add(viewProfileButton, c);
+
+        viewProfileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadProfile();
+            }
+        });
+
     }
 
+    private void loadProfile() {
+        Application.loadPage(Application.PROFILE_PAGE);
+    }
 }

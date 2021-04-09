@@ -80,6 +80,13 @@ public class LoginPage extends JPanel {
                 login();
             }
         });
+
+        registerPageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadRegisterPage();
+            }
+        });
     }
 
     private void login() {
@@ -90,8 +97,7 @@ public class LoginPage extends JPanel {
         try {
             response = ApiRequest.post("/user/login", jsonObj);
             if (response.statusCode() == 200) {
-                CardLayout cl = (CardLayout) this.getParent().getLayout();
-                cl.show(this.getParent(), "DashboardPage");
+                Application.loadPage(Application.DASHBOARD_PAGE);
             } else {
                 System.out.println(response.statusCode());
             }
@@ -100,6 +106,10 @@ public class LoginPage extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void loadRegisterPage() {
+        Application.loadPage(Application.REGISTRATION_PAGE);
     }
 
 }

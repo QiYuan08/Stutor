@@ -4,9 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Application extends JFrame{
-    private JPanel rootPanel;
+    private static JPanel rootPanel;
     private CardLayout cardLayout;
     private LoginPage loginPage;
+    public static final String LOGIN_PAGE = "LoginPage";
+    public static final String REGISTRATION_PAGE = "RegistrationPage";
+    public static final String DASHBOARD_PAGE = "DashboardPage";
+    public static final String PROFILE_PAGE = "ProfilePage";
 
     Application() {
         super("StuTor");
@@ -15,19 +19,31 @@ public class Application extends JFrame{
         rootPanel = new JPanel();
         cardLayout = new CardLayout();
         rootPanel.setLayout(cardLayout);
-        DashboardPage dashboardPage = new DashboardPage();
 
         rootPanel.add(new LoginPage(), "LoginPage");
         rootPanel.add(new RegistrationPage(), "RegistrationPage");
-        rootPanel.add(dashboardPage, "DashboardPage");
+        rootPanel.add(new DashboardPage(), "DashboardPage");
         rootPanel.add(new ProfilePage(), "ProfilePage");
-        System.out.println(dashboardPage.getName());
 
         this.add(rootPanel);
         this.setVisible(true);
     }
 
     public static void main(String[] args) {
-        Application application = new Application();
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Application application = new Application();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void loadPage(String pageName) {
+        CardLayout cl = (CardLayout) rootPanel.getLayout();
+        cl.show(rootPanel, pageName);
     }
 }
