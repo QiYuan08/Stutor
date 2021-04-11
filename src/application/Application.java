@@ -5,8 +5,7 @@ import java.awt.*;
 
 public class Application extends JFrame{
     private static JPanel rootPanel;
-    private CardLayout cardLayout;
-    private LoginPage loginPage;
+    private static CardLayout cardLayout;
     public static final String LOGIN_PAGE = "LoginPage";
     public static final String REGISTRATION_PAGE = "RegistrationPage";
     public static final String DASHBOARD_PAGE = "DashboardPage";
@@ -20,10 +19,10 @@ public class Application extends JFrame{
         cardLayout = new CardLayout();
         rootPanel.setLayout(cardLayout);
 
-        rootPanel.add(new LoginPage(), "LoginPage");
-        rootPanel.add(new RegistrationPage(), "RegistrationPage");
-        rootPanel.add(new DashboardPage(), "DashboardPage");
-        rootPanel.add(new ProfilePage(), "ProfilePage");
+        rootPanel.add(new LoginPage(), LOGIN_PAGE);
+        rootPanel.add(new RegistrationPage(), REGISTRATION_PAGE);
+        rootPanel.add(new DashboardPage(), DASHBOARD_PAGE);
+        rootPanel.add(new ProfilePage(), PROFILE_PAGE);
 
         this.add(rootPanel);
         this.setVisible(true);
@@ -43,7 +42,6 @@ public class Application extends JFrame{
     }
 
     public static void loadPage(String pageName) {
-        CardLayout cl = (CardLayout) rootPanel.getLayout();
-        cl.show(rootPanel, pageName);
+        cardLayout.show(rootPanel, pageName);
     }
 }

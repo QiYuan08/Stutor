@@ -15,7 +15,7 @@ public class RegistrationPage extends JPanel {
     private JLabel activityTitle, passwordField, usernameField, gnameField, fnameField, accType;
     private JTextField usernameInput, gnameInput, fnameInput;
     private JPasswordField passwordInput;
-    private JButton registerUserButton;
+    private JButton registerUserButton, loadLoginPage;
     private JCheckBox studentCheckBox, tutorCheckBox;
     private HttpResponse<String> response;
 
@@ -96,10 +96,21 @@ public class RegistrationPage extends JPanel {
         c.gridwidth = 3;
         this.add(registerUserButton, c);
 
+        loadLoginPage = new JButton("Back to Login Page");
+        c.gridy = 7;
+        this.add(loadLoginPage, c);
+
         registerUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 register();
+            }
+        });
+
+        loadLoginPage.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Application.loadPage(Application.LOGIN_PAGE);
             }
         });
     }
