@@ -4,12 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Application extends JFrame{
-    private static JPanel rootPanel;
-    private static CardLayout cardLayout;
     public static final String LOGIN_PAGE = "LoginPage";
     public static final String REGISTRATION_PAGE = "RegistrationPage";
     public static final String DASHBOARD_PAGE = "DashboardPage";
     public static final String PROFILE_PAGE = "ProfilePage";
+    private static JPanel rootPanel;
+    private static CardLayout cardLayout;
+//    private static User user;
 
     Application() {
         super("StuTor");

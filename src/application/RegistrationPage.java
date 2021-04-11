@@ -124,21 +124,15 @@ public class RegistrationPage extends JPanel {
         boolean isTutor = tutorCheckBox.isSelected();
         String jsonObj = "{ \"givenName\": \"" + gName + "\", \"familyName\": \"" + fName +
                 "\", \"userName\": \"" + username + "\", \"password\": \"" + password +
-                "\", \"isStudent\": \"" + isStudent + ", \"isTutor\": " + isTutor + "}";
-        try {
-            response = ApiRequest.post("/user", jsonObj);
-            if (response.statusCode() == 201) {
-                Application.loadPage(Application.DASHBOARD_PAGE);
-            } else if (response.statusCode() == 409) {
-                JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
-                        "Username Taken", JOptionPane.ERROR_MESSAGE);
-            } else {
-                System.out.println(response.statusCode());
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+                "\", \"isStudent\": " + isStudent + ", \"isTutor\": " + isTutor + "}";
+        response = ApiRequest.post("/user", jsonObj);
+        if (response.statusCode() == 201) {
+            Application.loadPage(Application.DASHBOARD_PAGE);
+        } else if (response.statusCode() == 409) {
+            JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
+                    "Username Taken", JOptionPane.ERROR_MESSAGE);
+        } else {
+            System.out.println(response.statusCode());
         }
     }
 }

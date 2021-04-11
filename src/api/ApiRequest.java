@@ -8,24 +8,31 @@ import java.net.http.HttpResponse;
 
 public class ApiRequest {
 
-    private static final String API_KEY = "";
+    private static final String API_KEY = "gwGDjgwTTNqGQDjMpqTLcntBQp8gbz";
     private static final String ROOT_URL = "https://fit3077.com/api/v1";
     private static HttpClient client;
     private static HttpRequest request;
     private static HttpResponse<String> response;
 
-    public static HttpResponse<String> get(String url) throws IOException, InterruptedException {
+    public static HttpResponse<String> get(String url) {
         client = HttpClient.newHttpClient();
         request = HttpRequest
                 .newBuilder(URI.create(ROOT_URL + url))
                 .setHeader("Authorization", API_KEY)
                 .GET()
                 .build();
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 
-    public static HttpResponse<String> post(String url, String jsonObj) throws IOException, InterruptedException {
+    public static HttpResponse<String> post(String url, String jsonObj) {
         client = HttpClient.newHttpClient();
         request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
                 .setHeader("Authorization", API_KEY)
@@ -33,7 +40,13 @@ public class ApiRequest {
                 .POST(HttpRequest.BodyPublishers.ofString(jsonObj))
                 .build();
 
-        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return response;
     }
 }

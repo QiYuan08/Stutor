@@ -1,6 +1,8 @@
 package application;
 
 import api.ApiRequest;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -18,7 +20,7 @@ public class LoginPage extends JPanel {
     private JButton loginUserButton, registerPageButton;
     private HttpResponse<String> response;
 
-    LoginPage () {
+    LoginPage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -88,25 +90,21 @@ public class LoginPage extends JPanel {
             }
         });
     }
+
     private void login() {
         String username = usernameInput.getText();
         String password = passwordInput.getText();
         String jsonObj = "{ \"userName\": \"" + username +
                 "\", \"password\": \"" + password + "\"}";
-        try {
-            response = ApiRequest.post("/user/login", jsonObj);
-            if (response.statusCode() == 200) {
-                loadDashboardPage(username);
-            } else if (response.statusCode() == 400) {
-                JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
-                        "Username Invalid", JOptionPane.ERROR_MESSAGE);
-            } else {
-                System.out.println(response.statusCode());
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        response = ApiRequest.post("/user/login", jsonObj);
+        if (response.statusCode() == 200) {
+            loadDashboardPage(username);
+        } else if (response.statusCode() == 400) {
+            JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
+                    "Username Invalid", JOptionPane.ERROR_MESSAGE);
+        } else {
+            System.out.println(response.statusCode());
         }
     }
 
@@ -114,25 +112,27 @@ public class LoginPage extends JPanel {
         Application.loadPage(Application.REGISTRATION_PAGE);
     }
 
-//    private void loadDashboardPage(String userId) {
-//        String jsonObj = "{ \"userName\": \"" + userId + "\"}";
-//        try {
-//            response = ApiRequest.get("/user");
-//            if (response.statusCode() == 200) {
-//
-//                System.out.println(response.headers().map());
-////                System.out.println(response.body());
-//                String res = response.body();
-//            } else {
-//                System.out.println(response.statusCode());
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        Application.loadPage(Application.DASHBOARD_PAGE);
-//
-//    }
+    private void loadDashboardPage(String username) {
+        response = ApiRequest.get("/user");
+        if (response.statusCode() == 200) {
+            JSONArray users = new JSONArray(response.body());
+            JSONObject user;
+            String userId = null;
+            for (int i = 0; i < users.length(); i++) {
+                user = users.getJSONObject(i);
+                if (user.get("userName").equals(username)) {
+                    userId = user.get("id").toString();
+                    break;
+                }
+            }
+            response = ApiRequest.get("/user/" + userId + "?fields=competencies.subject");
+//                JSONArray competencies = new JSONArray(new JSONObject(response.body()).get("competencies"));
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        } else {
+            System.out.println(response.statusCode());
+        }
+        Application.loadPage(Application.DASHBOARD_PAGE);
+
+    }
 
 }
