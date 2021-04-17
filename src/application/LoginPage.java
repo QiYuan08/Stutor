@@ -79,60 +79,91 @@ public class LoginPage extends JPanel {
         loginUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                login();
+//                login();
+                String username = usernameInput.getText();
+                String password = passwordInput.getText();
+                String jsonObj = "{ \"userName\": \"" + username +
+                        "\", \"password\": \"" + password + "\"}";
+
+                response = ApiRequest.post("/user/login", jsonObj);
+                if (response.statusCode() == 200) {
+                    loadDashboardPage(username);
+                } else if (response.statusCode() == 400) {
+                    JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
+                            "Username Invalid", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    System.out.println(response.statusCode());
+                }
+            }
+
+            private void loadDashboardPage(String username) {
+                response = ApiRequest.get("/user");
+                if (response.statusCode() == 200) {
+                    JSONArray users = new JSONArray(response.body());
+                    JSONObject user;
+                    String userId = null;
+                    for (int i = 0; i < users.length(); i++) {
+                        user = users.getJSONObject(i);
+                        if (user.get("userName").equals(username)) {
+                            userId = user.get("id").toString();
+                            break;
+                        }
+                    }
+                    response = ApiRequest.get("/user/" + userId + "?fields=competencies.subject");
+//                JSONArray competencies = new JSONArray(new JSONObject(response.body()).get("competencies"));
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                } else {
+                    System.out.println(response.statusCode());
+                }
+                Application.loadPage(Application.DASHBOARD_PAGE);
+
             }
         });
 
         registerPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadRegisterPage();
+                Application.loadPage(Application.REGISTRATION_PAGE);
             }
         });
     }
+//    private void login() {
+//        String username = usernameInput.getText();
+//        String password = passwordInput.getText();
+//        String jsonObj = "{ \"userName\": \"" + username +
+//                "\", \"password\": \"" + password + "\"}";
+//
+//        response = ApiRequest.post("/user/login", jsonObj);
+//        if (response.statusCode() == 200) {
+//            loadDashboardPage(username);
+//        } else if (response.statusCode() == 400) {
+//            JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
+//                    "Username Invalid", JOptionPane.ERROR_MESSAGE);
+//        } else {
+//            System.out.println(response.statusCode());
+//        }
+//    }
 
-    private void login() {
-        String username = usernameInput.getText();
-        String password = passwordInput.getText();
-        String jsonObj = "{ \"userName\": \"" + username +
-                "\", \"password\": \"" + password + "\"}";
-
-        response = ApiRequest.post("/user/login", jsonObj);
-        if (response.statusCode() == 200) {
-            loadDashboardPage(username);
-        } else if (response.statusCode() == 400) {
-            JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
-                    "Username Invalid", JOptionPane.ERROR_MESSAGE);
-        } else {
-            System.out.println(response.statusCode());
-        }
-    }
-
-    private void loadRegisterPage() {
-        Application.loadPage(Application.REGISTRATION_PAGE);
-    }
-
-    private void loadDashboardPage(String username) {
-        response = ApiRequest.get("/user");
-        if (response.statusCode() == 200) {
-            JSONArray users = new JSONArray(response.body());
-            JSONObject user;
-            String userId = null;
-            for (int i = 0; i < users.length(); i++) {
-                user = users.getJSONObject(i);
-                if (user.get("userName").equals(username)) {
-                    userId = user.get("id").toString();
-                    break;
-                }
-            }
-            response = ApiRequest.get("/user/" + userId + "?fields=competencies.subject");
-//                JSONArray competencies = new JSONArray(new JSONObject(response.body()).get("competencies"));
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        } else {
-            System.out.println(response.statusCode());
-        }
-        Application.loadPage(Application.DASHBOARD_PAGE);
-
-    }
-
+//    private void loadDashboardPage(String username) {
+//        response = ApiRequest.get("/user");
+//        if (response.statusCode() == 200) {
+//            JSONArray users = new JSONArray(response.body());
+//            JSONObject user;
+//            String userId = null;
+//            for (int i = 0; i < users.length(); i++) {
+//                user = users.getJSONObject(i);
+//                if (user.get("userName").equals(username)) {
+//                    userId = user.get("id").toString();
+//                    break;
+//                }
+//            }
+//            response = ApiRequest.get("/user/" + userId + "?fields=competencies.subject");
+////                JSONArray competencies = new JSONArray(new JSONObject(response.body()).get("competencies"));
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//        } else {
+//            System.out.println(response.statusCode());
+//        }
+//        Application.loadPage(Application.DASHBOARD_PAGE);
+//
+//    }
 }

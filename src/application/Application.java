@@ -12,7 +12,7 @@ public class Application extends JFrame{
     private static CardLayout cardLayout;
 //    private static User user;
 
-    Application() {
+    private Application() {
         super("StuTor");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(500, 400);

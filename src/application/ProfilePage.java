@@ -103,12 +103,8 @@ public class ProfilePage extends JPanel {
         dashboardPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadDashboard();
+                Application.loadPage(Application.DASHBOARD_PAGE);
             }
         });
-    }
-
-    private void loadDashboard() {
-        Application.loadPage(Application.DASHBOARD_PAGE);
     }
 }

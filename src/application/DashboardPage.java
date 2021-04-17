@@ -69,13 +69,8 @@ public class DashboardPage extends JPanel {
         viewProfileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loadProfile();
+                Application.loadPage(Application.PROFILE_PAGE);
             }
         });
-
-    }
-
-    private void loadProfile() {
-        Application.loadPage(Application.PROFILE_PAGE);
     }
 }
