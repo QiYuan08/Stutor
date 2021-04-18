@@ -1,5 +1,8 @@
 package application;
 
+import application.bid.AllBid;
+import application.bid.CreateOpenBid;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,6 +11,7 @@ public class Application extends JFrame{
     public static final String REGISTRATION_PAGE = "RegistrationPage";
     public static final String DASHBOARD_PAGE = "DashboardPage";
     public static final String PROFILE_PAGE = "ProfilePage";
+    public static final String OPEN_BID = "OpenBid";
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
 //    private static User user;
@@ -20,10 +24,15 @@ public class Application extends JFrame{
         cardLayout = new CardLayout();
         rootPanel.setLayout(cardLayout);
 
-        rootPanel.add(new LoginPage(), LOGIN_PAGE);
-        rootPanel.add(new RegistrationPage(), REGISTRATION_PAGE);
-        rootPanel.add(new DashboardPage(), DASHBOARD_PAGE);
-        rootPanel.add(new ProfilePage(), PROFILE_PAGE);
+//        rootPanel.add(new LoginPage(), LOGIN_PAGE);
+//        rootPanel.add(new RegistrationPage(), REGISTRATION_PAGE);
+//        rootPanel.add(new DashboardPage(), DASHBOARD_PAGE);
+//        rootPanel.add(new ProfilePage(), PROFILE_PAGE);
+        rootPanel.add(new CreateOpenBid(), OPEN_BID);
+
+//          JScrollPane mainPane = new JScrollPane(new AllBid());
+//          rootPanel.add(mainPane, "AllBid");
+
 
         this.add(rootPanel);
         this.setVisible(true);
