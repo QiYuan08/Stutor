@@ -1,5 +1,7 @@
 package application;
 
+import event_manager.EventSubscriber;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -7,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class DashboardPage extends JPanel {
+public class DashboardPage extends JPanel implements EventSubscriber {
 
     private JLabel activityTitle, tutorials;
     private JButton tutorial1Button, tutorial2Button, tutorial3Button, tutorial4Button, tutorial5Button, viewProfileButton;
@@ -72,5 +74,10 @@ public class DashboardPage extends JPanel {
                 Application.loadPage(Application.PROFILE_PAGE);
             }
         });
+    }
+
+    @Override
+    public void update(String eventType, String jsonObj) {
+
     }
 }

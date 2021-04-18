@@ -1,5 +1,7 @@
 package application;
 
+import event_manager.EventSubscriber;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -7,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class ProfilePage extends JPanel {
+public class ProfilePage extends JPanel implements EventSubscriber {
 
     private JLabel activityTitle, usernameField, nameField, accTypeField, competenciesField, qualificationsField, initBidsField;
     private JLabel username, name, accType;
@@ -106,5 +108,10 @@ public class ProfilePage extends JPanel {
                 Application.loadPage(Application.DASHBOARD_PAGE);
             }
         });
+    }
+
+    @Override
+    public void update(String eventType, String jsonObj) {
+
     }
 }

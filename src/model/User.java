@@ -1,3 +1,5 @@
+package model;
+
 import java.util.ArrayList;
 
 public abstract class User {
@@ -12,6 +14,6 @@ public abstract class User {
     private ArrayList<Qualification> qualifications;
     private ArrayList<Bid> initiatedBids;
 
-//    private ArrayList<Subject> subjects;
-//    private Schedule availability;
+//    private ArrayList<model.Subject> subjects;
+//    private model.Schedule availability;
 }

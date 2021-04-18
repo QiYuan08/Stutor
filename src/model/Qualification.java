@@ -1,3 +1,5 @@
+package model;
+
 public class Qualification {
 
 //    private String id;

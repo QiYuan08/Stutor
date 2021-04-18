@@ -88,7 +88,7 @@ public class LoginPage extends JPanel {
                 response = ApiRequest.post("/user/login", jsonObj);
                 if (response.statusCode() == 200) {
                     loadDashboardPage(username);
-                } else if (response.statusCode() == 400) {
+                } else if (response.statusCode() == 403) {
                     JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
                             "Username Invalid", JOptionPane.ERROR_MESSAGE);
                 } else {
