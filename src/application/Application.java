@@ -10,6 +10,7 @@ public class Application extends JFrame{
     public static final String REGISTRATION_PAGE = "RegistrationPage";
     public static final String DASHBOARD_PAGE = "DashboardPage";
     public static final String PROFILE_PAGE = "ProfilePage";
+    public static final String OPEN_BID = "OpenBid";
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
     private static EventManager eventManager;
