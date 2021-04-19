@@ -1,6 +1,7 @@
 package application;
 
 import api.ApiRequest;
+import event_manager.EventManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -79,11 +80,9 @@ public class LoginPage extends JPanel {
         loginUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                login();
                 String username = usernameInput.getText();
                 String password = passwordInput.getText();
-                String jsonObj = "{ \"userName\": \"" + username +
-                        "\", \"password\": \"" + password + "\"}";
+                String jsonObj = "{ \"userName\": \"" + username + "\", \"password\": \"" + password + "\"}";
 
                 response = ApiRequest.post("/user/login", jsonObj);
                 if (response.statusCode() == 200) {
@@ -106,6 +105,7 @@ public class LoginPage extends JPanel {
                         user = users.getJSONObject(i);
                         if (user.get("userName").equals(username)) {
                             userId = user.get("id").toString();
+                            Application.getEventManager().notify(EventManager.USER, user.toString());
                             break;
                         }
                     }
@@ -126,6 +126,16 @@ public class LoginPage extends JPanel {
                 Application.loadPage(Application.REGISTRATION_PAGE);
             }
         });
+    }
+
+    public String[] retrieveInputs() {
+        String username = usernameInput.getText();
+        String password = passwordInput.getText();
+        return new String[]{username, password};
+    }
+
+    public void addActionListener(ActionListener actionListener) {
+        loginUserButton.addActionListener(actionListener);
     }
 //    private void login() {
 //        String username = usernameInput.getText();

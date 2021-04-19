@@ -6,9 +6,9 @@ import java.util.HashMap;
 public class EventManager {
 
     HashMap<String, ArrayList<EventSubscriber>> subscribersTable = new HashMap<>();
-    public final String USER = "user";
-    public final String BID = "bid";
-    public final String CONTRACT = "contract";
+    public static final String USER = "user";
+    public static final String BID = "bid";
+    public static final String CONTRACT = "contract";
 
     public EventManager() {
 //        for (String component : components) {
@@ -32,7 +32,7 @@ public class EventManager {
     public void notify(String component, String jsonObj) {
         ArrayList<EventSubscriber> subscribers = subscribersTable.get(component);
         for (EventSubscriber subscriber : subscribers) {
-            subscriber.update(component, jsonObj);
+            subscriber.update();
         }
     }
 }

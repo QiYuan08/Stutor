@@ -109,9 +109,8 @@ public class ProfilePage extends JPanel implements EventSubscriber {
             }
         });
     }
-
     @Override
-    public void update(String eventType, String jsonObj) {
+    public void update() {
 
     }
 }
