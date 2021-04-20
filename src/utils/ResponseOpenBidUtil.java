@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import javax.swing.*;
 import java.net.http.HttpResponse;
 
-public class ReponseOpenBidUtil implements ResponseUtil{
+public class ResponseOpenBidUtil implements ResponseUtil{
 
     private HttpResponse<String> response;
 
