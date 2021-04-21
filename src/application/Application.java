@@ -1,5 +1,9 @@
 package application;
 
+import application.bid.AllBid;
+import application.bid.ResponseOpenBid;
+import controller.ResponseBidController;
+import event_manager.BidEventManager;
 import event_manager.EventManager;
 
 import javax.swing.*;
@@ -10,11 +14,12 @@ public class Application extends JFrame{
     public static final String REGISTRATION_PAGE = "RegistrationPage";
     public static final String DASHBOARD_PAGE = "DashboardPage";
     public static final String PROFILE_PAGE = "ProfilePage";
-    public static final String OPEN_BID = "OpenBid";
+    public static final String RESPONSEOPENBID = "ResponseOpenBid";
+    public static final String BID_LISTING = "BidListing";
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
     private static EventManager eventManager;
-//    private static model.User user;
+    private static BidEventManager bidEventManager;
 
     private Application() {
         super("StuTor");
@@ -28,15 +33,25 @@ public class Application extends JFrame{
         RegistrationPage registrationPage = new RegistrationPage();
         DashboardPage dashboardPage = new DashboardPage();
         ProfilePage profilePage = new ProfilePage();
+        AllBid allBid = new AllBid();
+        ResponseOpenBid responseOpenBid = new ResponseOpenBid();
 
-        rootPanel.add(loginPage, LOGIN_PAGE);
-        rootPanel.add(registrationPage, REGISTRATION_PAGE);
-        rootPanel.add(dashboardPage, DASHBOARD_PAGE);
-        rootPanel.add(profilePage, PROFILE_PAGE);
+//        rootPanel.add(loginPage, LOGIN_PAGE);
+//        rootPanel.add(registrationPage, REGISTRATION_PAGE);
+//        rootPanel.add(dashboardPage, DASHBOARD_PAGE);
+//        rootPanel.add(profilePage, PROFILE_PAGE);
+        rootPanel.add(allBid, BID_LISTING);
+        rootPanel.add(responseOpenBid, RESPONSEOPENBID);
 
         eventManager = new EventManager();
         eventManager.subscribe(eventManager.USER, profilePage);
         eventManager.subscribe(eventManager.CONTRACT, dashboardPage);
+        eventManager.subscribe(eventManager.BID, allBid);
+
+        bidEventManager = new BidEventManager();
+        bidEventManager.subscribe(responseOpenBid);
+
+        ResponseBidController bidController = new ResponseBidController(responseOpenBid);
 
         this.add(rootPanel);
         this.setVisible(true);
@@ -60,4 +75,6 @@ public class Application extends JFrame{
     }
 
     public static EventManager getEventManager() {return eventManager;}
+
+    public static BidEventManager getBidEventManager() {return bidEventManager;}
 }

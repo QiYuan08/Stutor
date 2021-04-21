@@ -1,5 +1,7 @@
 package event_manager;
 
+import interfaces.EventSubscriber;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,7 +34,7 @@ public class EventManager {
     public void notify(String component, String jsonObj) {
         ArrayList<EventSubscriber> subscribers = subscribersTable.get(component);
         for (EventSubscriber subscriber : subscribers) {
-            subscriber.update();
+            subscriber.update(jsonObj);
         }
     }
 }

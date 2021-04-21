@@ -1,6 +1,6 @@
 package application;
 
-import event_manager.EventSubscriber;
+import interfaces.EventSubscriber;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -109,8 +109,9 @@ public class ProfilePage extends JPanel implements EventSubscriber {
             }
         });
     }
+
     @Override
-    public void update() {
+    public void update(String data) {
 
     }
 }

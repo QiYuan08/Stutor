@@ -2,6 +2,7 @@ package application;
 
 import api.ApiRequest;
 import event_manager.EventManager;
+import interfaces.EventSubscriber;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,10 +11,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.http.HttpResponse;
 
-public class LoginPage extends JPanel {
+public class LoginPage extends JPanel implements EventSubscriber {
 
     private JLabel activityTitle, usernameField, passwordField, registerField;
     private JTextField usernameInput;
@@ -137,6 +137,11 @@ public class LoginPage extends JPanel {
     public void addActionListener(ActionListener actionListener) {
         loginUserButton.addActionListener(actionListener);
     }
+
+    @Override
+    public void update(String data) {
+
+    }
 //    private void login() {
 //        String username = usernameInput.getText();
 //        String password = passwordInput.getText();
@@ -176,4 +181,5 @@ public class LoginPage extends JPanel {
 //        Application.loadPage(Application.DASHBOARD_PAGE);
 //
 //    }
+
 }

@@ -1,4 +1,4 @@
-package utils;
+package interfaces;
 
 import org.json.JSONObject;
 
@@ -12,5 +12,5 @@ public interface ResponseUtil {
      * @param bidId the id of the bid to update
      * @param msgBody the information/data to be updated into the bid
      */
-    void update(String bidId, JSONObject msgBody);
+    void updateBid(String bidId, JSONObject msgBody);
 }

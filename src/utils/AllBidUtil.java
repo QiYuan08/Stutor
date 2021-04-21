@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import java.net.http.HttpResponse;
+import java.time.Instant;
 
 /***
  * Utility class to perform the backend logic for the ALlBid UI class
@@ -17,10 +18,20 @@ public class AllBidUtil {
      */
     private HttpResponse<String> response;
 
-    public JSONArray getAllBid(){
+    public JSONArray getAllBid(String studentId){
         response = ApiRequest.get("/bid");
+        JSONArray bids = new JSONArray(response.body());
+        for (int i=0; i < bids.length(); i++){
+            JSONObject bid = bids.getJSONObject(i);
+            JSONObject initiator = bid.getJSONObject("initiator");
 
-        return new JSONArray(response.body());
+            // if the poster of the bid is the tutor itself don't show the bid
+            if (initiator.get("id").equals(studentId)){
+                bids.remove(i);
+            }
+        }
+
+        return bids;
     }
 
     public void viewBidDetail(){
@@ -31,7 +42,10 @@ public class AllBidUtil {
      * Function for a tutor to close a bid immideately if he agree to a tutor bid
      */
     public void closeBid(String bidId){
-        response =  ApiRequest.post("/bid/" + bidId +"/close-down", ""); // pass empty json object since this API call don't need it
+
+        JSONObject closeDate = new JSONObject();
+        closeDate.put("dateCloseDown", Instant.now());
+        response =  ApiRequest.post("/bid/" + bidId +"/close-down", closeDate.toString()); // pass empty json object since this API call don't need it
         String msg;
 
         if (response.statusCode() == 200){

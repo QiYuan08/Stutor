@@ -1,6 +1,6 @@
 package application;
 
-import event_manager.EventSubscriber;
+import interfaces.EventSubscriber;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class DashboardPage extends JPanel implements EventSubscriber {
+public class DashboardPage extends JPanel implements EventSubscriber{
 
     private JLabel activityTitle, tutorials;
     private JButton tutorial1Button, tutorial2Button, tutorial3Button, tutorial4Button, tutorial5Button, viewProfileButton;
@@ -77,7 +77,7 @@ public class DashboardPage extends JPanel implements EventSubscriber {
     }
 
     @Override
-    public void update() {
+    public void update(String data) {
 
     }
 }

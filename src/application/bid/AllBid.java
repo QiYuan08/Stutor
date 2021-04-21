@@ -1,11 +1,10 @@
 package application.bid;
 
-import event_manager.EventSubscriber;
+import application.Application;
+import interfaces.EventSubscriber;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.AllBidUtil;
-import utils.ResponseCloseBidUtil;
-import utils.ResponseOpenBidUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -13,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// TODO: refactor into composite design pattern such that separate bid in content panel into another class
 public class AllBid extends JPanel implements EventSubscriber {
 
     JPanel contentPanel = new JPanel();
@@ -42,29 +42,13 @@ public class AllBid extends JPanel implements EventSubscriber {
         c.gridwidth = 1;
         contentPanel.add(activityTitle, c);
 
-//        // add content panel into main panel
-//        contentPanel = new JPanel();
-//        contentPanel.setPreferredSize(new Dimension(100, 200));
-//        contentPanel.setLayout(new GridBagLayout());
-//        contentPanel.setBackground(Color.RED);
-//        c.gridx = 0;
-//        c.gridy = 1;
-//        c.gridheight = 3;
-//        c.gridwidth = 1;
-//        c.anchor = GridBagConstraints.PAGE_END;
-//        c.fill = GridBagConstraints.HORIZONTAL;
-////        c.fill = GridBagConstraints.VERTICAL;
-////        this.add(contentPanel, c);
-
         // wrap contentPanel inside a scrollpane
-
         scrollPane = new JScrollPane(contentPanel);
         this.add(scrollPane, c);
 //        this.add(scrollPane, c);
 
         // add all the bids into content pane
         // need a controller class to sync all the bid
-
         bids = new JSONArray();
         bids.put(new JSONObject().put("type", "open").put("id", "123456"));
         bids.put(new JSONObject().put("type", "close").put("id", "987654"));
@@ -101,14 +85,14 @@ public class AllBid extends JPanel implements EventSubscriber {
             // add a description jlabel
             bidPanelConstraint.gridx = 0;
             bidPanelConstraint.gridy = 0;
-            bidPanelConstraint.gridwidth = 3;
+            bidPanelConstraint.gridwidth = 5;
             bidPanelConstraint.anchor = GridBagConstraints.WEST;
             JLabel bidLabel = new JLabel();
             bidLabel.setText("Description");
             bidPanel.add(bidLabel, bidPanelConstraint);
 
             // add view detail button
-            bidPanelConstraint.gridx = 3;
+            bidPanelConstraint.gridx = 5;
             bidPanelConstraint.gridwidth = 1;
             JButton viewBidBtn = new JButton("View Bid");
             viewBidBtn.setName(bid.get("id").toString()); // give a unique name to a button to distinguish them
@@ -116,7 +100,8 @@ public class AllBid extends JPanel implements EventSubscriber {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JButton thisBtn = (JButton) e.getSource();
-                    JOptionPane.showMessageDialog(new JFrame(), "Testing","Bid ID:" + thisBtn.getName(), JOptionPane.INFORMATION_MESSAGE);
+                    Application.getBidEventManager().notify(thisBtn.getName());
+                    Application.loadPage(Application.RESPONSEOPENBID);
                 }
             });
             bidPanel.add(viewBidBtn, bidPanelConstraint);
@@ -124,7 +109,7 @@ public class AllBid extends JPanel implements EventSubscriber {
             // if this is an open bid add close bid button
             if (bid.get("type").equals("open")){
                 bidPanelConstraint.anchor = GridBagConstraints.LINE_END;
-                bidPanelConstraint.gridx = 4;
+                bidPanelConstraint.gridx = 6;
                 bidPanelConstraint.gridwidth = 1;
                 JButton closeBidBtn = new JButton("Close Bid");
                 closeBidBtn.addActionListener(new ActionListener() {
@@ -148,14 +133,18 @@ public class AllBid extends JPanel implements EventSubscriber {
         }
     }
 
-
-
+    /**
+     * Update the bids inside this panel whenever there is a changes
+     * @param data The tutor id that are currently using this page
+     */
     @Override
-    public void update() {
-//        this.bids = bids;
-//        contentPanel.removeAll();
-//        contentPanel.revalidate();
-//        contentPanel.revalidate();
-//        createContent();
+    public void update(String data) {
+
+        bids = new AllBidUtil().getAllBid(data);
+
+        contentPanel.removeAll();
+        contentPanel.repaint();
+        contentPanel.revalidate();
+        createContent();
     }
 }

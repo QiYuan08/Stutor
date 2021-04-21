@@ -1,6 +1,7 @@
 package utils;
 
 import api.ApiRequest;
+import interfaces.ResponseUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,12 +9,12 @@ import org.json.JSONObject;
 import javax.swing.*;
 import java.net.http.HttpResponse;
 
-public class ResponseCloseBidUtil implements ResponseUtil{
+public class ResponseCloseBidUtil implements ResponseUtil {
 
     private HttpResponse<String> response;
 
     @Override
-    public void update(String bidId, JSONObject msgBody) {
+    public void updateBid(String bidId, JSONObject msgBody) {
         response = ApiRequest.get("/bid/" + bidId);
         JSONObject bid = new JSONObject(response.body());
         JSONObject additionalInfo = (JSONObject) bid.get("additionalInfo");
