@@ -77,7 +77,7 @@ public class DashboardPage extends JPanel implements EventSubscriber {
     }
 
     @Override
-    public void update() {
+    public void update(String data) {
 
     }
 }

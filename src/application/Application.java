@@ -1,5 +1,6 @@
 package application;
 
+import controller.UserController;
 import event_manager.EventManager;
 
 import javax.swing.*;
@@ -34,9 +35,12 @@ public class Application extends JFrame{
         rootPanel.add(dashboardPage, DASHBOARD_PAGE);
         rootPanel.add(profilePage, PROFILE_PAGE);
 
-        eventManager = new EventManager();
-        eventManager.subscribe(eventManager.USER, profilePage);
-        eventManager.subscribe(eventManager.CONTRACT, dashboardPage);
+//        eventManager = new EventManager();
+//        eventManager.subscribe(eventManager.USER, profilePage);
+//        eventManager.subscribe(eventManager.CONTRACT, dashboardPage);
+
+        UserController userController = new UserController(loginPage);
+        userController.subscribe(profilePage);
 
         this.add(rootPanel);
         this.setVisible(true);

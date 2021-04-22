@@ -20,6 +20,8 @@ public class UserController {
 
     public UserController(InputInterface inputPage) {
         this.inputPage = inputPage;
+        subscribers = new ArrayList<>();
+        inputPage.addActionListener(new UserListener());
     }
 
     public void subscribe(EventSubscriber subscriber) {
@@ -30,9 +32,9 @@ public class UserController {
         subscribers.remove(subscriber);
     }
 
-    public void notifySubscribers() {
+    public void notifySubscribers(String userId) {
         for (EventSubscriber subscriber : subscribers) {
-            subscriber.update();
+            subscriber.update(userId);
         }
     }
 
@@ -41,40 +43,17 @@ public class UserController {
         public void actionPerformed(ActionEvent e) {
             String[] inputs = inputPage.retrieveInputs();
             String jsonObj = "{ \"userName\": \"" + inputs[0] + "\", \"password\": \"" + inputs[1] + "\"}";
-
             HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj);
+
             if (response.statusCode() == 200) {
-                notifySubscribers();
-                loadDashboardPage(inputs[0]);
+                notifySubscribers(inputs[0]);
+                Application.loadPage(Application.DASHBOARD_PAGE);
             } else if (response.statusCode() == 403) {
                 JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
                         "Username Invalid", JOptionPane.ERROR_MESSAGE);
             } else {
                 System.out.println(response.statusCode());
             }
-        }
-        private void loadDashboardPage(String username) {
-            HttpResponse<String> response = ApiRequest.get("/user");
-            if (response.statusCode() == 200) {
-                JSONArray users = new JSONArray(response.body());
-                JSONObject user;
-                String userId = null;
-                for (int i = 0; i < users.length(); i++) {
-                    user = users.getJSONObject(i);
-                    if (user.get("userName").equals(username)) {
-                        userId = user.get("id").toString();
-                        Application.getEventManager().notify(EventManager.USER, user.toString());
-                        break;
-                    }
-                }
-                response = ApiRequest.get("/user/" + userId + "?fields=competencies.subject");
-//                JSONArray competencies = new JSONArray(new JSONObject(response.body()).get("competencies"));
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            } else {
-                System.out.println(response.statusCode());
-            }
-            Application.loadPage(Application.DASHBOARD_PAGE);
-
         }
     }
 }

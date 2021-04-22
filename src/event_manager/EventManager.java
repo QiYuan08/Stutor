@@ -29,10 +29,10 @@ public class EventManager {
         subscribers.remove(subscriber);
     }
 
-    public void notify(String component, String jsonObj) {
+    public void notify(String component, String data) {
         ArrayList<EventSubscriber> subscribers = subscribersTable.get(component);
         for (EventSubscriber subscriber : subscribers) {
-            subscriber.update();
+            subscriber.update(data);
         }
     }
 }

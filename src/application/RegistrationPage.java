@@ -103,7 +103,6 @@ public class RegistrationPage extends JPanel {
         registerUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                register();
                 String username = usernameInput.getText();
                 String password = passwordInput.getText();
                 String gName = gnameInput.getText();
@@ -115,7 +114,7 @@ public class RegistrationPage extends JPanel {
                         "\", \"isStudent\": " + isStudent + ", \"isTutor\": " + isTutor + "}";
                 response = ApiRequest.post("/user", jsonObj);
                 if (response.statusCode() == 201) {
-                    Application.loadPage(Application.DASHBOARD_PAGE);
+                    Application.loadPage(Application.LOGIN_PAGE);
                 } else if (response.statusCode() == 409) {
                     JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
                             "Username Taken", JOptionPane.ERROR_MESSAGE);

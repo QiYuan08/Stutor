@@ -4,6 +4,6 @@ import model.User;
 
 public interface EventSubscriber {
 
-    void update();
+    void update(String data);
 
 }
