@@ -19,7 +19,7 @@ public class ProfilePage extends JPanel implements EventSubscriber {
     private JLabel username, name, accType;
     private JScrollPane competenciesList, qualificationsList;
     private JButton dashboardPageButton;
-    private String userId;
+    public static String userId;
 
     ProfilePage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -107,7 +107,7 @@ public class ProfilePage extends JPanel implements EventSubscriber {
 
     @Override
     public void update(String username) {
-        if (this.userId == null) {
+        if (ProfilePage.userId == null) {
             HttpResponse<String> response = ApiRequest.get("/user?fields=competencies.subject&fields=qualifications");
             if (response.statusCode() == 200) {
                 JSONArray users = new JSONArray(response.body());
@@ -115,7 +115,7 @@ public class ProfilePage extends JPanel implements EventSubscriber {
                 for (int i = 0; i < users.length(); i++) {
                     user = users.getJSONObject(i);
                     if (user.get("userName").equals(username)) {
-                        this.userId = user.get("id").toString();
+                        ProfilePage.userId = user.get("id").toString();
                     }
                 }
             }
@@ -162,7 +162,7 @@ public class ProfilePage extends JPanel implements EventSubscriber {
                 JPanel componentPanel = new JPanel();
                 JSONObject qualification = (JSONObject) qualifications.get(j);
                 String desc = qualification.optString("title");
-                if (qualification.optString("description") != "") {
+                if (!qualification.optString("description").equals("")) {
                     desc += " - " + qualification.optString("description");
                 }
                 if (!qualification.optBoolean("verified")) {

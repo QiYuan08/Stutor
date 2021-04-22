@@ -2,10 +2,7 @@ package controller;
 
 import api.ApiRequest;
 import application.Application;
-import event_manager.EventManager;
 import event_manager.EventSubscriber;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,15 +10,15 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class UserController {
+public class LoginController {
 
     private InputInterface inputPage;
     private ArrayList<EventSubscriber> subscribers;
 
-    public UserController(InputInterface inputPage) {
+    public LoginController(InputInterface inputPage) {
         this.inputPage = inputPage;
         subscribers = new ArrayList<>();
-        inputPage.addActionListener(new UserListener());
+        inputPage.addActionListener(new LoginListener());
     }
 
     public void subscribe(EventSubscriber subscriber) {
@@ -38,7 +35,7 @@ public class UserController {
         }
     }
 
-    class UserListener implements ActionListener {
+    class LoginListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             String[] inputs = inputPage.retrieveInputs();

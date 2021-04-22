@@ -1,6 +1,7 @@
 package application;
 
-import controller.UserController;
+import application.bid.CreateOpenBid;
+import controller.LoginController;
 import event_manager.EventManager;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class Application extends JFrame{
     public static final String OPEN_BID = "OpenBid";
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
-    private static EventManager eventManager;
+//    private static EventManager eventManager;
 //    private static model.User user;
 
     private Application() {
@@ -34,13 +35,15 @@ public class Application extends JFrame{
         rootPanel.add(registrationPage, REGISTRATION_PAGE);
         rootPanel.add(dashboardPage, DASHBOARD_PAGE);
         rootPanel.add(profilePage, PROFILE_PAGE);
+//        rootPanel.add(new CreateOpenBid());
 
 //        eventManager = new EventManager();
 //        eventManager.subscribe(eventManager.USER, profilePage);
 //        eventManager.subscribe(eventManager.CONTRACT, dashboardPage);
 
-        UserController userController = new UserController(loginPage);
-        userController.subscribe(profilePage);
+        LoginController loginController = new LoginController(loginPage);
+        loginController.subscribe(profilePage);
+        loginController.subscribe(dashboardPage);
 
         this.add(rootPanel);
         this.setVisible(true);
@@ -63,5 +66,5 @@ public class Application extends JFrame{
         cardLayout.show(rootPanel, pageName);
     }
 
-    public static EventManager getEventManager() {return eventManager;}
+//    public static EventManager getEventManager() {return eventManager;}
 }
