@@ -1,6 +1,8 @@
 package application;
 
 import controller.ApplicationController;
+import controller.ContractListener;
+import controller.LoginListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +15,7 @@ public class Application extends JFrame{
     public static final String OPEN_BID_PAGE = "OpenBidPage";
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
+    ApplicationController loginController, contractController;
 
     private Application() {
         super("StuTor");
@@ -34,9 +37,15 @@ public class Application extends JFrame{
         rootPanel.add(profilePage, PROFILE_PAGE);
         rootPanel.add(openBidPage, OPEN_BID_PAGE);
 
-        ApplicationController applicationController = new ApplicationController(loginPage, ApplicationController.USER_LISTENER);
-        applicationController.subscribe(profilePage);
-        applicationController.subscribe(dashboardPage);
+        contractController = new ApplicationController();
+        ContractListener contractListener = new ContractListener(openBidPage, contractController);
+
+        contractController.subscribe(dashboardPage);
+
+        loginController = new ApplicationController();
+        LoginListener loginListener = new LoginListener(loginPage, loginController);
+        loginController.subscribe(profilePage);
+        loginController.subscribe(dashboardPage);
 
         this.add(rootPanel);
         this.setVisible(true);
