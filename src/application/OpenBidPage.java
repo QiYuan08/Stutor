@@ -1,4 +1,4 @@
-package application.bid;
+package application;
 
 import org.json.JSONObject;
 
@@ -7,11 +7,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 // TODO: decide how to get subjectID consistently
-public class CreateOpenBid extends CreateBid{
+public class OpenBidPage extends JPanel {
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField;
     private JTextField subjectInput, qualificationInput, lessonInput, dayInput, rateInput;
@@ -19,7 +17,7 @@ public class CreateOpenBid extends CreateBid{
     private JComboBox<String> startMeridiem, endMeridiem,rateCombo;
     private JSpinner startTime, endTime;
 
-    public CreateOpenBid(){
+    public OpenBidPage(){
         String[] meridiem = {"AM", "PM"};
 
         this.setBorder(new EmptyBorder(15, 15, 15, 15));

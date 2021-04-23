@@ -3,7 +3,7 @@ package utils;
 import org.json.JSONObject;
 
 /***
- * Based class for tutor to create response/bid for a student request
+ * Base class for tutor to create response/bid for a student request
  */
 public interface ResponseUtil {
 

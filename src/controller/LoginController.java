@@ -2,7 +2,6 @@ package controller;
 
 import api.ApiRequest;
 import application.Application;
-import event_manager.EventSubscriber;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,25 +11,25 @@ import java.util.ArrayList;
 
 public class LoginController {
 
-    private InputInterface inputPage;
-    private ArrayList<EventSubscriber> subscribers;
+    private ObserverInputInterface inputPage;
+    private ArrayList<ObserverOutputInterface> subscribers;
 
-    public LoginController(InputInterface inputPage) {
+    public LoginController(ObserverInputInterface inputPage) {
         this.inputPage = inputPage;
         subscribers = new ArrayList<>();
         inputPage.addActionListener(new LoginListener());
     }
 
-    public void subscribe(EventSubscriber subscriber) {
+    public void subscribe(ObserverOutputInterface subscriber) {
         subscribers.add(subscriber);
     }
 
-    public void unsubscribe(EventSubscriber subscriber) {
+    public void unsubscribe(ObserverOutputInterface subscriber) {
         subscribers.remove(subscriber);
     }
 
     public void notifySubscribers(String userId) {
-        for (EventSubscriber subscriber : subscribers) {
+        for (ObserverOutputInterface subscriber : subscribers) {
             subscriber.update(userId);
         }
     }

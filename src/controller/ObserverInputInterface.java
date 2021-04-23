@@ -2,9 +2,9 @@ package controller;
 
 import java.awt.event.ActionListener;
 
-public interface InputInterface {
+public interface ObserverInputInterface {
 
-    public String[] retrieveInputs();
+    String[] retrieveInputs();
     void addActionListener(ActionListener actionListener);
 
 }

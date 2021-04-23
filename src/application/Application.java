@@ -1,8 +1,6 @@
 package application;
 
-import application.bid.CreateOpenBid;
 import controller.LoginController;
-import event_manager.EventManager;
 
 import javax.swing.*;
 import java.awt.*;

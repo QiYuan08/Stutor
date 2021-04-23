@@ -1,20 +1,15 @@
 package application;
 
-import api.ApiRequest;
-import controller.InputInterface;
-import event_manager.EventManager;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import controller.ObserverInputInterface;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.http.HttpResponse;
 
-public class LoginPage extends JPanel implements InputInterface {
+public class LoginPage extends JPanel implements ObserverInputInterface {
 
     private JLabel activityTitle, usernameField, passwordField, registerField;
     private JTextField usernameInput;

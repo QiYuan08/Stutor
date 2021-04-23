@@ -1,7 +1,7 @@
 package application;
 
 import api.ApiRequest;
-import event_manager.EventSubscriber;
+import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class DashboardPage extends JPanel implements EventSubscriber {
+public class DashboardPage extends JPanel implements ObserverOutputInterface {
 
     private JLabel activityTitle, tutorialsTaken, tutorialsTaught;
 //    private JButton tutorial1Button, tutorial2Button, tutorial3Button, tutorial4Button, tutorial5Button,
