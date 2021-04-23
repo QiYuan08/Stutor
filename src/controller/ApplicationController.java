@@ -6,28 +6,29 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class LoginController {
+public class ApplicationController {
 
-    private ObserverInputInterface inputPage;
     private ArrayList<ObserverOutputInterface> subscribers;
+    public static final String USER_LISTENER = "UserListener";
+    public static final String CONTRACT_LISTENER = "ContractListener";
 
-    public LoginController(ObserverInputInterface inputPage) {
-        this.inputPage = inputPage;
+    public ApplicationController(ObserverInputInterface inputPage, String listenerType) {
         subscribers = new ArrayList<>();
-        inputPage.addActionListener(new LoginListener());
+        if (listenerType.equals(USER_LISTENER)) {
+            inputPage.addActionListener(new LoginListener(inputPage));
+        } else if (listenerType.equals(CONTRACT_LISTENER)) {
+            inputPage.addActionListener(new ContractListener(inputPage));
+        }
     }
 
     public void subscribe(ObserverOutputInterface subscriber) {
         subscribers.add(subscriber);
     }
 
-    public void unsubscribe(ObserverOutputInterface subscriber) {
-        subscribers.remove(subscriber);
-    }
+    public void unsubscribe(ObserverOutputInterface subscriber) {subscribers.remove(subscriber);}
 
     public void notifySubscribers(String userId) {
         for (ObserverOutputInterface subscriber : subscribers) {
@@ -35,7 +36,14 @@ public class LoginController {
         }
     }
 
-    class LoginListener implements ActionListener {
+    class LoginListener extends EventListener {
+
+        private ObserverInputInterface inputPage;
+
+        public LoginListener(ObserverInputInterface inputPage) {
+            super(inputPage);
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
             JSONObject jsonObj = inputPage.retrieveInputs();
@@ -50,6 +58,20 @@ public class LoginController {
             } else {
                 System.out.println(response.statusCode());
             }
+        }
+    }
+
+    class ContractListener extends EventListener {
+
+        private ObserverInputInterface inputPage;
+
+        public ContractListener(ObserverInputInterface inputPage) {
+            super(inputPage);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
         }
     }
 }

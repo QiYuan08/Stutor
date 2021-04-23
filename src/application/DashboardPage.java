@@ -15,7 +15,6 @@ import java.net.http.HttpResponse;
 public class DashboardPage extends JPanel implements ObserverOutputInterface {
 
     private JLabel activityTitle, tutorialsTaken, tutorialsTaught;
-//    private JButton tutorial1Button, tutorial2Button, tutorial3Button, tutorial4Button, tutorial5Button,
     private JButton viewProfileButton, seeBidsButton, openBidButton, findBidsButton;
     private JScrollPane tutorialsTakenList, tutorialsTaughtList;
     private HttpResponse<String> response;
@@ -73,31 +72,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface {
         c.gridy = 9;
         c.gridheight = 4;
         this.add(tutorialsTaughtList, c);
-
-//        tutorial1Button = new JButton("Add New Tutorial");
-//        c.gridx = 0;
-//        c.gridy = 2;
-//        this.add(tutorial1Button, c);
-//
-//        tutorial2Button = new JButton("Add New Tutorial");
-//        c.gridx = 1;
-//        c.gridy = 2;
-//        this.add(tutorial2Button, c);
-//
-//        tutorial3Button = new JButton("Add New Tutorial");
-//        c.gridx = 0;
-//        c.gridy = 3;
-//        this.add(tutorial3Button, c);
-//
-//        tutorial4Button = new JButton("Add New Tutorial");
-//        c.gridx = 1;
-//        c.gridy = 3;
-//        this.add(tutorial4Button, c);
-//
-//        tutorial5Button = new JButton("Add New Tutorial");
-//        c.gridx = 0;
-//        c.gridy = 4;
-//        this.add(tutorial5Button, c);
 
         viewProfileButton = new JButton("View Profile");
         c.gridx = 1;

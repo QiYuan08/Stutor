@@ -1,6 +1,6 @@
 package application;
 
-import controller.LoginController;
+import controller.ApplicationController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,11 +10,9 @@ public class Application extends JFrame{
     public static final String REGISTRATION_PAGE = "RegistrationPage";
     public static final String DASHBOARD_PAGE = "DashboardPage";
     public static final String PROFILE_PAGE = "ProfilePage";
-    public static final String OPEN_BID = "OpenBid";
+    public static final String OPEN_BID_PAGE = "OpenBidPage";
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
-//    private static EventManager eventManager;
-//    private static model.User user;
 
     private Application() {
         super("StuTor");
@@ -28,20 +26,17 @@ public class Application extends JFrame{
         RegistrationPage registrationPage = new RegistrationPage();
         DashboardPage dashboardPage = new DashboardPage();
         ProfilePage profilePage = new ProfilePage();
+        OpenBidPage openBidPage = new OpenBidPage();
 
         rootPanel.add(loginPage, LOGIN_PAGE);
         rootPanel.add(registrationPage, REGISTRATION_PAGE);
         rootPanel.add(dashboardPage, DASHBOARD_PAGE);
         rootPanel.add(profilePage, PROFILE_PAGE);
-//        rootPanel.add(new CreateOpenBid());
+        rootPanel.add(openBidPage, OPEN_BID_PAGE);
 
-//        eventManager = new EventManager();
-//        eventManager.subscribe(eventManager.USER, profilePage);
-//        eventManager.subscribe(eventManager.CONTRACT, dashboardPage);
-
-        LoginController loginController = new LoginController(loginPage);
-        loginController.subscribe(profilePage);
-        loginController.subscribe(dashboardPage);
+        ApplicationController applicationController = new ApplicationController(loginPage, ApplicationController.USER_LISTENER);
+        applicationController.subscribe(profilePage);
+        applicationController.subscribe(dashboardPage);
 
         this.add(rootPanel);
         this.setVisible(true);
@@ -64,5 +59,4 @@ public class Application extends JFrame{
         cardLayout.show(rootPanel, pageName);
     }
 
-//    public static EventManager getEventManager() {return eventManager;}
 }
