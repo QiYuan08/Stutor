@@ -16,9 +16,9 @@ public class ApplicationController {
 
     public void unsubscribe(ObserverOutputInterface subscriber) {subscribers.remove(subscriber);}
 
-    public void notifySubscribers(String userId) {
+    public void notifySubscribers(String data) {
         for (ObserverOutputInterface subscriber : subscribers) {
-            subscriber.update(userId);
+            subscriber.update(data);
         }
     }
 }

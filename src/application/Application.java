@@ -6,6 +6,7 @@ import controller.LoginListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Application extends JFrame{
     public static final String LOGIN_PAGE = "LoginPage";
@@ -16,6 +17,7 @@ public class Application extends JFrame{
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
     ApplicationController loginController, contractController;
+    ActionListener contractListener, loginListener;
 
     private Application() {
         super("StuTor");
@@ -37,15 +39,14 @@ public class Application extends JFrame{
         rootPanel.add(profilePage, PROFILE_PAGE);
         rootPanel.add(openBidPage, OPEN_BID_PAGE);
 
-        contractController = new ApplicationController();
-        ContractListener contractListener = new ContractListener(openBidPage, contractController);
-
-        contractController.subscribe(dashboardPage);
-
         loginController = new ApplicationController();
-        LoginListener loginListener = new LoginListener(loginPage, loginController);
+        loginListener = new LoginListener(loginPage, loginController);
         loginController.subscribe(profilePage);
         loginController.subscribe(dashboardPage);
+
+        contractController = new ApplicationController();
+        contractListener = new ContractListener(openBidPage, contractController);
+        contractController.subscribe(dashboardPage);
 
         this.add(rootPanel);
         this.setVisible(true);
