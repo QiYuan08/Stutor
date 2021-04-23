@@ -1,6 +1,7 @@
 package application;
 
 import controller.ObserverInputInterface;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -73,48 +74,6 @@ public class LoginPage extends JPanel implements ObserverInputInterface {
         c.gridx = 0;
         this.add(registerPageButton, c);
 
-//        loginUserButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                String username = usernameInput.getText();
-//                String password = passwordInput.getText();
-//                String jsonObj = "{ \"userName\": \"" + username + "\", \"password\": \"" + password + "\"}";
-//
-//                response = ApiRequest.post("/user/login", jsonObj);
-//                if (response.statusCode() == 200) {
-//                    loadDashboardPage(username);
-//                } else if (response.statusCode() == 403) {
-//                    JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
-//                            "Username Invalid", JOptionPane.ERROR_MESSAGE);
-//                } else {
-//                    System.out.println(response.statusCode());
-//                }
-//            }
-//
-//            private void loadDashboardPage(String username) {
-//                response = ApiRequest.get("/user");
-//                if (response.statusCode() == 200) {
-//                    JSONArray users = new JSONArray(response.body());
-//                    JSONObject user;
-//                    String userId = null;
-//                    for (int i = 0; i < users.length(); i++) {
-//                        user = users.getJSONObject(i);
-//                        if (user.get("userName").equals(username)) {
-//                            userId = user.get("id").toString();
-////                            Application.getEventManager().notify(EventManager.USER, user.toString());
-//                            break;
-//                        }
-//                    }
-//                    response = ApiRequest.get("/user/" + userId + "?fields=competencies.subject");
-////                JSONArray competencies = new JSONArray(new JSONObject(response.body()).get("competencies"));
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                } else {
-//                    System.out.println(response.statusCode());
-//                }
-//                Application.loadPage(Application.DASHBOARD_PAGE);
-//
-//            }
-//        });
 
         registerPageButton.addActionListener(new ActionListener() {
             @Override
@@ -124,52 +83,15 @@ public class LoginPage extends JPanel implements ObserverInputInterface {
         });
     }
 
-    public String[] retrieveInputs() {
+    public JSONObject retrieveInputs() {
         String username = usernameInput.getText();
         String password = passwordInput.getText();
-        return new String[]{username, password};
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("userName", username).put("password", password);
+        return jsonObj;
     }
 
     public void addActionListener(ActionListener actionListener) {
         loginUserButton.addActionListener(actionListener);
     }
-//    private void login() {
-//        String username = usernameInput.getText();
-//        String password = passwordInput.getText();
-//        String jsonObj = "{ \"userName\": \"" + username +
-//                "\", \"password\": \"" + password + "\"}";
-//
-//        response = ApiRequest.post("/user/login", jsonObj);
-//        if (response.statusCode() == 200) {
-//            loadDashboardPage(username);
-//        } else if (response.statusCode() == 400) {
-//            JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
-//                    "Username Invalid", JOptionPane.ERROR_MESSAGE);
-//        } else {
-//            System.out.println(response.statusCode());
-//        }
-//    }
-
-//    private void loadDashboardPage(String username) {
-//        response = ApiRequest.get("/user");
-//        if (response.statusCode() == 200) {
-//            JSONArray users = new JSONArray(response.body());
-//            JSONObject user;
-//            String userId = null;
-//            for (int i = 0; i < users.length(); i++) {
-//                user = users.getJSONObject(i);
-//                if (user.get("userName").equals(username)) {
-//                    userId = user.get("id").toString();
-//                    break;
-//                }
-//            }
-//            response = ApiRequest.get("/user/" + userId + "?fields=competencies.subject");
-////                JSONArray competencies = new JSONArray(new JSONObject(response.body()).get("competencies"));
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//        } else {
-//            System.out.println(response.statusCode());
-//        }
-//        Application.loadPage(Application.DASHBOARD_PAGE);
-//
-//    }
 }

@@ -1,5 +1,6 @@
 package application;
 
+import controller.ObserverInputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -9,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 // TODO: decide how to get subjectID consistently
-public class OpenBidPage extends JPanel {
+public class OpenBidPage extends JPanel implements ObserverInputInterface {
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField;
     private JTextField subjectInput, qualificationInput, lessonInput, dayInput, rateInput;
@@ -166,5 +167,16 @@ public class OpenBidPage extends JPanel {
 //                createBid("Open",,"", additionalInfo);
             }
         });
+    }
+
+    @Override
+    public JSONObject retrieveInputs() {
+        JSONObject jsonObj = new JSONObject();
+        return new JSONObject();
+    }
+
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+        submitButton.addActionListener(actionListener);
     }
 }

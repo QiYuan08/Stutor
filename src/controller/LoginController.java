@@ -2,6 +2,7 @@ package controller;
 
 import api.ApiRequest;
 import application.Application;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -37,12 +38,11 @@ public class LoginController {
     class LoginListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String[] inputs = inputPage.retrieveInputs();
-            String jsonObj = "{ \"userName\": \"" + inputs[0] + "\", \"password\": \"" + inputs[1] + "\"}";
-            HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj);
+            JSONObject jsonObj = inputPage.retrieveInputs();
+            HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj.toString());
 
             if (response.statusCode() == 200) {
-                notifySubscribers(inputs[0]);
+                notifySubscribers(jsonObj.get("userName").toString());
                 Application.loadPage(Application.DASHBOARD_PAGE);
             } else if (response.statusCode() == 403) {
                 JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",

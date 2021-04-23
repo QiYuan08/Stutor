@@ -1,10 +1,12 @@
 package controller;
 
+import org.json.JSONObject;
+
 import java.awt.event.ActionListener;
 
 public interface ObserverInputInterface {
 
-    String[] retrieveInputs();
+    JSONObject retrieveInputs();
     void addActionListener(ActionListener actionListener);
 
 }
