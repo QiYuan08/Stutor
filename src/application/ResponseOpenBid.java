@@ -1,4 +1,4 @@
-package application.bid;
+package application;
 
 import interfaces.InputInterface;
 import interfaces.BidEventSubscriber;
@@ -9,7 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class ResponseOpenBid extends CreateBid implements BidEventSubscriber, InputInterface {
+public class ResponseOpenBid extends JPanel implements BidEventSubscriber, InputInterface {
 
     private JLabel activityTitle, nameField, competencyField, lessonField, dayField, startTimeField, endTimeField, rateField, freeLessonField;
     private JTextField nameInput, competencyInput, lessonInput, dayInput, rateInput;

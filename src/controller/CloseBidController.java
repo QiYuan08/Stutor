@@ -1,11 +1,8 @@
 package controller;
 
 import api.ApiRequest;
-import application.Application;
-import application.bid.ResponseOpenBid;
 import interfaces.InputInterface;
 import org.json.JSONObject;
-import utils.AllBidUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

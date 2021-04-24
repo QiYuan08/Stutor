@@ -1,4 +1,4 @@
-package application.bid;
+package application;
 
 import interfaces.EventSubscriber;
 
