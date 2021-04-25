@@ -1,5 +1,6 @@
 package controller;
 
+import application.AllBidPage;
 import application.Application;
 
 import javax.swing.*;
@@ -8,10 +9,10 @@ import java.awt.event.ActionListener;
 
 public class AllBidListener implements ActionListener {
 
-    private ObserverInputInterface inputPage;
+    private AllBidPage inputPage;
     private ApplicationController applicationController;
 
-    public AllBidListener(ObserverInputInterface inputPage, ApplicationController applicationController) {
+    public AllBidListener(AllBidPage inputPage, ApplicationController applicationController) {
         this.inputPage = inputPage;
         this.applicationController = applicationController;
         inputPage.addActionListener(this);

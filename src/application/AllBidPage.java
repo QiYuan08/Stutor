@@ -26,6 +26,8 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
     JSONArray bids;
     GridBagConstraints c;
     JButton viewBidBtn;
+    JButton[] buttonArr;
+    private String userId;
 
     public AllBidPage() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
@@ -39,7 +41,7 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
 //        c.weighty = 1;
         c.insets = new Insets(1, 1, 1, 1);
 
-        activityTitle = new JLabel("User Login");
+        activityTitle = new JLabel("Request List");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -65,6 +67,20 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
         bids.put(new JSONObject().put("type", "close").put("id", "bc06e9ad-5d20-4dce-a176-a6ac73b26b35"));
         bids.put(new JSONObject().put("type", "close").put("id", "bc06e9ad-5d20-4dce-a176-a6ac73b26b35"));
         bids.put(new JSONObject().put("type", "close").put("id", "bc06e9ad-5d20-4dce-a176-a6ac73b26b35"));
+        bids.put(new JSONObject()
+                .put("id", "96b93474-5b31-4383-829c-1274f7fef403")
+                .put("duration", "1")
+                .put("dateCreated", "2021-04-25T10:21:00.023328100Z")
+                .put("noOfoLesson", "1")
+                .put("rate", "10")
+                .put("additionalInfo", new JSONObject())
+                .put("preferredSession", 1)
+                .put("initiatorId", "ecc52cc1-a3e4-4037-a80f-62d3799645f4")
+                .put("minCompetency", 1)
+                .put("startTime", "1PM")
+                .put("type", "open")
+                .put("day", "Monday")
+                .put("subjectId", "88f6ee80-4e7b-49b2-847b-23612d8a6f2f"));
 
         createContent();
     }
@@ -73,6 +89,9 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
      * Method to create all the bid available in the db and show it to the user inside the contentPanel
      */
     private void createContent() {
+
+        // button array to add event listener to them later one
+        buttonArr = new JButton[bids.length()];
 
         c.insets = new Insets(2,3,2,3); //spacing between each bids
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -109,15 +128,7 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
             bidPanelConstraint.gridwidth = 1;
             viewBidBtn = new JButton("View Bid");
             viewBidBtn.setName(bid.get("id").toString()); // give a unique name to a button to distinguish the
-
-//            viewBidBtn.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    JButton thisBtn = (JButton) e.getSource();
-//                    Application.getBidEventManager().notify(thisBtn.getName());
-//                    Application.loadPage(Application.RESPONSEOPENBID);
-//                }
-//            });
+            buttonArr[i] = viewBidBtn; // add the button into button array
             bidPanel.add(viewBidBtn, bidPanelConstraint);
 
             // if this is an open bid add close bid button
@@ -143,12 +154,8 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
             c.gridwidth = 1;
             c.gridheight = 1;
             contentPanel.add(bidPanel, c);
-
         }
-    }
 
-    public void setViewBidListener(ActionListener listener){
-        viewBidBtn.addActionListener(listener);
     }
 
     /**
@@ -158,17 +165,56 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
     @Override
     public void update(String data) {
 
-        // get all thid bid other than the one the user created
+        this.userId = data;
+        JSONObject user;
+
+        // get all bid
         HttpResponse<String> response = ApiRequest.get("/bid");
         bids = new JSONArray(response.body());
-        for (int i=0; i < bids.length(); i++){
-            JSONObject bid = bids.getJSONObject(i);
-            JSONObject initiator = bid.getJSONObject("initiator");
 
-            // if the poster of the bid is the tutor itself don't show the bid
-            if (initiator.get("id").equals(data)){
-                bids.remove(i);
+        // get the detail of the user
+        response = ApiRequest.get("/user/" + this.userId);
+        user = new JSONObject(response.body());
+
+        // filter the bid based on the user competency and userId
+        for (int i=0; i < bids.length(); i++){
+
+            JSONObject bid = bids.getJSONObject(i);
+
+            // if bid is still open
+            if (bid.get("dateClosedDown").equals(null)) {
+                JSONObject initiator = bid.getJSONObject("initiator");
+
+                // loop through every competency of the user
+                JSONArray userCompetencies = new JSONArray(user.get("competencies"));
+                for (int j=0; j < userCompetencies.length(); j++){
+
+                    JSONObject competency = userCompetencies.getJSONObject(j);
+                    int unknownCount = 0; //counter to see if the tutor has competency in this subject
+
+                    // if tutor knows current subject
+                    if (competency.getJSONObject("subject").get("id").equals(bid.get("subjectId"))) {
+
+                        // if min competency level is higher than user don't show the bid
+                        if (competency.getInt("level") < bid.getInt("minCompetency")){
+                            bids.remove(i);
+                        }
+                    } else {
+                        unknownCount += 1;
+                    }
+
+                    // if tutor don't know about this subject don't show the bid
+                    if (unknownCount == userCompetencies.length()){
+                        bids.remove(i);
+                    }
+                }
+
+                // if the poster of the bid is the tutor itself don't show the bid
+                if (initiator.get("id").equals(this.userId) ){
+                    bids.remove(i);
+                }
             }
+
         }
 
         // remake the jpanel
@@ -183,8 +229,14 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
         return null;
     }
 
+    /**
+     * Method to set event listener for every view bid button
+     * @param actionListener actionListener for the view bid button
+     */
     @Override
     public void addActionListener(ActionListener actionListener) {
-        viewBidBtn.addActionListener(actionListener);
+        for (JButton button: buttonArr){
+            button.addActionListener(actionListener);
+        }
     }
 }

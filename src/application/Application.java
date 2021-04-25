@@ -16,8 +16,8 @@ public class Application extends JFrame{
     public static final String VIEW_BID = "ViewBidPage";
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
-    ApplicationController loginController, contractController, allBidController, viewBidController;
-    ActionListener contractListener, loginListener, allBidListener, viewBidListener;
+    ApplicationController loginController, contractController, allBidController, viewBidController, openBidController;
+    ActionListener contractListener, loginListener, allBidListener, viewBidListener, openBidListener, closeBidListener;
 
     private Application() {
         super("StuTor");
@@ -33,13 +33,13 @@ public class Application extends JFrame{
         ProfilePage profilePage = new ProfilePage();
         OpenBidPage openBidPage = new OpenBidPage();
         AllBidPage allBid = new AllBidPage();
-        ViewBid viewBid = new ViewBid();
+        ViewBidPage viewBid = new ViewBidPage();
 
 //        rootPanel.add(loginPage, LOGIN_PAGE);
 //        rootPanel.add(registrationPage, REGISTRATION_PAGE);
 //        rootPanel.add(dashboardPage, DASHBOARD_PAGE);
 //        rootPanel.add(profilePage, PROFILE_PAGE);
-        rootPanel.add(openBidPage, OPEN_BID_PAGE);
+//        rootPanel.add(openBidPage, OPEN_BID_PAGE);
         rootPanel.add(allBid, ALL_BID);
         rootPanel.add(viewBid, VIEW_BID);
 
@@ -53,12 +53,20 @@ public class Application extends JFrame{
         contractListener = new ContractListener(openBidPage, contractController);
         contractController.subscribe(dashboardPage);
 
+        // controller for user to open bid
+        // TODO: refactor openbid listener so that constructor nonid controller if no other class subscribing it
+        openBidController = new ApplicationController();
+        openBidListener = new OpenBidListener(openBidPage, openBidController);
+
+        // passinng bidId between AllBid page and ViewBid page
         allBidController = new ApplicationController();
         allBidListener = new AllBidListener(allBid, allBidController);
         allBidController.subscribe(viewBid);
 
-        viewBidController = new ApplicationController();
-        viewBidListener = new ViewBidListener(viewBid, viewBidController);
+        // listener for closing bid
+        closeBidListener = new CloseBidListener(viewBid);
+//        viewBidController = new ApplicationController();
+//        viewBidListener = new CloseBidListener(viewBid, viewBidController);
 
         this.add(rootPanel);
         this.setVisible(true);
