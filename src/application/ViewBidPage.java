@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
+// TODO: show all bidder in open bid
 public class ViewBidPage extends JPanel implements ObserverOutputInterface {
 
     private String bidId;

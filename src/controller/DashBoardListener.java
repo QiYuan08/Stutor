@@ -7,6 +7,9 @@ import application.ProfilePage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/***
+ * Listener for find bid button in dashboard
+ */
 public class DashBoardListener implements ActionListener {
 
     DashboardPage inputPage;

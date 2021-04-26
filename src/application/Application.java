@@ -14,9 +14,10 @@ public class Application extends JFrame{
     public static final String OPEN_BID_PAGE = "OpenBidPage";
     public static final String ALL_BID = "AllBidPage";
     public static final String VIEW_BID = "ViewBidPage";
+    public static final String USER_BID = "UserBidPage";
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
-    ApplicationController loginController, contractController, allBidController, viewBidController, openBidController, dashboardController;
+    ApplicationController loginController, contractController, allBidController, userBidController, openBidController, dashboardController;
     ActionListener contractListener, loginListener, allBidListener, viewBidListener, openBidListener, closeBidListener, dashboardListener;
 
     private Application() {
@@ -32,16 +33,18 @@ public class Application extends JFrame{
         DashboardPage dashboardPage = new DashboardPage();
         ProfilePage profilePage = new ProfilePage();
         OpenBidPage openBidPage = new OpenBidPage();
-        AllBidPage allBid = new AllBidPage();
-        ViewBidPage viewBid = new ViewBidPage();
+        AllBidPage allBidPage = new AllBidPage();
+        ViewBidPage viewBidPage = new ViewBidPage();
+        UserBidPage userBidPage = new UserBidPage();
 
         rootPanel.add(loginPage, LOGIN_PAGE);
         rootPanel.add(registrationPage, REGISTRATION_PAGE);
         rootPanel.add(dashboardPage, DASHBOARD_PAGE);
         rootPanel.add(profilePage, PROFILE_PAGE);
         rootPanel.add(openBidPage, OPEN_BID_PAGE);
-        rootPanel.add(allBid, ALL_BID);
-        rootPanel.add(viewBid, VIEW_BID);
+        rootPanel.add(allBidPage, ALL_BID);
+        rootPanel.add(viewBidPage, VIEW_BID);
+        rootPanel.add(userBidPage, USER_BID);
 
         loginController = new ApplicationController();
         loginListener = new LoginListener(loginPage, loginController);
@@ -51,13 +54,17 @@ public class Application extends JFrame{
 
         // passing bidId between AllBid page and ViewBid page
         allBidController = new ApplicationController();
-        allBidListener = new AllBidListener(allBid, allBidController);
-        allBidController.subscribe(viewBid);
+        allBidListener = new AllBidListener(allBidPage, allBidController);
+        allBidController.subscribe(viewBidPage);
 
         dashboardController = new ApplicationController();
-        dashboardListener = new DashBoardListener(dashboardPage, dashboardController);
-        dashboardController.subscribe(allBid);
+        dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
+        dashboardController.subscribe(allBidPage);
         dashboardController.subscribe((ObserverOutputInterface) allBidListener); // for all bid page to update all its button
+        dashboardController.subscribe(userBidPage);
+
+        // passing
+//        dashboardController.subscribe(openBidPage);
 
         contractController = new ApplicationController();
         contractListener = new ContractListener(openBidPage, contractController);
@@ -71,9 +78,10 @@ public class Application extends JFrame{
 
 
         // listener for closing bid
-        closeBidListener = new CloseBidListener(viewBid);
+        // TODO: update allBidPage after closing
+        closeBidListener = new CloseBidListener(viewBidPage);
 //        viewBidController = new ApplicationController();
-//        viewBidListener = new CloseBidListener(viewBid, viewBidController);
+//        viewBidListener = new CloseBidListener(viewBidPage, viewBidController);
 
         this.add(rootPanel);
         this.setVisible(true);

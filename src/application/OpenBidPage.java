@@ -19,14 +19,15 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
-    private JButton submitButton;
+    private JButton submitButton, backBtn;
     private JComboBox<String> startMeridiem, typeCombo, subjectCombo, competencyCombo;
     private JSpinner startTime, duration;
-    private String userId = "ecc52cc1-a3e4-4037-a80f-62d3799645f4";   // TODO: remove the hardcoded userId
+//    private String userId;
     private HashMap<String, String> subjectMapping;
     private OpenBidUtil util = new OpenBidUtil();
 
     public OpenBidPage(){
+
         String[] meridiem = {"AM", "PM"};
 
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -36,11 +37,19 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
 //        c.weighty = 1;
         c.insets = new Insets(5, 5, 0, 5);
 
+        backBtn = new JButton("Back");
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.weightx = 0.2;
+        this.add(backBtn, c);
+
         activityTitle = new JLabel("Request Tutor");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
         c.gridx = 0;
+        c.weightx = 1;
         c.gridy = 0;
         c.gridwidth = 4;
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -75,7 +84,6 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(qualificationField, c);
-
 
         competencyCombo = new JComboBox<>(new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
         c.gridx = 1;
@@ -207,6 +215,13 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         c.gridy = 10;
         c.gridwidth = 4;
         this.add(submitButton, c);
+
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Application.loadPage(Application.DASHBOARD_PAGE);
+            }
+        });
     }
 
     @Override
@@ -231,10 +246,11 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("subjectId", subjectId);
         jsonObj.put("type", typeCombo.getSelectedItem().toString());
-        jsonObj.put("initiatorId", this.userId);
+        jsonObj.put("initiatorId", ProfilePage.userId);
         jsonObj.put("dateCreated", Instant.now());
         jsonObj.put("additionalInfo", additionalInfo);
 
+        System.out.println(jsonObj);
         return jsonObj;
     }
 
@@ -249,6 +265,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
      */
     @Override
     public void update(String data) {
-        this.userId = data;
+//        System.out.println(data);
+//        this.userId = data;
     }
 }

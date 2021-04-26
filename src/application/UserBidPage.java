@@ -1,20 +1,17 @@
 package application;
 
 import api.ApiRequest;
-import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
-import interfaces.EventSubscriber;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class AllBidPage extends JPanel implements EventSubscriber, ObserverInputInterface, ObserverOutputInterface {
+public class UserBidPage extends JPanel implements ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -25,7 +22,7 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
     ArrayList<JButton> buttonArr;
     private String userId;
 
-    public AllBidPage() {
+    public UserBidPage() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridLayout(1,1, 2, 2));
     }
@@ -128,58 +125,25 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
         JSONObject user;
 
         // get all bid
-        HttpResponse<String> response = ApiRequest.get("/bid");
+        HttpResponse<String> response = ApiRequest.getUser("/bid", new String[] {"initiatedBids"});
         bids = new JSONArray(response.body());
 
-        // get the detail of the user
-        response = ApiRequest.getUser("/user/" + this.userId, new String[] {"competencies", "competencies.subject"});
-        user = new JSONObject(response.body());
+        // filter the bid based on the user competency and userId
+        for (int i=0; i < bids.length(); i++){
 
-        if (user.get("isTutor").equals(true)){
+            JSONObject bid = bids.getJSONObject(i);
+            System.out.println(bid);
 
-            // filter the bid based on the user competency and userId
-            for (int i=0; i < bids.length(); i++){
+            // if bid is closed
+            if (bid.get("dateClosedDown") != null) {
+                JSONObject initiator = bid.getJSONObject("initiator");
 
-                JSONObject bid = bids.getJSONObject(i);
-                System.out.println(bid);
-
-                // if bid is still open
-                if (bid.get("dateClosedDown").equals(null)) {
-                    JSONObject initiator = bid.getJSONObject("initiator");
-
-                    // loop through every competency of the user
-                    JSONArray userCompetencies = new JSONArray(user.getJSONArray("competencies"));
-                    for (int j=0; j < userCompetencies.length(); j++){
-
-                        JSONObject userCompetency = userCompetencies.getJSONObject(j);
-                        int unknownCount = 0; //counter to see if the tutor has userCompetency in this subject
-
-                        // if tutor knows current subject
-                        if (userCompetency.getJSONObject("subject").get("id").equals(bid.getJSONObject("subject").get("id"))) {
-
-                            // if min userCompetency level is higher than user don't show the bid
-                            if (userCompetency.getInt("level") < bid.getInt("minCompetency")){
-                                bids.remove(i);
-                            }
-                        } else {
-                            unknownCount += 1;
-                        }
-
-                        // if tutor don't know about this subject don't show the bid
-                        if (unknownCount == userCompetencies.length()){
-                            bids.remove(i);
-                        }
-                    }
-
-                    // if the poster of the bid is the tutor itself don't show the bid
-                    if (initiator.get("id").equals(this.userId) ){
-                        bids.remove(i);
-                    }
+                // if the poster of the bid is the tutor itself don't show the bid
+                if (initiator.get("id").equals(this.userId) ){
+                    bids.remove(i);
                 }
-
             }
         }
-
 
         // remake the jpanel
         contentPanel.removeAll();
@@ -188,23 +152,19 @@ public class AllBidPage extends JPanel implements EventSubscriber, ObserverInput
         createContent();
     }
 
-    @Override
-    public JSONObject retrieveInputs() {
-        return null;
-    }
-
-    /**
-     * Method to set event listener for every view bid button
-     * @param actionListener actionListener for the view bid button
-     */
-    @Override
-    public void addActionListener(ActionListener actionListener) {
-
-        if (buttonArr != null) {
-            for (JButton button: buttonArr){
-                button.addActionListener(actionListener);
-            }
-        }
-
-    }
+//    /**
+//     * Method to set event listener for every view bid button
+//     * @param actionListener actionListener for the view bid button
+//     */
+//    @Override
+//    public void addActionListener(ActionListener actionListener) {
+//
+//        if (buttonArr != null) {
+//            for (JButton button: buttonArr){
+//                button.addActionListener(actionListener);
+//            }
+//        }
+//
+//    }
 }
+
