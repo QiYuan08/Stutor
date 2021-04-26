@@ -69,7 +69,7 @@ public class ViewBidPage extends JPanel implements ObserverOutputInterface {
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.ALL_BID);
+                Application.loadPage(Application.FIND_BID);
             }
         });
 

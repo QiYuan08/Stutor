@@ -1,12 +1,12 @@
 package application;
 
-import interfaces.EventSubscriber;
+import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class ConfirmBid extends JPanel implements EventSubscriber {
+public class ConfirmBid extends JPanel implements ObserverOutputInterface {
     private JLabel name, rate, competency, session, message;
     private JTextField messageField;
     private JPanel details, response;

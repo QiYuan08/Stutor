@@ -11,7 +11,7 @@ import java.awt.*;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class UserBidsPage extends JPanel implements ObserverOutputInterface {
+public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -22,7 +22,7 @@ public class UserBidsPage extends JPanel implements ObserverOutputInterface {
     ArrayList<JButton> buttonArr;
     private String userId;
 
-    public UserBidsPage() {
+    public SeeBidsPage() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridLayout(1,1, 2, 2));
     }

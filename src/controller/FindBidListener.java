@@ -1,18 +1,18 @@
 package controller;
 
-import application.AllBidPage;
+import application.FindBidPage;
 import application.Application;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AllBidListener implements ObserverOutputInterface, ActionListener {
+public class FindBidListener implements ObserverOutputInterface, ActionListener {
 
-    private AllBidPage inputPage;
+    private FindBidPage inputPage;
     private ApplicationController applicationController;
 
-    public AllBidListener(AllBidPage inputPage, ApplicationController applicationController) {
+    public FindBidListener(FindBidPage inputPage, ApplicationController applicationController) {
         this.inputPage = inputPage;
         this.applicationController = applicationController;
 //        inputPage.addActionListener(this);
@@ -28,6 +28,8 @@ public class AllBidListener implements ObserverOutputInterface, ActionListener {
         Application.loadPage(Application.VIEW_BID);
     }
 
+    // this method is called whenever there is an update in bids to display to tutor
+    // to add listener for all the list of bids;
     @Override
     public void update(String data) {
         inputPage.addActionListener(this);

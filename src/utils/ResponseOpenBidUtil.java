@@ -1,7 +1,6 @@
 package utils;
 
 import api.ApiRequest;
-import interfaces.ResponseUtil;
 import org.json.JSONObject;
 
 import javax.swing.*;
