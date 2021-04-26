@@ -20,6 +20,7 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
     private JButton dashboardPageButton;
     public static String userId;
 
+    // TODO: retrieve userId when get username in LoginListener and pass it here in update functions since most page require id
     ProfilePage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());

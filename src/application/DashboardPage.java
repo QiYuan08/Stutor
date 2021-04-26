@@ -118,4 +118,8 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface {
             this.tutorialsTaughtList.setViewportView(tutorialsTaughtPanel);
         }
     }
+
+    public void addFindBidListener(ActionListener listener) {
+        this.findBidsButton.addActionListener(listener);
+    }
 }

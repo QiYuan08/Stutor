@@ -7,15 +7,17 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 public class ViewBidPage extends JPanel implements ObserverOutputInterface {
 
     private String bidId;
-    private JLabel title, name, rate, competency, noOfLesson, duration, startTime, day, preferredSession;
+    private JLabel title, subjectLabel, name, rate, competency, noOfLesson, duration, startTime, day, preferredSession;
     private JButton closeBtn = new JButton("Buy Out");
     private JButton replyBtn = new JButton("Bid");
+    private JButton backBtn;
 
     ViewBidPage() {
 
@@ -48,11 +50,35 @@ public class ViewBidPage extends JPanel implements ObserverOutputInterface {
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalAlignment(JLabel.TOP);
         title.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-        c.gridx = this.getComponentCount();
-        c.gridwidth = 4;
-        c.gridy = 0;
+        c.gridy = this.getComponentCount();
+        c.gridwidth = 3;
+        c.gridx = 1;
         c.anchor = GridBagConstraints.PAGE_START;
         this.add(title, c);
+
+        backBtn = new JButton("Back");
+        c.gridy = 0;
+        c.weightx = 0.0;
+        c.gridwidth = 1;
+        c.gridx = 0;
+        c.anchor = GridBagConstraints.PAGE_START;
+        this.add(backBtn, c);
+
+        // TODO: can talk about this in design rationale, nonid to create a listener for this cuz very simple and wont change forever
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Application.loadPage(Application.ALL_BID);
+            }
+        });
+
+        subjectLabel = new JLabel("Subject: " + subject.get("name"));
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridwidth = 3;
+        c.gridy = this.getComponentCount();
+        c.anchor = GridBagConstraints.PAGE_START;
+        this.add(subjectLabel, c);
 
         name = new JLabel("Name: " + initiator.get("givenName") +" " + initiator.get("familyName"));
         c.gridx = 0;

@@ -34,6 +34,39 @@ public class ApiRequest {
         return response;
     }
 
+    public static HttpResponse<String> getUser(String url, String[] fields) {
+
+        String fieldStr = "";
+
+        if (fields.length > 0){
+            fieldStr = "?";
+            for (int i=0; i < fields.length; i++) {
+                fieldStr += "fields=" + fields[i];
+                if (i < fields.length - 1) { // last field nonid add &
+                    fieldStr += "&";
+                }
+            }
+
+        }
+
+        System.out.println(URI.create(ROOT_URL + url + fieldStr));
+        client = HttpClient.newHttpClient();
+        request = HttpRequest
+                .newBuilder(URI.create(ROOT_URL + url + fieldStr))
+                .setHeader("Authorization", API_KEY)
+                .GET()
+                .build();
+
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
     public static HttpResponse<String> post(String url, String jsonObj) {
         client = HttpClient.newHttpClient();
         request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
