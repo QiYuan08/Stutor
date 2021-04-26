@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class AllBidPage extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
+public class FindBidPage extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -24,7 +24,7 @@ public class AllBidPage extends JPanel implements ObserverInputInterface, Observ
     ArrayList<JButton> buttonArr;
     private String userId;
 
-    public AllBidPage() {
+    public FindBidPage() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridLayout(1,1, 2, 2));
     }

@@ -1,7 +1,7 @@
 package application;
 
-import interfaces.InputInterface;
-import interfaces.BidEventSubscriber;
+import controller.ObserverInputInterface;
+import controller.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -9,7 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class ResponseOpenBid extends JPanel implements BidEventSubscriber, InputInterface {
+public class ResponseOpenBid extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
     private JLabel activityTitle, nameField, competencyField, lessonField, dayField, startTimeField, endTimeField, rateField, freeLessonField;
     private JTextField nameInput, competencyInput, lessonInput, dayInput, rateInput;
@@ -167,13 +167,6 @@ public class ResponseOpenBid extends JPanel implements BidEventSubscriber, Input
     }
 
     @Override
-    public void updateBidId(String bidId) {
-        this.bidId = bidId;
-        activityTitle.setText("Bidding for: " + this.bidId);
-        submitButton.setName(bidId); // set the name of this button as bidId for quering with db
-    }
-
-    @Override
     public JSONObject retrieveInputs() {
 
         String time = startTime.getValue().toString() + startMeridiem.getSelectedItem().toString() + " to " + endTime.getValue().toString() + endMeridiem.getSelectedItem().toString();
@@ -192,7 +185,14 @@ public class ResponseOpenBid extends JPanel implements BidEventSubscriber, Input
     }
 
     @Override
-    public void setListener(ActionListener listener) {
-        submitButton.addActionListener(listener);
+    public void addActionListener(ActionListener actionListener) {
+        submitButton.addActionListener(actionListener);
+    }
+
+    @Override
+    public void update(String data) {
+        this.bidId = bidId;
+        activityTitle.setText("Bidding for: " + this.bidId);
+        submitButton.setName(bidId); // set the name of this button as bidId for quering with db
     }
 }
