@@ -2,6 +2,8 @@ package controller;
 
 import api.ApiRequest;
 import application.Application;
+import application.ProfilePage;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -26,7 +28,7 @@ public class LoginListener implements ActionListener {
         HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj.toString());
 
         if (response.statusCode() == 200) {
-            applicationController.notifySubscribers(jsonObj.get("userName").toString());
+            applicationController.notifySubscribers(getUserId(jsonObj.getString("userName")));
             Application.loadPage(Application.DASHBOARD_PAGE);
         } else if (response.statusCode() == 403) {
             JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
@@ -34,5 +36,20 @@ public class LoginListener implements ActionListener {
         } else {
             System.out.println(response.statusCode());
         }
+    }
+
+    private String getUserId(String username) {
+        HttpResponse<String> response = ApiRequest.get("/user");
+        if (response.statusCode() == 200) {
+            JSONArray users = new JSONArray(response.body());
+            JSONObject user;
+            for (int i = 0; i < users.length(); i++) {
+                user = users.getJSONObject(i);
+                if (user.get("userName").equals(username)) {
+                    return user.get("id").toString();
+                }
+            }
+        }
+        return null;
     }
 }

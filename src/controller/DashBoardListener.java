@@ -22,7 +22,7 @@ public class DashBoardListener implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        applicationController.notifySubscribers(ProfilePage.userId);
+        applicationController.notifySubscribers(inputPage.getUserId());
         Application.loadPage(Application.ALL_BID);
     }
 }

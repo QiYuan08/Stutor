@@ -25,6 +25,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
 //    private String userId;
     private HashMap<String, String> subjectMapping;
     private OpenBidUtil util = new OpenBidUtil();
+    private String userId;
 
     public OpenBidPage(){
 
@@ -64,7 +65,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         this.add(subjectField, c);
 
         // retrieve all the subject name from the key mapping
-        ArrayList<String> subjectsName = new ArrayList<String>();
+        ArrayList<String> subjectsName = new ArrayList<>();
         subjectMapping = util.getAllSubject();
         for (String key: subjectMapping.keySet()){
             subjectsName.add(key);
@@ -72,7 +73,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         // convert arraylist into array for combobox
         String[] subjectsNameArr = new String[subjectsName.size()];
         subjectsName.toArray(subjectsNameArr);
-        subjectCombo = new JComboBox<String>(subjectsNameArr);
+        subjectCombo = new JComboBox<>(subjectsNameArr);
         c.gridx = 1;
         c.gridwidth = 4;
         this.add(subjectCombo, c);
@@ -246,7 +247,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("subjectId", subjectId);
         jsonObj.put("type", typeCombo.getSelectedItem().toString());
-        jsonObj.put("initiatorId", ProfilePage.userId);
+        jsonObj.put("initiatorId", this.userId);
         jsonObj.put("dateCreated", Instant.now());
         jsonObj.put("additionalInfo", additionalInfo);
 

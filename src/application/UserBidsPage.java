@@ -11,7 +11,7 @@ import java.awt.*;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class UserBidPage extends JPanel implements ObserverOutputInterface {
+public class UserBidsPage extends JPanel implements ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -22,7 +22,7 @@ public class UserBidPage extends JPanel implements ObserverOutputInterface {
     ArrayList<JButton> buttonArr;
     private String userId;
 
-    public UserBidPage() {
+    public UserBidsPage() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridLayout(1,1, 2, 2));
     }
@@ -125,7 +125,8 @@ public class UserBidPage extends JPanel implements ObserverOutputInterface {
         JSONObject user;
 
         // get all bid
-        HttpResponse<String> response = ApiRequest.getUser("/bid", new String[] {"initiatedBids"});
+//        HttpResponse<String> response = ApiRequest.getUser("/bid", new String[] {"initiatedBids"});
+        HttpResponse<String> response = ApiRequest.get("/bid");
         bids = new JSONArray(response.body());
 
         // filter the bid based on the user competency and userId

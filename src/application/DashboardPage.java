@@ -18,6 +18,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface {
     private JButton viewProfileButton, seeBidsButton, openBidButton, findBidsButton;
     private JScrollPane tutorialsTakenList, tutorialsTaughtList;
     private HttpResponse<String> response;
+    private String userId;
 
     DashboardPage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -93,13 +94,14 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface {
         seeBidsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.USER_BID);
+                Application.loadPage(Application.USER_BIDS);
             }
         });
     }
 
     @Override
-    public void update(String data) {
+    public void update(String userId) {
+        this.userId = userId;
         HttpResponse<String> response = ApiRequest.get("/contract");
         if (response.statusCode() == 200) {
             JSONArray contracts = new JSONArray(response.body());
@@ -109,12 +111,12 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface {
             tutorialsTaughtPanel.setLayout(new BoxLayout(tutorialsTaughtPanel, BoxLayout.Y_AXIS));
             for (int i = 0; i < contracts.length(); i++) {
                 JSONObject contract = (JSONObject) contracts.get(i);
-                if (contract.optJSONObject("firstParty").get("id").equals(ProfilePage.userId)) {
+                if (contract.optJSONObject("firstParty").get("id").equals(this.userId)) {
                     JPanel componentPanel = new JPanel();
                     componentPanel.add(new JLabel(contract.optJSONObject("subject").optString("name") +
                             " - " + contract.optJSONObject("subject").optString("description")));
                     tutorialsTakenPanel.add(componentPanel);
-                } else if (contract.optJSONObject("secondParty").get("id").equals(ProfilePage.userId)) {
+                } else if (contract.optJSONObject("secondParty").get("id").equals(this.userId)) {
                     JPanel componentPanel = new JPanel();
                     componentPanel.add(new JLabel(contract.optJSONObject("subject").optString("name") +
                             " - " + contract.optJSONObject("subject").optString("description")));
@@ -133,4 +135,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface {
     public void addCreateBidListener(ActionListener listener) {
         this.openBidButton.addActionListener(listener);
     }
+
+    public String getUserId() {return this.userId;}
 }

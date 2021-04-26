@@ -18,7 +18,7 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
     private JLabel username, name, accType;
     private JScrollPane competenciesList, qualificationsList;
     private JButton dashboardPageButton;
-    public static String userId;
+    private String userId;
 
     // TODO: retrieve userId when get username in LoginListener and pass it here in update functions since most page require id
     ProfilePage() {
@@ -106,25 +106,9 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
     }
 
     @Override
-    public void update(String username) {
-        if (ProfilePage.userId == null) {
-            HttpResponse<String> response = ApiRequest.get("/user?fields=competencies.subject&fields=qualifications");
-            if (response.statusCode() == 200) {
-                JSONArray users = new JSONArray(response.body());
-                JSONObject user;
-                for (int i = 0; i < users.length(); i++) {
-                    user = users.getJSONObject(i);
-                    if (user.get("userName").equals(username)) {
-                        ProfilePage.userId = user.get("id").toString();
-                    }
-                }
-            }
-        }
-        updateContent();
-    }
-
-    private void updateContent() {
-        HttpResponse<String> response = ApiRequest.get("/user/" + userId + "?fields=competencies.subject&fields=qualifications");
+    public void update(String userId) {
+        this.userId = userId;
+        HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=competencies.subject&fields=qualifications");
         if (response.statusCode() == 200) {
             JSONObject user = new JSONObject(response.body());
             this.username.setText(user.get("userName").toString());

@@ -14,8 +14,9 @@ public class Application extends JFrame{
     public static final String OPEN_BID_PAGE = "OpenBidPage";
     public static final String ALL_BID = "AllBidPage";
     public static final String VIEW_BID = "ViewBidPage";
-    public static final String USER_BID = "UserBidPage";
+    public static final String USER_BIDS = "UserBidsPage";
     private static JPanel rootPanel;
+//    private static JPanel loginPage, registrationPage, dashboardPage, profilePage, openBidPage, viewBidPage, userBidsPage;
     private static CardLayout cardLayout;
     ApplicationController loginController, contractController, allBidController, userBidController, openBidController, dashboardController;
     ActionListener contractListener, loginListener, allBidListener, viewBidListener, openBidListener, closeBidListener, dashboardListener;
@@ -35,7 +36,7 @@ public class Application extends JFrame{
         OpenBidPage openBidPage = new OpenBidPage();
         AllBidPage allBidPage = new AllBidPage();
         ViewBidPage viewBidPage = new ViewBidPage();
-        UserBidPage userBidPage = new UserBidPage();
+        UserBidsPage userBidsPage = new UserBidsPage();
 
         rootPanel.add(loginPage, LOGIN_PAGE);
         rootPanel.add(registrationPage, REGISTRATION_PAGE);
@@ -44,13 +45,14 @@ public class Application extends JFrame{
         rootPanel.add(openBidPage, OPEN_BID_PAGE);
         rootPanel.add(allBidPage, ALL_BID);
         rootPanel.add(viewBidPage, VIEW_BID);
-        rootPanel.add(userBidPage, USER_BID);
+        rootPanel.add(userBidsPage, USER_BIDS);
 
         loginController = new ApplicationController();
         loginListener = new LoginListener(loginPage, loginController);
         loginController.subscribe(profilePage);
         loginController.subscribe(dashboardPage);
         loginController.subscribe(openBidPage);
+
 
         // passing bidId between AllBid page and ViewBid page
         allBidController = new ApplicationController();
@@ -61,7 +63,7 @@ public class Application extends JFrame{
         dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe(allBidPage);
         dashboardController.subscribe((ObserverOutputInterface) allBidListener); // for all bid page to update all its button
-        dashboardController.subscribe(userBidPage);
+        dashboardController.subscribe(userBidsPage);
 
         // passing
 //        dashboardController.subscribe(openBidPage);
@@ -101,6 +103,12 @@ public class Application extends JFrame{
     }
 
     public static void loadPage(String pageName) {
+        cardLayout.show(rootPanel, pageName);
+    }
+
+    public static void loadPage(String pageName, String context) {
+        ObserverOutputInterface page = (ObserverOutputInterface) rootPanel.getClientProperty(pageName);
+        page.update(context);
         cardLayout.show(rootPanel, pageName);
     }
 
