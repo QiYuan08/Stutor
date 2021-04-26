@@ -17,7 +17,7 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
     private JLabel activityTitle, usernameField, nameField, accTypeField, competenciesField, qualificationsField, initBidsField;
     private JLabel username, name, accType;
     private JScrollPane competenciesList, qualificationsList;
-    private JButton dashboardPageButton;
+    private JButton dashboardPageButton, logOutButton;
     private String userId;
 
     // TODO: retrieve userId when get username in LoginListener and pass it here in update functions since most page require id
@@ -86,6 +86,10 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
         c.gridwidth = 1;
         this.add(dashboardPageButton, c);
 
+        logOutButton = new JButton("Log Out");
+        c.gridx = 1;
+        this.add(logOutButton, c);
+
         competenciesList = new JScrollPane();
         c.gridy = 4;
         c.gridwidth = 2;
@@ -101,6 +105,13 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Application.loadPage(Application.DASHBOARD_PAGE);
+            }
+        });
+
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Application.loadPage(Application.LOGIN_PAGE);
             }
         });
     }
