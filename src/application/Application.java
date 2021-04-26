@@ -107,8 +107,12 @@ public class Application extends JFrame{
     }
 
     public static void loadPage(String pageName, String context) {
-        ObserverOutputInterface page = (ObserverOutputInterface) rootPanel.getClientProperty(pageName);
-        page.update(context);
+        for (Component component: rootPanel.getComponents()) {
+            if (component instanceof ObserverOutputInterface) {
+                ObserverOutputInterface page = (ObserverOutputInterface) component;
+                page.update(context);
+            }
+        }
         cardLayout.show(rootPanel, pageName);
     }
 

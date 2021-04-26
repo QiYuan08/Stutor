@@ -3,7 +3,6 @@ package application;
 import api.ApiRequest;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
-import interfaces.EventSubscriber;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class AllBidPage extends JPanel implements EventSubscriber, ObserverInputInterface, ObserverOutputInterface {
+public class AllBidPage extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;

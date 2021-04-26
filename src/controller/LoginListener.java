@@ -30,6 +30,7 @@ public class LoginListener implements ActionListener {
         if (response.statusCode() == 200) {
             applicationController.notifySubscribers(getUserId(jsonObj.getString("userName")));
             Application.loadPage(Application.DASHBOARD_PAGE);
+//            Application.loadPage(Application.DASHBOARD_PAGE, getUserId(jsonObj.getString("userName")));
         } else if (response.statusCode() == 403) {
             JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
                     "Username Invalid", JOptionPane.ERROR_MESSAGE);
