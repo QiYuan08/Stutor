@@ -18,7 +18,7 @@ public class Application extends JFrame{
     private static JPanel rootPanel;
 //    private static JPanel loginPage, registrationPage, dashboardPage, profilePage, openBidPage, viewBidPage, userBidsPage;
     private static CardLayout cardLayout;
-    ApplicationController loginController, contractController, findBidController, userBidController, openBidController, dashboardController;
+    ApplicationController loginController, contractController, findBidController, userBidController, openBidController, dashboardController, updateViewController;
     ActionListener contractListener, loginListener, findBidListener, viewBidListener, openBidListener, closeBidListener, dashboardListener;
 
     private Application() {
@@ -35,8 +35,8 @@ public class Application extends JFrame{
         ProfilePage profilePage = new ProfilePage();
         OpenBidPage openBidPage = new OpenBidPage();
         FindBidPage findBidPage = new FindBidPage();
-        ViewBidPage viewBidPage = new ViewBidPage();
-        SeeBidsPage userBidsPage = new SeeBidsPage();
+        FindBidDetail findBidDetail = new FindBidDetail();
+        SeeBidsPage seeBidsPage = new SeeBidsPage();
 
         rootPanel.add(loginPage, LOGIN_PAGE);
         rootPanel.add(registrationPage, REGISTRATION_PAGE);
@@ -44,8 +44,16 @@ public class Application extends JFrame{
         rootPanel.add(profilePage, PROFILE_PAGE);
         rootPanel.add(openBidPage, OPEN_BID_PAGE);
         rootPanel.add(findBidPage, FIND_BID);
-        rootPanel.add(viewBidPage, VIEW_BID);
-        rootPanel.add(userBidsPage, USER_BIDS);
+        rootPanel.add(findBidDetail, VIEW_BID);
+        rootPanel.add(seeBidsPage, USER_BIDS);
+
+
+        // listener for closing bid
+        // TODO: update findBidPage after closing
+        updateViewController = new ApplicationController();
+        closeBidListener = new CloseBidListener(findBidDetail, updateViewController);
+        updateViewController.subscribe(findBidPage);
+        updateViewController.subscribe(seeBidsPage);
 
         // passing studentId between classes
         loginController = new ApplicationController();
@@ -53,23 +61,20 @@ public class Application extends JFrame{
         loginController.subscribe(profilePage);
         loginController.subscribe(dashboardPage);
         loginController.subscribe(openBidPage);
-        loginController.subscribe(userBidsPage);
+        loginController.subscribe(seeBidsPage);
         loginController.subscribe(findBidPage);
+        loginController.subscribe((ObserverOutputInterface) closeBidListener); // get the userId to update other bidding page
 
         // passing bidId between AllBid page and ViewBid page
         findBidController = new ApplicationController();
         findBidListener = new FindBidListener(findBidPage, findBidController);
-        findBidController.subscribe(viewBidPage);
+        findBidController.subscribe(findBidDetail);
 
-        // needed for find bid pages to add event listener for all of its button
+        // dashboardController needed for find bid pages to add event listener for all of its button
         dashboardController = new ApplicationController();
         dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for all bid page to update all its button
-        dashboardController.subscribe(userBidsPage);
-
-
-        // passing
-//        dashboardController.subscribe(openBidPage);
+        dashboardController.subscribe(seeBidsPage);
 
         contractController = new ApplicationController();
         contractListener = new ContractListener(openBidPage, contractController);
@@ -81,12 +86,8 @@ public class Application extends JFrame{
         openBidListener = new OpenBidListener(openBidPage, openBidController);
 
 
-
-        // listener for closing bid
-        // TODO: update findBidPage after closing
-        closeBidListener = new CloseBidListener(viewBidPage);
 //        viewBidController = new ApplicationController();
-//        viewBidListener = new CloseBidListener(viewBidPage, viewBidController);
+//        viewBidListener = new CloseBidListener(, viewBidController);
 
         this.add(rootPanel);
         this.setVisible(true);

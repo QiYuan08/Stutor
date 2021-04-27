@@ -48,8 +48,6 @@ public class ApiRequest {
             }
 
         }
-
-        System.out.println(URI.create(ROOT_URL + url + fieldStr));
         client = HttpClient.newHttpClient();
         request = HttpRequest
                 .newBuilder(URI.create(ROOT_URL + url + fieldStr))

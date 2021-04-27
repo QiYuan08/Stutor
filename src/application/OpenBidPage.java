@@ -266,7 +266,6 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
      */
     @Override
     public void update(String data) {
-//        System.out.println(data);
-//        this.userId = data;
+        this.userId = data;
     }
 }

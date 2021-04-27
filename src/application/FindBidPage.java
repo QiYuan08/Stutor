@@ -6,9 +6,11 @@ import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.sound.midi.SysexMessage;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
     JLabel activityTitle;
     JSONArray bids;
     GridBagConstraints c;
-    JButton viewBidBtn;
+    JButton viewBidBtn, backBtn;
     ArrayList<JButton> buttonArr;
     private String userId;
 
@@ -44,13 +46,23 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
 //        c.weighty = 1;
         c.insets = new Insets(1, 1, 1, 1);
 
+        backBtn = new JButton("Back");
+//        c.gridy = 0;
+//        c.weightx = 0.0;
+//        c.gridwidth = 1;
+//        c.gridheight = 1;
+//        c.gridx = 0;
+//        c.anchor = GridBagConstraints.PAGE_START;
+//        this.add(backBtn, c);
+
         activityTitle = new JLabel("Request List");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-        c.gridx = 0;
+        c.gridx = 1;
         c.gridy = 0;
-        c.gridwidth = 1;
+        c.weightx = 1;
+        c.gridwidth = 3;
         contentPanel.add(activityTitle, c);
 
         // wrap contentPanel inside a scrollpane
@@ -91,16 +103,16 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
                 // add view detail button
                 bidPanelConstraint.gridx = 6;
                 bidPanelConstraint.gridwidth = 1;
+                bidPanelConstraint.weightx = 0.2;
                 viewBidBtn = new JButton("View Bid");
-                System.out.println(bid);
-                System.out.println(bid.get("id"));
+//                System.out.println(bid);
                 viewBidBtn.setName(bid.get("id").toString()); // give a unique name to a button to distinguish the
                 buttonArr.add(viewBidBtn); // add the button into button array
                 bidPanel.add(viewBidBtn, bidPanelConstraint);
 
                 c.gridx = 0;
-                c.gridy = contentPanel.getComponentCount();
-                c.gridwidth = 1;
+                c.gridy = contentPanel.getComponentCount() - 1;
+                c.gridwidth = 4;
                 c.gridheight = 1;
                 contentPanel.add(bidPanel, c);
             }
@@ -114,6 +126,13 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
             bidPanel.add(noBid);
             contentPanel.add(bidPanel);
         }
+
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Application.loadPage(Application.DASHBOARD_PAGE);
+            }
+        });
     }
 
     /**
@@ -123,12 +142,14 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
     @Override
     public void update(String data) {
 
+        System.out.println("update in findbidpage called");
         this.userId = data;
         JSONObject user;
+        bids = new JSONArray();
 
         // get all bid
         HttpResponse<String> response = ApiRequest.get("/bid");
-        bids = new JSONArray(response.body());
+        JSONArray returnedBids = new JSONArray(response.body());
 
         // get the detail of the user
         response = ApiRequest.getUser("/user/" + this.userId, new String[] {"competencies", "competencies.subject"});
@@ -136,46 +157,36 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
 
         if (user.get("isTutor").equals(true)){
 
-            // filter the bid based on the user competency and userId
-            for (int i=0; i < bids.length(); i++){
+            // add every bid that is qualified to be teached by this user to bids
+            for (int i =0; i < returnedBids.length(); i++){
 
-                JSONObject bid = bids.getJSONObject(i);
-                System.out.println(bid);
+                JSONObject bid = returnedBids.getJSONObject(i);
 
-                // if bid is still open
+                // if the bid still open
                 if (bid.get("dateClosedDown").equals(null)) {
-                    JSONObject initiator = bid.getJSONObject("initiator");
+                    // for some bids that doesn't have min competency
+                    if (bid.getJSONObject("additionalInfo").has("minCompetency") == false) {
+                        bids.put(bid);
 
-                    // loop through every competency of the user
-                    JSONArray userCompetencies = new JSONArray(user.getJSONArray("competencies"));
-                    for (int j=0; j < userCompetencies.length(); j++){
+                    } else { // if that bid has competency
+                        // check this subject with every competency of this user
+                        JSONArray userCompetencies = user.getJSONArray("competencies");
+                        for (int j = 0; j < userCompetencies.length(); j++){
 
-                        JSONObject userCompetency = userCompetencies.getJSONObject(j);
-                        int unknownCount = 0; //counter to see if the tutor has userCompetency in this subject
+                            // current competency
+                            JSONObject competency = userCompetencies.getJSONObject(j);
 
-                        // if tutor knows current subject
-                        if (userCompetency.getJSONObject("subject").get("id").equals(bid.getJSONObject("subject").get("id"))) {
+                            // if user know this subject
+                            if (competency.getJSONObject("subject").get("id").equals(bid.getJSONObject("subject").get("id"))) {
 
-                            // if min userCompetency level is higher than user don't show the bid
-                            if (userCompetency.getInt("level") < bid.getInt("minCompetency")){
-                                bids.remove(i);
+                                // compare the competency level
+                                if (competency.getInt("level") >= (bid.getJSONObject("additionalInfo").getInt("minCompetency") + 2)) {
+                                    bids.put(bid);
+                                }
                             }
-                        } else {
-                            unknownCount += 1;
                         }
-
-                        // if tutor don't know about this subject don't show the bid
-                        if (unknownCount == userCompetencies.length()){
-                            bids.remove(i);
-                        }
-                    }
-
-                    // if the poster of the bid is the tutor itself don't show the bid
-                    if (initiator.get("id").equals(this.userId) ){
-                        bids.remove(i);
                     }
                 }
-
             }
         }
 

@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 // TODO: show all bidder in open bid
-public class ViewBidPage extends JPanel implements ObserverOutputInterface {
+public class FindBidDetail extends JPanel implements ObserverOutputInterface {
 
     private String bidId;
     private JLabel title, subjectLabel, name, rate, competency, noOfLesson, duration, startTime, day, preferredSession;
@@ -20,7 +20,7 @@ public class ViewBidPage extends JPanel implements ObserverOutputInterface {
     private JButton replyBtn = new JButton("Bid");
     private JButton backBtn;
 
-    ViewBidPage() {
+    FindBidDetail() {
 
     }
 
@@ -99,7 +99,7 @@ public class ViewBidPage extends JPanel implements ObserverOutputInterface {
 
         // if competency is provided in the bid
         if (additionalInfo.has("rate")){
-            competency = new JLabel("Rate: " + additionalInfo.get("minCompetency"));
+            competency = new JLabel("Competency: " + additionalInfo.get("minCompetency"));
         } else {
             competency = new JLabel("Competency not provided");
         }

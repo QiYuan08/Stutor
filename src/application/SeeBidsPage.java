@@ -8,9 +8,12 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
+// TODO: fix the layout =.=
 public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
@@ -18,7 +21,7 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
     JLabel activityTitle;
     JSONArray bids;
     GridBagConstraints c;
-    JButton viewBidBtn;
+    JButton viewBidBtn, backBtn;
     ArrayList<JButton> buttonArr;
     private String userId;
 
@@ -38,17 +41,25 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         contentPanel.setBackground(new Color(153, 255, 255));
         contentPanel.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
         c = new GridBagConstraints();
-        c.weightx = 1;
 //        c.weighty = 1;
         c.insets = new Insets(1, 1, 1, 1);
+
+        backBtn = new JButton("Back");
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 1;
+        c.weightx = 0.2;
+        c.anchor = GridBagConstraints.PAGE_START;
+        contentPanel.add(backBtn, c);
 
         activityTitle = new JLabel("Request List");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-        c.gridx = 0;
+        c.weightx = 1;
+        c.gridx = 1;
         c.gridy = 0;
-        c.gridwidth = 1;
+        c.gridwidth = 2;
         contentPanel.add(activityTitle, c);
 
         // wrap contentPanel inside a scrollpane
@@ -59,6 +70,7 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.PAGE_START;
         c.ipady = 50;
+
 
         // create a jPanel for each bids available
         if (bids.length() > 0) {
@@ -89,6 +101,7 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
                 // add view detail button
                 bidPanelConstraint.gridx = 6;
                 bidPanelConstraint.gridwidth = 1;
+                bidPanelConstraint.weightx = 0.2;
                 viewBidBtn = new JButton("View Bid");
                 System.out.println(bid);
                 System.out.println(bid.get("id"));
@@ -97,8 +110,9 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
                 bidPanel.add(viewBidBtn, bidPanelConstraint);
 
                 c.gridx = 0;
+                c.weightx = 1;
                 c.gridy = contentPanel.getComponentCount();
-                c.gridwidth = 1;
+                c.gridwidth = 5;
                 c.gridheight = 1;
                 contentPanel.add(bidPanel, c);
             }
@@ -112,10 +126,17 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
             bidPanel.add(noBid);
             contentPanel.add(bidPanel);
         }
+
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Application.loadPage(Application.DASHBOARD_PAGE);
+            }
+        });
     }
 
     /**
-     * Update the bids inside this panels whenever this page is load
+     * Update the panels with all the bids that are openend by the user
      * @param data The user id that are currently using this page
      */
     @Override
@@ -124,27 +145,10 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         this.userId = data;
         JSONObject user;
 
+        System.out.println(this.userId);
         // get all bid
-//        HttpResponse<String> response = ApiRequest.getUser("/bid", new String[] {"initiatedBids"});
-        HttpResponse<String> response = ApiRequest.get("/bid");
-        bids = new JSONArray(response.body());
-
-        // filter the bid based on the user competency and userId
-        for (int i=0; i < bids.length(); i++){
-
-            JSONObject bid = bids.getJSONObject(i);
-            System.out.println(bid);
-
-            // if bid is closed
-            if (bid.get("dateClosedDown") != null) {
-                JSONObject initiator = bid.getJSONObject("initiator");
-
-                // if the poster of the bid is the tutor itself don't show the bid
-                if (initiator.get("id").equals(this.userId) ){
-                    bids.remove(i);
-                }
-            }
-        }
+        HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids");
+        bids = new JSONArray(new JSONObject(response.body()).getJSONArray("initiatedBids"));
 
         // remake the jpanel
         contentPanel.removeAll();

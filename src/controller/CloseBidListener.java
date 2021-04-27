@@ -1,7 +1,8 @@
 package controller;
 
 import api.ApiRequest;
-import application.ViewBidPage;
+import application.Application;
+import application.FindBidDetail;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -10,13 +11,15 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.time.Instant;
 
-public class CloseBidListener implements ActionListener {
+public class CloseBidListener implements ActionListener, ObserverOutputInterface {
 
-    private ViewBidPage inputPage;
+    private FindBidDetail inputPage;
     private ApplicationController applicationController;
+    private String userId; // needed to update other bid view
 
-    public CloseBidListener(ViewBidPage inputPage) {
+    public CloseBidListener(FindBidDetail inputPage, ApplicationController applicationController) {
         this.inputPage = inputPage;
+        this.applicationController = applicationController;
         inputPage.addCloseBidListener(this);
     }
 
@@ -34,13 +37,14 @@ public class CloseBidListener implements ActionListener {
 
         JSONObject closeDate = new JSONObject();
         closeDate.put("dateClosedDown", Instant.now());
-        System.out.println(closeDate);
         HttpResponse<String> response =  ApiRequest.post("/bid/" + bidId +"/close-down", closeDate.toString()); // pass empty json object since this API call don't need it
         String msg;
 
         if (response.statusCode() == 200){
-            msg = "Bid closed successfully at: " + closeDate;
+            msg = "Bid closed successfully at: " + closeDate.get("dateClosedDown");
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Success", JOptionPane.INFORMATION_MESSAGE);
+            applicationController.notifySubscribers(this.userId);
+            Application.loadPage(Application.DASHBOARD_PAGE);
         } else {
             msg = "Error: " + new JSONObject(response.body()).get("message");
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
@@ -48,4 +52,12 @@ public class CloseBidListener implements ActionListener {
 
     }
 
+    /**
+     * Receive userId from loginController
+     * @param data userId required to update other bidding view
+     */
+    @Override
+    public void update(String data) {
+        this.userId = data;
+    }
 }
