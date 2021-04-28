@@ -25,7 +25,6 @@ public class FindBidListener implements ObserverOutputInterface, ActionListener 
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
-        System.out.println(bidId);
         applicationController.notifySubscribers(bidId);
         ApplicationManager.loadPage(ApplicationManager.VIEW_BID);
     }

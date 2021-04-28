@@ -15,8 +15,8 @@ public class Application extends JFrame{
     private static JPanel rootPanel;
 //    private static JPanel loginPage, registrationPage, dashboardPage, profilePage, openBidPage, viewBidPage, userBidsPage;
     private static CardLayout cardLayout;
-    ApplicationController loginController, contractController, findBidController, userBidController, openBidController, dashboardController, updateViewController;
-    ActionListener contractListener, loginListener, findBidListener, viewBidListener, openBidListener, closeBidListener, dashboardListener;
+    ApplicationController loginController, contractController, findBidController,seeBidController, openBidController, dashboardController, updateViewController;
+    ActionListener contractListener, loginListener, findBidListener, seeBidListener, openBidListener, closeBidListener, dashboardListener;
 
     private Application() {
         super("StuTor");
@@ -62,19 +62,24 @@ public class Application extends JFrame{
         loginController.subscribe(findBidPage);
         loginController.subscribe((ObserverOutputInterface) closeBidListener); // get the userId to update other bidding page
 
-        // passing bidId between AllBid page and ViewBid page
+        // passing bidId between FindBidPage and ViewBid page
         findBidController = new ApplicationController();
         findBidListener = new FindBidListener(findBidPage, findBidController);
         findBidController.subscribe(findBidDetail);
 
+        // passing bidId between SeeBidPage and ViewBid page
+        seeBidController = new ApplicationController();
+        seeBidListener = new SeeBidListener(seeBidsPage, seeBidController);
+        seeBidController.subscribe(findBidDetail);
+
         // dashboardController needed for find bid pages to add event listener for all of its button
-        // this controller is called when user click on findBid Button in dashboard
+        // this controller is called when user click on findBid Button and seeBid button in dashboard
         dashboardController = new ApplicationController();
         dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe(findBidPage);
-        dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for all bid page to update all its button
+        dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for find bid page to update all its button
         dashboardController.subscribe(seeBidsPage);
-
+        dashboardController.subscribe((ObserverOutputInterface) seeBidListener); // for see bid page to update all its button
 
 
         contractController = new ApplicationController();

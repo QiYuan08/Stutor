@@ -1,9 +1,11 @@
 package application.bid_pages;
 
+import api.ApiRequest;
 import application.Application;
 import application.ApplicationManager;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.OpenBidUtil;
 
@@ -12,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.http.HttpResponse;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +24,8 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
-    private JButton submitButton, backBtn;
+    private JButton submitButton = new JButton("Submit");
+    private JButton backBtn;
     private JComboBox<String> startMeridiem, typeCombo, subjectCombo, competencyCombo;
     private JSpinner startTime, duration;
 //    private String userId;
@@ -30,7 +34,35 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
     private String userId;
 
     public OpenBidPage(){
+    }
 
+    /**
+     * Get the user competency to populate the jcombo box for the subject that the student can
+     * request for tutor
+     */
+    private void getUserCompetency() {
+        subjectMapping = new HashMap<>();
+
+        System.out.println(this.userId);
+        if (this.userId != null){
+            HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=competencies&fields=competencies.subject");
+            JSONObject user = new JSONObject(response.body());
+            JSONArray competencies = new JSONArray(user.getJSONArray("competencies"));
+
+            // for every competencies, add into the hashmap mapping
+            for (int i=0; i<competencies.length(); i++){
+
+                JSONObject subject = (JSONObject) competencies.getJSONObject(i).getJSONObject("subject");
+                System.out.println(subject);
+
+                subjectMapping.put(subject.get("name").toString(), subject.get("id").toString());
+
+            }
+        }
+
+    }
+
+    private void buildPage(){
         String[] meridiem = {"AM", "PM"};
 
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -68,7 +100,6 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
 
         // retrieve all the subject name from the key mapping
         ArrayList<String> subjectsName = new ArrayList<>();
-        subjectMapping = util.getAllSubject();
         for (String key: subjectMapping.keySet()){
             subjectsName.add(key);
         }
@@ -226,7 +257,6 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
             }
         });
     }
-
     @Override
     public JSONObject retrieveInputs() {
 
@@ -263,11 +293,13 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
     }
 
     /***
-     * Get update of the current user id when user login
+     * Get update of the current user id when user login and build the page (called after user login)
      * @param data any data that is crucial to the pages for them to request the information that they need from the database
      */
     @Override
     public void update(String data) {
         this.userId = data;
+        getUserCompetency();
+        buildPage();
     }
 }

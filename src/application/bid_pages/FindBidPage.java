@@ -160,7 +160,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         JSONArray returnedBids = new JSONArray(response.body());
 
         // get the detail of the user
-        response = ApiRequest.getUser("/user/" + this.userId, new String[] {"competencies", "competencies.subject"});
+        response = ApiRequest.get("/user/" + this.userId + "?fields=competencies&fields=competencies.subject");
         user = new JSONObject(response.body());
 
         if (user.get("isTutor").equals(true)){

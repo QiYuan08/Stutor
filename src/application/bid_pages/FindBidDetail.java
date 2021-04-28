@@ -176,7 +176,7 @@ public class FindBidDetail extends JPanel implements ObserverOutputInterface {
 
 
     /**
-     * Get the bidId from All Bid page one user click on view bid to retrieve data from db
+     * Get the bidId from Find Bid page one user click on view bid to retrieve data from db
      * @param data any data that is crucial to the pages for them to request the information that they need from the database
      */
     @Override

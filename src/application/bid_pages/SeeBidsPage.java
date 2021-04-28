@@ -3,6 +3,7 @@ package application.bid_pages;
 import api.ApiRequest;
 import application.Application;
 import application.ApplicationManager;
+import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,7 +17,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 // TODO: fix the layout =.=
-public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
+public class SeeBidsPage extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -54,7 +55,7 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         c.anchor = GridBagConstraints.PAGE_START;
         contentPanel.add(backBtn, c);
 
-        activityTitle = new JLabel("Request List");
+        activityTitle = new JLabel("Your Bid");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -105,8 +106,6 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
                 bidPanelConstraint.gridwidth = 1;
                 bidPanelConstraint.weightx = 0.2;
                 viewBidBtn = new JButton("View Bid");
-                System.out.println(bid);
-                System.out.println(bid.get("id"));
                 viewBidBtn.setName(bid.get("id").toString()); // give a unique name to a button to distinguish the
                 buttonArr.add(viewBidBtn); // add the button into button array
                 bidPanel.add(viewBidBtn, bidPanelConstraint);
@@ -126,15 +125,39 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
             activityTitle.setVerticalAlignment(JLabel.CENTER);
             activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
             bidPanel.add(noBid);
+            c.gridx = 0;
+            c.gridy = contentPanel.getComponentCount();
+            c.gridwidth = 4;
+            c.gridheight = 1;
             contentPanel.add(bidPanel);
         }
 
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("back btn pressed");
+                //TODO: refactor to return to see bids page instead of dashboard cuz if go back to seebids need to find a way to update the view also
                 ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
             }
         });
+    }
+
+    @Override
+    public JSONObject retrieveInputs() {
+        return null;
+    }
+
+    /**
+     * Update every view detail button in this page
+     * @param actionListener action listener class for each button
+     */
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+        if (buttonArr != null) {
+            for (JButton button: buttonArr){
+                button.addActionListener(actionListener);
+            }
+        }
     }
 
     /**
@@ -147,7 +170,6 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         this.userId = data;
         JSONObject user;
 
-        System.out.println(this.userId);
         // get all bid
         HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids");
         bids = new JSONArray(new JSONObject(response.body()).getJSONArray("initiatedBids"));
@@ -163,19 +185,5 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         createContent();
     }
 
-//    /**
-//     * Method to set event listener for every view bid button
-//     * @param actionListener actionListener for the view bid button
-//     */
-//    @Override
-//    public void addActionListener(ActionListener actionListener) {
-//
-//        if (buttonArr != null) {
-//            for (JButton button: buttonArr){
-//                button.addActionListener(actionListener);
-//            }
-//        }
-//
-//    }
-}
 
+}
