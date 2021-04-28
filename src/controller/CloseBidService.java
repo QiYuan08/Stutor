@@ -2,6 +2,7 @@ package controller;
 
 import api.ApiRequest;
 import application.Application;
+import application.ApplicationManager;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -53,7 +54,7 @@ public class CloseBidService {
                         if (response.statusCode() == 200){
                             msg = "Bid closed successfully at: " + closeDate;
                             JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Success", JOptionPane.INFORMATION_MESSAGE);
-                            Application.loadPage(Application.DASHBOARD_PAGE);
+                            ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
                         } else {
                             msg = "Error: " + new JSONObject(response.body()).get("message");
                             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);

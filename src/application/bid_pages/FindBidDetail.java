@@ -2,6 +2,7 @@ package application.bid_pages;
 
 import api.ApiRequest;
 import application.Application;
+import application.ApplicationManager;
 import controller.ObserverOutputInterface;
 import org.json.JSONObject;
 
@@ -70,7 +71,7 @@ public class FindBidDetail extends JPanel implements ObserverOutputInterface {
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.FIND_BID);
+                ApplicationManager.loadPage(ApplicationManager.FIND_BID);
             }
         });
 

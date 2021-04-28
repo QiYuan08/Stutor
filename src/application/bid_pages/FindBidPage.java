@@ -2,6 +2,7 @@ package application.bid_pages;
 
 import api.ApiRequest;
 import application.Application;
+import application.ApplicationManager;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -137,7 +138,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.DASHBOARD_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
             }
         });
     }
@@ -172,7 +173,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
                 // if the bid still open
                 if (bid.get("dateClosedDown").equals(null) ) {
                     // for some bids that doesn't have min competency
-                    if (bid.getJSONObject("additionalInfo").has("minCompetency") == false) {
+                    if (!bid.getJSONObject("additionalInfo").has("minCompetency")) {
                         bids.put(bid);
 
                     } else { // if that bid has competency

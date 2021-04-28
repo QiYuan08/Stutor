@@ -1,6 +1,7 @@
 package application.bid_pages;
 
 import application.Application;
+import application.ApplicationManager;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONObject;
@@ -221,7 +222,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.DASHBOARD_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
             }
         });
     }

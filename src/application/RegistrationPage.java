@@ -114,7 +114,7 @@ public class RegistrationPage extends JPanel {
                         "\", \"isStudent\": " + isStudent + ", \"isTutor\": " + isTutor + "}";
                 response = ApiRequest.post("/user", jsonObj);
                 if (response.statusCode() == 201) {
-                    Application.loadPage(Application.LOGIN_PAGE);
+                    ApplicationManager.loadPage(ApplicationManager.LOGIN_PAGE);
                 } else if (response.statusCode() == 409) {
                     JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
                             "Username Taken", JOptionPane.ERROR_MESSAGE);
@@ -127,7 +127,7 @@ public class RegistrationPage extends JPanel {
         loadLoginPage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.LOGIN_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.LOGIN_PAGE);
             }
         });
     }

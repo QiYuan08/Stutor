@@ -2,6 +2,7 @@ package listeners;
 
 import api.ApiRequest;
 import application.Application;
+import application.ApplicationManager;
 import application.ProfilePage;
 import controller.ApplicationController;
 import controller.ObserverInputInterface;
@@ -31,7 +32,7 @@ public class LoginListener implements ActionListener {
 
         if (response.statusCode() == 200) {
             applicationController.notifySubscribers(getUserId(jsonObj.getString("userName")));
-            Application.loadPage(Application.DASHBOARD_PAGE);
+            ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
 //            Application.loadPage(Application.DASHBOARD_PAGE, getUserId(jsonObj.getString("userName")));
         } else if (response.statusCode() == 403) {
             JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",

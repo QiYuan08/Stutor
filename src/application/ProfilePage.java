@@ -104,14 +104,14 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
         dashboardPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.DASHBOARD_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
             }
         });
 
         logOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.LOGIN_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.LOGIN_PAGE);
             }
         });
     }

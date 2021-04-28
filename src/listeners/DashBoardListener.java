@@ -1,6 +1,7 @@
 package listeners;
 
 import application.Application;
+import application.ApplicationManager;
 import application.DashboardPage;
 import controller.ApplicationController;
 
@@ -23,6 +24,6 @@ public class DashBoardListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         applicationController.notifySubscribers(inputPage.getUserId());
-        Application.loadPage(Application.FIND_BID);
+        ApplicationManager.loadPage(ApplicationManager.FIND_BID);
     }
 }

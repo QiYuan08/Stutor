@@ -2,6 +2,7 @@ package listeners;
 
 import api.ApiRequest;
 import application.Application;
+import application.ApplicationManager;
 import application.bid_pages.FindBidDetail;
 import controller.ApplicationController;
 import controller.ObserverOutputInterface;
@@ -46,7 +47,7 @@ public class CloseBidListener implements ActionListener, ObserverOutputInterface
             msg = "Bid closed successfully at: " + closeDate.get("dateClosedDown");
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Success", JOptionPane.INFORMATION_MESSAGE);
             applicationController.notifySubscribers(this.userId);
-            Application.loadPage(Application.DASHBOARD_PAGE);
+            ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
         } else {
             msg = "Error: " + new JSONObject(response.body()).get("message");
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);

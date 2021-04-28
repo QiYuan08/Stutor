@@ -78,7 +78,7 @@ public class LoginPage extends JPanel implements ObserverInputInterface {
         registerPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.REGISTRATION_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.REGISTRATION_PAGE);
             }
         });
     }
