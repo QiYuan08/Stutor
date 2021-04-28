@@ -61,6 +61,7 @@ public class Application extends JFrame{
         loginController.subscribe(seeBidsPage);
         loginController.subscribe(findBidPage);
         loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
+        loginController.subscribe(createBidPage);
 
         // passing bidId between FindBidPage and FindBidsDetail page
         findBidController = new ApplicationController();
@@ -88,8 +89,8 @@ public class Application extends JFrame{
 
         // controller for user to open bid
         // TODO: refactor openbid listener so that constructor nonid controller if no other class subscribing it
-        createBidController = new ApplicationController();
-        createBidListener = new CreateBidListener(createBidPage, createBidController);
+//        createBidController = new ApplicationController();
+        createBidListener = new CreateBidListener(createBidPage);
 
         ApplicationManager.setRootPanel(rootPanel);
 
@@ -102,6 +103,12 @@ public class Application extends JFrame{
             @Override
             public void run() {
                 try {
+
+                    // create a service class
+                    CloseBidService service = new CloseBidService();
+                    service.setDuration(30); //set the interval before closing automatically
+                    service.closeOpenBidService();
+
                     Application application = new Application();
                 } catch (Exception e) {
                     e.printStackTrace();

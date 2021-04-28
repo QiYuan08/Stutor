@@ -24,7 +24,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
-    private JButton submitButton = new JButton("Submit");
+    private JButton submitButton = new JButton("Submit Request");
     private JButton backBtn;
     private JComboBox<String> startMeridiem, typeCombo, subjectCombo, competencyCombo;
     private JSpinner startTime, duration;
@@ -53,7 +53,6 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
             for (int i=0; i<competencies.length(); i++){
 
                 JSONObject subject = (JSONObject) competencies.getJSONObject(i).getJSONObject("subject");
-                System.out.println(subject);
 
                 subjectMapping.put(subject.get("name").toString(), subject.get("id").toString());
 
@@ -119,7 +118,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
         c.gridheight = 1;
         this.add(qualificationField, c);
 
-        competencyCombo = new JComboBox<>(new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+        competencyCombo = new JComboBox<>(new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"});
         c.gridx = 1;
         c.gridwidth = 4;
         this.add(competencyCombo, c);
@@ -243,7 +242,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
         this.add(typeCombo, c);
 
         //submitBtn
-        submitButton = new JButton("Submit Request");
+//        submitButton = new JButton("Submit Request");
         c.weightx = 0.1;
         c.gridx = 0;
         c.gridy = 10;
@@ -283,22 +282,26 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
         jsonObj.put("dateCreated", Instant.now());
         jsonObj.put("additionalInfo", additionalInfo);
 
-        System.out.println(jsonObj);
         return jsonObj;
     }
 
     @Override
     public void addActionListener(ActionListener actionListener) {
-        submitButton.addActionListener(actionListener);
+        this.submitButton.addActionListener(actionListener);
     }
 
     /***
-     * Get update of the current user id when user login and build the page (called after user login)
+     * Get update of the current user id when user login to get all the subject required and build the page (called after user login)
      * @param data any data that is crucial to the pages for them to request the information that they need from the database
      */
     @Override
     public void update(String data) {
         this.userId = data;
+
+        this.removeAll();
+        this.repaint();
+        this.revalidate();
+
         getUserCompetency();
         buildPage();
     }

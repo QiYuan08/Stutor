@@ -4,6 +4,7 @@ import api.ApiRequest;
 import application.Application;
 import controller.ApplicationController;
 import controller.ObserverInputInterface;
+import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,11 +17,9 @@ import java.time.Instant;
 public class CreateBidListener implements ActionListener {
 
     private ObserverInputInterface inputPage;
-    private ApplicationController applicationController;
 
-    public CreateBidListener(ObserverInputInterface inputPage, ApplicationController applicationController) {
+    public CreateBidListener(ObserverInputInterface inputPage) {
         this.inputPage = inputPage;
-        this.applicationController = applicationController;
         inputPage.addActionListener(this);
     }
 
@@ -39,7 +38,11 @@ public class CreateBidListener implements ActionListener {
         // compares bid minimum competency level with the student's competency level to check if it is two levels above
         for (int i = 0; i < competencies.length(); i++) {
             JSONObject competency =  (JSONObject) competencies.get(i);
+
+            // for that competency
             if (competency.getJSONObject("subject").getString("id").equals(bidDetails.getString("subjectId"))) {
+
+                // if the user competency is 2 level lower
                 if (competency.getInt("level") + 2 > (bidDetails.getJSONObject("additionalInfo").getInt("minCompetency"))) {
                     System.out.println(true);
                     JOptionPane.showMessageDialog(new JFrame(), "The minimum competency level must be at least 2 levels higher than your subject level. Please try again.",

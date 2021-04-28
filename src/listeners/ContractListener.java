@@ -14,7 +14,7 @@ public class ContractListener implements ActionListener {
     public ContractListener(ObserverInputInterface inputPage, ApplicationController applicationController) {
         this.inputPage = inputPage;
         this.applicationController = applicationController;
-        inputPage.addActionListener(this);
+//        inputPage.addActionListener(this);
     }
 
     @Override
