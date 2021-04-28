@@ -1,56 +1,39 @@
-package application;
+package controller;
 
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
-import org.json.JSONObject;
 import utils.OpenBidUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-// TODO: decide how to get subjectID consistently
-public class OpenBidPage extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
+public class UpdateBid extends JPanel {
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
-    private JButton submitButton, backBtn;
+    private JButton submitButton;
     private JComboBox<String> startMeridiem, typeCombo, subjectCombo, competencyCombo;
     private JSpinner startTime, duration;
-//    private String userId;
+    private String userId = "ecc52cc1-a3e4-4037-a80f-62d3799645f4";   // TODO: remove the hardcoded userId
     private HashMap<String, String> subjectMapping;
     private OpenBidUtil util = new OpenBidUtil();
-    private String userId;
 
-    public OpenBidPage(){
-
+    UpdateBid() {
         String[] meridiem = {"AM", "PM"};
 
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
-//        c.weighty = 1;
+    //        c.weighty = 1;
         c.insets = new Insets(5, 5, 0, 5);
-
-        backBtn = new JButton("Back");
-        c.gridx = 0;
-        c.gridy = 0;
-        c.gridwidth = 1;
-        c.weightx = 0.2;
-        this.add(backBtn, c);
 
         activityTitle = new JLabel("Request Tutor");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
         c.gridx = 0;
-        c.weightx = 1;
         c.gridy = 0;
         c.gridwidth = 4;
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -65,15 +48,15 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         this.add(subjectField, c);
 
         // retrieve all the subject name from the key mapping
-        ArrayList<String> subjectsName = new ArrayList<>();
+        ArrayList<String> subjectsName = new ArrayList<String>();
         subjectMapping = util.getAllSubject();
-        for (String key: subjectMapping.keySet()){
+            for (String key: subjectMapping.keySet()){
             subjectsName.add(key);
         }
         // convert arraylist into array for combobox
         String[] subjectsNameArr = new String[subjectsName.size()];
-        subjectsName.toArray(subjectsNameArr);
-        subjectCombo = new JComboBox<>(subjectsNameArr);
+            subjectsName.toArray(subjectsNameArr);
+        subjectCombo = new JComboBox<String>(subjectsNameArr);
         c.gridx = 1;
         c.gridwidth = 4;
         this.add(subjectCombo, c);
@@ -85,6 +68,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(qualificationField, c);
+
 
         competencyCombo = new JComboBox<>(new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
         c.gridx = 1;
@@ -170,7 +154,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         c.weightx = 1;
         this.add(sessionInput, c);
 
-        sessionLabel = new JLabel("sessions per week");
+        sessionLabel = new JLabel("per week");
         c.gridx = 2;
         c.gridy = 7;
         c.gridwidth = 1;
@@ -191,7 +175,7 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         c.gridwidth = 1;
         this.add(rateInput, c);
 
-        rateLabel = new JLabel("dollar per hour");
+        rateLabel = new JLabel("per hour");
         c.gridx = 2;
         c.weightx = 0.2;
         c.gridwidth = 1;
@@ -216,56 +200,5 @@ public class OpenBidPage extends JPanel implements ObserverInputInterface, Obser
         c.gridy = 10;
         c.gridwidth = 4;
         this.add(submitButton, c);
-
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Application.loadPage(Application.DASHBOARD_PAGE);
-            }
-        });
-    }
-
-    @Override
-    public JSONObject retrieveInputs() {
-
-        String noOfLesson = lessonInput.getText();
-        String day = dayInput.getText();
-        String time = startTime.getValue().toString() + startMeridiem.getSelectedItem().toString();
-        String rate = rateInput.getText();
-        Integer competency = Integer.valueOf(competencyCombo.getSelectedItem().toString());
-        String subjectId = subjectMapping.get(subjectCombo.getSelectedItem());
-
-        JSONObject additionalInfo = new JSONObject();
-        additionalInfo.put("minCompetency", competency);
-        additionalInfo.put("noOfoLesson", noOfLesson);
-        additionalInfo.put("day", day);
-        additionalInfo.put("startTime", time);
-        additionalInfo.put("duration", duration.getValue().toString());
-        additionalInfo.put("preferredSession", Integer.valueOf(sessionInput.getText()));
-        additionalInfo.put("rate", rate);
-
-        JSONObject jsonObj = new JSONObject();
-        jsonObj.put("subjectId", subjectId);
-        jsonObj.put("type", typeCombo.getSelectedItem().toString());
-        jsonObj.put("initiatorId", this.userId);
-        jsonObj.put("dateCreated", Instant.now());
-        jsonObj.put("additionalInfo", additionalInfo);
-
-        System.out.println(jsonObj);
-        return jsonObj;
-    }
-
-    @Override
-    public void addActionListener(ActionListener actionListener) {
-        submitButton.addActionListener(actionListener);
-    }
-
-    /***
-     * Get update of the current user id when user login
-     * @param data any data that is crucial to the pages for them to request the information that they need from the database
-     */
-    @Override
-    public void update(String data) {
-        this.userId = data;
     }
 }

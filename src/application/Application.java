@@ -71,10 +71,14 @@ public class Application extends JFrame{
         findBidController.subscribe(findBidDetail);
 
         // dashboardController needed for find bid pages to add event listener for all of its button
+        // this controller is called when user click on findBid Button in dashboard
         dashboardController = new ApplicationController();
         dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
+        dashboardController.subscribe(findBidPage);
         dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for all bid page to update all its button
         dashboardController.subscribe(seeBidsPage);
+
+
 
         contractController = new ApplicationController();
         contractListener = new ContractListener(openBidPage, contractController);

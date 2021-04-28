@@ -151,6 +151,10 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         bids = new JSONArray(new JSONObject(response.body()).getJSONArray("initiatedBids"));
 
         // remake the jpanel
+        this.removeAll();
+        this.repaint();
+        this.revalidate();
+
         contentPanel.removeAll();
         contentPanel.repaint();
         contentPanel.revalidate();
