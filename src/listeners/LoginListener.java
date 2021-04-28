@@ -1,8 +1,10 @@
-package controller;
+package listeners;
 
 import api.ApiRequest;
 import application.Application;
 import application.ProfilePage;
+import controller.ApplicationController;
+import controller.ObserverInputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -1,6 +1,11 @@
 package application;
 
+import application.bid_pages.FindBidDetail;
+import application.bid_pages.FindBidPage;
+import application.bid_pages.OpenBidPage;
+import application.bid_pages.SeeBidsPage;
 import controller.*;
+import listeners.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -114,14 +119,14 @@ public class Application extends JFrame{
         cardLayout.show(rootPanel, pageName);
     }
 
-    public static void loadPage(String pageName, String context) {
-        for (Component component: rootPanel.getComponents()) {
-            if (component instanceof ObserverOutputInterface) {
-                ObserverOutputInterface page = (ObserverOutputInterface) component;
-                page.update(context);
-            }
-        }
-        cardLayout.show(rootPanel, pageName);
-    }
+//    public static void loadPage(String pageName, String context) {
+//        for (Component component: rootPanel.getComponents()) {
+//            if (component instanceof ObserverOutputInterface) {
+//                ObserverOutputInterface page = (ObserverOutputInterface) component;
+//                page.update(context);
+//            }
+//        }
+//        cardLayout.show(rootPanel, pageName);
+//    }
 
 }

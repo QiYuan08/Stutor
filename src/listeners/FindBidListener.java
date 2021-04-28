@@ -1,7 +1,9 @@
-package controller;
+package listeners;
 
-import application.FindBidPage;
+import application.bid_pages.FindBidPage;
 import application.Application;
+import controller.ApplicationController;
+import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

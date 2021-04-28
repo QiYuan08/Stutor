@@ -1,6 +1,7 @@
-package application;
+package application.bid_pages;
 
 import api.ApiRequest;
+import application.Application;
 import controller.ObserverOutputInterface;
 import org.json.JSONObject;
 
@@ -20,7 +21,7 @@ public class FindBidDetail extends JPanel implements ObserverOutputInterface {
     private JButton replyBtn = new JButton("Bid");
     private JButton backBtn;
 
-    FindBidDetail() {
+    public FindBidDetail() {
 
     }
 

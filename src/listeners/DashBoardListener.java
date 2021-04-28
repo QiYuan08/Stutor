@@ -1,7 +1,8 @@
-package controller;
+package listeners;
 
 import application.Application;
 import application.DashboardPage;
+import controller.ApplicationController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

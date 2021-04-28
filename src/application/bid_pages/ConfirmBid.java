@@ -1,4 +1,4 @@
-package application;
+package application.bid_pages;
 
 import controller.ObserverOutputInterface;
 

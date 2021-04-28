@@ -1,10 +1,13 @@
-package application;
+package application.bid_pages;
 
 import api.ApiRequest;
+import application.Application;
+import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.sound.midi.SysexMessage;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -13,8 +16,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-// TODO: fix the layout =.=
-public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
+public class FindBidPage extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -25,7 +27,7 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
     ArrayList<JButton> buttonArr;
     private String userId;
 
-    public SeeBidsPage() {
+    public FindBidPage() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridLayout(1,1, 2, 2));
     }
@@ -41,14 +43,16 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         contentPanel.setBackground(new Color(153, 255, 255));
         contentPanel.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
         c = new GridBagConstraints();
+        c.weightx = 1;
 //        c.weighty = 1;
         c.insets = new Insets(1, 1, 1, 1);
 
         backBtn = new JButton("Back");
-        c.gridx = 0;
         c.gridy = 0;
+        c.weightx = 0.0;
         c.gridwidth = 1;
-        c.weightx = 0.2;
+        c.gridheight = 1;
+        c.gridx = 0;
         c.anchor = GridBagConstraints.PAGE_START;
         contentPanel.add(backBtn, c);
 
@@ -56,10 +60,11 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-        c.weightx = 1;
         c.gridx = 1;
         c.gridy = 0;
-        c.gridwidth = 2;
+        c.weightx = 1;
+        c.gridwidth = 3;
+        c.anchor = GridBagConstraints.NORTH;
         contentPanel.add(activityTitle, c);
 
         // wrap contentPanel inside a scrollpane
@@ -70,7 +75,6 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.PAGE_START;
         c.ipady = 50;
-
 
         // create a jPanel for each bids available
         if (bids.length() > 0) {
@@ -95,7 +99,8 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
                 bidPanelConstraint.gridwidth = 5;
                 bidPanelConstraint.anchor = GridBagConstraints.WEST;
                 JLabel bidLabel = new JLabel();
-                bidLabel.setText("Subject: " + bid.getJSONObject("subject").get("name"));
+                bidLabel.setText(bid.getJSONObject("subject").get("name") + " (Level " +
+                        bid.getJSONObject("additionalInfo").get("minCompetency") + ")");
                 bidPanel.add(bidLabel, bidPanelConstraint);
 
                 // add view detail button
@@ -103,16 +108,14 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
                 bidPanelConstraint.gridwidth = 1;
                 bidPanelConstraint.weightx = 0.2;
                 viewBidBtn = new JButton("View Bid");
-                System.out.println(bid);
-                System.out.println(bid.get("id"));
+//                System.out.println(bid);
                 viewBidBtn.setName(bid.get("id").toString()); // give a unique name to a button to distinguish the
                 buttonArr.add(viewBidBtn); // add the button into button array
                 bidPanel.add(viewBidBtn, bidPanelConstraint);
 
                 c.gridx = 0;
-                c.weightx = 1;
-                c.gridy = contentPanel.getComponentCount();
-                c.gridwidth = 5;
+                c.gridy = contentPanel.getComponentCount() - 1;
+                c.gridwidth = 4;
                 c.gridheight = 1;
                 contentPanel.add(bidPanel, c);
             }
@@ -124,6 +127,10 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
             activityTitle.setVerticalAlignment(JLabel.CENTER);
             activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
             bidPanel.add(noBid);
+            c.gridx = 0;
+            c.gridy = contentPanel.getComponentCount();
+            c.gridwidth = 4;
+            c.gridheight = 1;
             contentPanel.add(bidPanel);
         }
 
@@ -136,19 +143,60 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
     }
 
     /**
-     * Update the panels with all the bids that are openend by the user
+     * Update the bids inside this panels whenever this page is load
      * @param data The user id that are currently using this page
      */
     @Override
     public void update(String data) {
 
+        System.out.println("update in findbidpage called");
         this.userId = data;
         JSONObject user;
+        bids = new JSONArray();
 
-        System.out.println(this.userId);
         // get all bid
-        HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids");
-        bids = new JSONArray(new JSONObject(response.body()).getJSONArray("initiatedBids"));
+        HttpResponse<String> response = ApiRequest.get("/bid");
+        JSONArray returnedBids = new JSONArray(response.body());
+
+        // get the detail of the user
+        response = ApiRequest.getUser("/user/" + this.userId, new String[] {"competencies", "competencies.subject"});
+        user = new JSONObject(response.body());
+
+        if (user.get("isTutor").equals(true)){
+
+            // add every bid that is qualified to be teached by this user to bids
+            for (int i =0; i < returnedBids.length(); i++){
+
+                JSONObject bid = returnedBids.getJSONObject(i);
+
+                // if the bid still open
+                if (bid.get("dateClosedDown").equals(null) ) {
+                    // for some bids that doesn't have min competency
+                    if (bid.getJSONObject("additionalInfo").has("minCompetency") == false) {
+                        bids.put(bid);
+
+                    } else { // if that bid has competency
+                        // check this subject with every competency of this user
+                        JSONArray userCompetencies = user.getJSONArray("competencies");
+                        for (int j = 0; j < userCompetencies.length(); j++){
+
+                            // current competency
+                            JSONObject competency = userCompetencies.getJSONObject(j);
+
+                            // if user know this subject
+                            if (competency.getJSONObject("subject").get("id").equals(bid.getJSONObject("subject").get("id"))) {
+
+                                // compare the competency level
+                                if (competency.getInt("level") >= (bid.getJSONObject("additionalInfo").getInt("minCompetency") + 2)) {
+                                    bids.put(bid);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         // remake the jpanel
         this.removeAll();
@@ -161,19 +209,24 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface {
         createContent();
     }
 
-//    /**
-//     * Method to set event listener for every view bid button
-//     * @param actionListener actionListener for the view bid button
-//     */
-//    @Override
-//    public void addActionListener(ActionListener actionListener) {
-//
-//        if (buttonArr != null) {
-//            for (JButton button: buttonArr){
-//                button.addActionListener(actionListener);
-//            }
-//        }
-//
-//    }
-}
+    @Override
+    public JSONObject retrieveInputs() {
+        return null;
+    }
 
+    /**
+     * Method to set event listener for every view bid button
+     * @param actionListener actionListener for the view bid button
+     */
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+
+        if (buttonArr != null) {
+            System.out.println("hello from findbidListener");
+            for (JButton button: buttonArr){
+                button.addActionListener(actionListener);
+            }
+        }
+
+    }
+}

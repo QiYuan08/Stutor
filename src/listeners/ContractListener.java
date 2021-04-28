@@ -1,4 +1,7 @@
-package controller;
+package listeners;
+
+import controller.ApplicationController;
+import controller.ObserverInputInterface;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

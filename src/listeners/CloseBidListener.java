@@ -1,8 +1,10 @@
-package controller;
+package listeners;
 
 import api.ApiRequest;
 import application.Application;
-import application.FindBidDetail;
+import application.bid_pages.FindBidDetail;
+import controller.ApplicationController;
+import controller.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
