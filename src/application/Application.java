@@ -1,8 +1,8 @@
 package application;
 
-import application.bid_pages.FindBidDetail;
+import application.bid_pages.FindBidsDetail;
 import application.bid_pages.FindBidPage;
-import application.bid_pages.OpenBidPage;
+import application.bid_pages.CreateBidPage;
 import application.bid_pages.SeeBidsPage;
 import controller.*;
 import listeners.*;
@@ -15,8 +15,8 @@ public class Application extends JFrame{
     private static JPanel rootPanel;
 //    private static JPanel loginPage, registrationPage, dashboardPage, profilePage, openBidPage, viewBidPage, userBidsPage;
     private static CardLayout cardLayout;
-    ApplicationController loginController, contractController, findBidController,seeBidController, openBidController, dashboardController, updateViewController;
-    ActionListener contractListener, loginListener, findBidListener, seeBidListener, openBidListener, closeBidListener, dashboardListener;
+    ApplicationController loginController, contractController, findBidController,seeBidController, createBidController, dashboardController, bidClosingController;
+    ActionListener contractListener, loginListener, findBidListener, seeBidListener, createBidListener, bidClosingListener, dashboardListener;
 
     private Application() {
         super("StuTor");
@@ -30,47 +30,47 @@ public class Application extends JFrame{
         RegistrationPage registrationPage = new RegistrationPage();
         DashboardPage dashboardPage = new DashboardPage();
         ProfilePage profilePage = new ProfilePage();
-        OpenBidPage openBidPage = new OpenBidPage();
+        CreateBidPage createBidPage = new CreateBidPage();
         FindBidPage findBidPage = new FindBidPage();
-        FindBidDetail findBidDetail = new FindBidDetail();
+        FindBidsDetail findBidsDetail = new FindBidsDetail();
         SeeBidsPage seeBidsPage = new SeeBidsPage();
 
         rootPanel.add(loginPage, ApplicationManager.LOGIN_PAGE);
         rootPanel.add(registrationPage, ApplicationManager.REGISTRATION_PAGE);
         rootPanel.add(dashboardPage, ApplicationManager.DASHBOARD_PAGE);
         rootPanel.add(profilePage, ApplicationManager.PROFILE_PAGE);
-        rootPanel.add(openBidPage, ApplicationManager.OPEN_BID_PAGE);
+        rootPanel.add(createBidPage, ApplicationManager.OPEN_BID_PAGE);
         rootPanel.add(findBidPage, ApplicationManager.FIND_BID);
-        rootPanel.add(findBidDetail, ApplicationManager.VIEW_BID);
+        rootPanel.add(findBidsDetail, ApplicationManager.VIEW_BID);
         rootPanel.add(seeBidsPage, ApplicationManager.USER_BIDS);
 
 
         // listener for closing bid
         // TODO: update findBidPage after closing
-        updateViewController = new ApplicationController();
-        closeBidListener = new CloseBidListener(findBidDetail, updateViewController);
-        updateViewController.subscribe(findBidPage);
-        updateViewController.subscribe(seeBidsPage);
+        bidClosingController = new ApplicationController();
+        bidClosingListener = new BidClosingListener(findBidsDetail, bidClosingController);
+        bidClosingController.subscribe(findBidPage);
+        bidClosingController.subscribe(seeBidsPage);
 
         // passing studentId between classes
         loginController = new ApplicationController();
         loginListener = new LoginListener(loginPage, loginController);
         loginController.subscribe(profilePage);
         loginController.subscribe(dashboardPage);
-        loginController.subscribe(openBidPage);
+        loginController.subscribe(createBidPage);
         loginController.subscribe(seeBidsPage);
         loginController.subscribe(findBidPage);
-        loginController.subscribe((ObserverOutputInterface) closeBidListener); // get the userId to update other bidding page
+        loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
 
-        // passing bidId between FindBidPage and ViewBid page
+        // passing bidId between FindBidPage and FindBidsDetail page
         findBidController = new ApplicationController();
         findBidListener = new FindBidListener(findBidPage, findBidController);
-        findBidController.subscribe(findBidDetail);
+        findBidController.subscribe(findBidsDetail);
 
         // passing bidId between SeeBidPage and ViewBid page
         seeBidController = new ApplicationController();
         seeBidListener = new SeeBidListener(seeBidsPage, seeBidController);
-        seeBidController.subscribe(findBidDetail);
+        seeBidController.subscribe(findBidsDetail);
 
         // dashboardController needed for find bid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
@@ -83,17 +83,13 @@ public class Application extends JFrame{
 
 
         contractController = new ApplicationController();
-        contractListener = new ContractListener(openBidPage, contractController);
+        contractListener = new ContractListener(createBidPage, contractController);
         contractController.subscribe(dashboardPage);
 
         // controller for user to open bid
         // TODO: refactor openbid listener so that constructor nonid controller if no other class subscribing it
-        openBidController = new ApplicationController();
-        openBidListener = new OpenBidListener(openBidPage, openBidController);
-
-
-//        viewBidController = new ApplicationController();
-//        viewBidListener = new CloseBidListener(, viewBidController);
+        createBidController = new ApplicationController();
+        createBidListener = new CreateBidListener(createBidPage, createBidController);
 
         ApplicationManager.setRootPanel(rootPanel);
 
@@ -113,19 +109,4 @@ public class Application extends JFrame{
             }
         });
     }
-
-//    public static void loadPage(String pageName) {
-//        cardLayout.show(rootPanel, pageName);
-//    }
-//
-//    public static void loadPage(String pageName, String context) {
-//        for (Component component: rootPanel.getComponents()) {
-//            if (component instanceof ObserverOutputInterface) {
-//                ObserverOutputInterface page = (ObserverOutputInterface) component;
-//                page.update(context);
-//            }
-//        }
-//        cardLayout.show(rootPanel, pageName);
-//    }
-
 }

@@ -1,6 +1,7 @@
 package application;
 
 import api.ApiRequest;
+import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,7 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class DashboardPage extends JPanel implements ObserverOutputInterface {
+public class DashboardPage extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
     private JLabel activityTitle, tutorialsTaken, tutorialsTaught;
     private JButton viewProfileButton, seeBidsButton, createBidButton, findBidsButton;
@@ -92,13 +93,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface {
                 ApplicationManager.loadPage(ApplicationManager.PROFILE_PAGE);
             }
         });
-
-//        seeBidsButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                ApplicationManager.loadPage(ApplicationManager.USER_BIDS);
-//            }
-//        });
     }
 
     @Override
@@ -190,19 +184,18 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface {
         }
     }
 
-    public void addFindBidListener(ActionListener listener) {
-        this.findBidsButton.addActionListener(listener);
+//    public String getUserId() {
+//        return this.userId;
+//    }
+
+    @Override
+    public JSONObject retrieveInputs() {
+        return null;
     }
 
-    public void addSeeBidListener(ActionListener listener) { this.seeBidsButton.addActionListener(listener);}
-
-    public void addCreateBidListener(ActionListener listener) {
-        this.createBidButton.addActionListener(listener);
-    }
-
-    public void addSeeBidListener(ActionListener listener) { this.seeBidsButton.addActionListener(listener);}
-
-    public String getUserId() {
-        return this.userId;
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+        this.findBidsButton.addActionListener(actionListener);
+        this.seeBidsButton.addActionListener(actionListener);
     }
 }

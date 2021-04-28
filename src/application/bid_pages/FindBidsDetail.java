@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 // TODO: show all bidder in open bid
-public class FindBidDetail extends JPanel implements ObserverOutputInterface {
+public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
 
     private String bidId;
     private JLabel title, subjectLabel, name, rate, competency, noOfLesson, duration, startTime, day, preferredSession;
@@ -22,7 +22,7 @@ public class FindBidDetail extends JPanel implements ObserverOutputInterface {
     private JButton replyBtn = new JButton("Bid");
     private JButton backBtn;
 
-    public FindBidDetail() {
+    public FindBidsDetail() {
 
     }
 

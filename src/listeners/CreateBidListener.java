@@ -13,12 +13,12 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.time.Instant;
 
-public class OpenBidListener implements ActionListener {
+public class CreateBidListener implements ActionListener {
 
     private ObserverInputInterface inputPage;
     private ApplicationController applicationController;
 
-    public OpenBidListener(ObserverInputInterface inputPage, ApplicationController applicationController) {
+    public CreateBidListener(ObserverInputInterface inputPage, ApplicationController applicationController) {
         this.inputPage = inputPage;
         this.applicationController = applicationController;
         inputPage.addActionListener(this);

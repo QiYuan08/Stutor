@@ -1,9 +1,8 @@
 package listeners;
 
 import api.ApiRequest;
-import application.Application;
 import application.ApplicationManager;
-import application.bid_pages.FindBidDetail;
+import application.bid_pages.FindBidsDetail;
 import controller.ApplicationController;
 import controller.ObserverOutputInterface;
 import org.json.JSONObject;
@@ -14,13 +13,13 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.time.Instant;
 
-public class CloseBidListener implements ActionListener, ObserverOutputInterface {
+public class BidClosingListener implements ActionListener, ObserverOutputInterface {
 
-    private FindBidDetail inputPage;
+    private FindBidsDetail inputPage;
     private ApplicationController applicationController;
     private String userId; // needed to update other bid view
 
-    public CloseBidListener(FindBidDetail inputPage, ApplicationController applicationController) {
+    public BidClosingListener(FindBidsDetail inputPage, ApplicationController applicationController) {
         this.inputPage = inputPage;
         this.applicationController = applicationController;
         inputPage.addCloseBidListener(this);

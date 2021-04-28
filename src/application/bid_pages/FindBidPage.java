@@ -149,9 +149,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
      */
     @Override
     public void update(String data) {
-
-        System.out.println("update in findbidpage called");
-        this.userId = data;
+        if (this.userId == null) {this.userId = data;}
         JSONObject user;
         bids = new JSONArray();
 

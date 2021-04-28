@@ -166,9 +166,8 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface, Obse
      */
     @Override
     public void update(String data) {
-
-        this.userId = data;
-        JSONObject user;
+        if (this.userId == null) {
+        this.userId = data;}
 
         // get all bid
         HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids");
