@@ -27,7 +27,7 @@ public class SeeBidListener implements ActionListener, ObserverOutputInterface {
         String bidId = thisBtn.getName();
         System.out.println(bidId);
         controller.notifySubscribers(bidId);
-        ApplicationManager.loadPage(ApplicationManager.VIEW_BID);
+        ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
     }
 
 

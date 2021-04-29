@@ -83,7 +83,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Ob
         createBidButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.OPEN_BID_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.CREATE_BID_PAGE);
             }
         });
 

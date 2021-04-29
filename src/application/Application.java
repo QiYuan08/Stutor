@@ -1,9 +1,6 @@
 package application;
 
-import application.bid_pages.FindBidsDetail;
-import application.bid_pages.FindBidPage;
-import application.bid_pages.CreateBidPage;
-import application.bid_pages.SeeBidsPage;
+import application.bid_pages.*;
 import controller.*;
 import listeners.*;
 
@@ -13,9 +10,8 @@ import java.awt.event.ActionListener;
 
 public class Application extends JFrame{
     private static JPanel rootPanel;
-//    private static JPanel loginPage, registrationPage, dashboardPage, profilePage, openBidPage, viewBidPage, userBidsPage;
     private static CardLayout cardLayout;
-    ApplicationController loginController, contractController, findBidController,seeBidController, createBidController, dashboardController, bidClosingController;
+    ApplicationController loginController, contractController, findBidController,seeBidController, dashboardController, bidClosingController;
     ActionListener contractListener, loginListener, findBidListener, seeBidListener, createBidListener, bidClosingListener, dashboardListener;
 
     private Application() {
@@ -34,15 +30,17 @@ public class Application extends JFrame{
         FindBidPage findBidPage = new FindBidPage();
         FindBidsDetail findBidsDetail = new FindBidsDetail();
         SeeBidsPage seeBidsPage = new SeeBidsPage();
+        MessagesPage messagesPage = new MessagesPage();
 
         rootPanel.add(loginPage, ApplicationManager.LOGIN_PAGE);
         rootPanel.add(registrationPage, ApplicationManager.REGISTRATION_PAGE);
         rootPanel.add(dashboardPage, ApplicationManager.DASHBOARD_PAGE);
         rootPanel.add(profilePage, ApplicationManager.PROFILE_PAGE);
-        rootPanel.add(createBidPage, ApplicationManager.OPEN_BID_PAGE);
+        rootPanel.add(createBidPage, ApplicationManager.CREATE_BID_PAGE);
         rootPanel.add(findBidPage, ApplicationManager.FIND_BID);
-        rootPanel.add(findBidsDetail, ApplicationManager.VIEW_BID);
-        rootPanel.add(seeBidsPage, ApplicationManager.USER_BIDS);
+        rootPanel.add(findBidsDetail, ApplicationManager.FIND_BID_DETAIL);
+        rootPanel.add(seeBidsPage, ApplicationManager.SEE_BIDS_PAGE);
+        rootPanel.add(messagesPage, ApplicationManager.MESSAGES_PAGE);
 
 
         // listener for closing bid

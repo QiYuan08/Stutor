@@ -2,7 +2,6 @@ package listeners;
 
 import application.ApplicationManager;
 import application.bid_pages.FindBidPage;
-import application.Application;
 import controller.ApplicationController;
 import controller.ObserverOutputInterface;
 
@@ -26,7 +25,7 @@ public class FindBidListener implements ObserverOutputInterface, ActionListener 
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         applicationController.notifySubscribers(bidId);
-        ApplicationManager.loadPage(ApplicationManager.VIEW_BID);
+        ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
     }
 
     // this method is called whenever there is an update in bids to display to tutor
