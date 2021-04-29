@@ -36,7 +36,6 @@ public class CloseBidService {
                 HttpResponse<String> response = ApiRequest.get("/bid");
                 String a = response.body();
                 JSONArray bids = new JSONArray(response.body());
-                System.out.println("hello from close bid service");
 
                 // check every bid to see if they already expired
                 for (int i=0; i<bids.length(); i++){
@@ -44,20 +43,16 @@ public class CloseBidService {
                     // if bid type is open
                     if (bid.get("type").equals("open") && bid.get("dateClosedDown").equals(null)){
                         Instant bidStart = Instant.parse(bid.getString("dateCreated"));
-                        Instant expireTime = bidStart.plus(counter, ChronoUnit.SECONDS);
+                        Instant expireTime = bidStart.plus(counter, ChronoUnit.MILLIS);
                         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
                         Instant now = ts.toInstant();
 
-                        System.out.println("Closing bid: " + bid);
-                        System.out.println("Expired Time: " + expireTime);
-                        System.out.println("Close Time: " + Instant.now());
-
                         // if expire time greater than now close the bid
-                        if (expireTime.compareTo(now) > 0){
+                        if (now.compareTo(expireTime) > 0){
 
+                            //TODO: remove the JOptionPANEL later
                             JSONObject closeDate = new JSONObject();
                             closeDate.put("dateClosedDown", now);
-                            System.out.println(closeDate);
                             response =  ApiRequest.post("/bid/" + bid.get("id") +"/close-down", closeDate.toString()); // pass empty json object since this API call don't need it
                             String msg;
 
