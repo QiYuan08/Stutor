@@ -53,17 +53,6 @@ public class Application extends JFrame{
         rootPanel.add(responseCloseBid, ApplicationManager.RESPONSE_CLOSE_BID);
 
 
-        // passing studentId between classes
-        loginController = new ApplicationController();
-        loginListener = new LoginListener(loginPage, loginController);
-        loginController.subscribe(profilePage);
-        loginController.subscribe(dashboardPage);
-        loginController.subscribe(createBidPage);
-        loginController.subscribe(seeBidsPage);
-        loginController.subscribe(findBidPage);
-        loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
-        loginController.subscribe(createBidPage);
-
         /***
          * Split up different process into different process
          * to remove unnecessary controller observer call
@@ -74,6 +63,18 @@ public class Application extends JFrame{
         bidClosingListener = new BidBuyoutListener(findBidsDetail, bidClosingController);
         bidClosingController.subscribe(findBidPage);
         bidClosingController.subscribe(seeBidsPage);
+        bidClosingController.subscribe(dashboardPage);
+
+        // passing studentId between classes
+        loginController = new ApplicationController();
+        loginListener = new LoginListener(loginPage, loginController);
+        loginController.subscribe(profilePage);
+        loginController.subscribe(dashboardPage);
+        loginController.subscribe(createBidPage);
+        loginController.subscribe(seeBidsPage);
+        loginController.subscribe(findBidPage);
+        loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
+        loginController.subscribe(createBidPage);
 
         findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
         seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
