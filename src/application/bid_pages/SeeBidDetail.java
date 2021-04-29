@@ -69,7 +69,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //TODO: refactor to return to see bids page instead of dashboard cuz if go back to seebids need to find a way to update the view also
-                ApplicationManager.loadPage(ApplicationManager.SEE_BID);
+                ApplicationManager.loadPage(ApplicationManager.SEE_BIDS_PAGE);
             }
         });
 

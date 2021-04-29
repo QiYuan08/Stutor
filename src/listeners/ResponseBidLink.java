@@ -17,19 +17,19 @@ import java.net.http.HttpResponse;
  * To avoid having another controller with only one subsriber in application.java
  * Main function is to pass data
  */
-public class ResponseBidListener implements ActionListener {
+public class ResponseBidLink implements ActionListener {
 
     private FindBidsDetail inputPage;
     private ResponseOpenBid responseOpenBid;
     private ResponseCloseBid responseCloseBid;
 
-    public ResponseBidListener(FindBidsDetail inputPage, ResponseOpenBid responseOpenBid, ResponseCloseBid responseCloseBid){
+    public ResponseBidLink(FindBidsDetail inputPage, ResponseOpenBid responseOpenBid, ResponseCloseBid responseCloseBid){
         this.inputPage = inputPage;
         this.responseOpenBid = responseOpenBid;
         this.responseCloseBid = responseCloseBid;
         inputPage.addReplyBidListener(this);
         responseOpenBid.addActionListener(this);
-
+        responseCloseBid.addActionListener(this);
     }
 
     @Override

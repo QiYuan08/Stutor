@@ -2,6 +2,8 @@ package application;
 
 import application.bid_pages.*;
 import controller.*;
+import links.FindBidDetailLink;
+import links.SeeBidDetailLink;
 import listeners.*;
 
 import javax.swing.*;
@@ -39,10 +41,10 @@ public class Application extends JFrame{
         rootPanel.add(registrationPage, ApplicationManager.REGISTRATION_PAGE);
         rootPanel.add(dashboardPage, ApplicationManager.DASHBOARD_PAGE);
         rootPanel.add(profilePage, ApplicationManager.PROFILE_PAGE);
-        rootPanel.add(createBidPage, ApplicationManager.OPEN_BID_PAGE);
+        rootPanel.add(createBidPage, ApplicationManager.CREATE_BID_PAGE);
         rootPanel.add(findBidPage, ApplicationManager.FIND_BID);
         rootPanel.add(findBidsDetail, ApplicationManager.FIND_BID_DETAIL);
-        rootPanel.add(seeBidsPage, ApplicationManager.SEE_BID);
+        rootPanel.add(seeBidsPage, ApplicationManager.SEE_BIDS_PAGE);
         rootPanel.add(seeBidDetail, ApplicationManager.SEE_BID_DETAIL);
         rootPanel.add(responseOpenBid, ApplicationManager.RESPONSE_OPEN_BID);
         rootPanel.add(responseCloseBid, ApplicationManager.RESPONSE_CLOSE_BID);
@@ -70,14 +72,17 @@ public class Application extends JFrame{
         loginController.subscribe(createBidPage);
 
         // passing bidId between FindBidPage and FindBidsDetail page
-        findBidController = new ApplicationController();
-        findBidListener = new FindBidListener(findBidPage, findBidController);
-        findBidController.subscribe(findBidsDetail);
+//        findBidController = new ApplicationController();
+//        findBidListener = new FindBidListener(findBidPage, findBidController);
+//        findBidController.subscribe(findBidsDetail);
+//
+//        // passing bidId between SeeBidPage and SeeBidDetail page
+//        seeBidController = new ApplicationController();
+//        seeBidListener = new SeeBidListener(seeBidsPage, seeBidController);
+//        seeBidController.subscribe(seeBidDetail);
 
-        // passing bidId between SeeBidPage and SeeBidDetail page
-        seeBidController = new ApplicationController();
-        seeBidListener = new SeeBidListener(seeBidsPage, seeBidController);
-        seeBidController.subscribe(seeBidDetail);
+        FindBidDetailLink findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
+        SeeBidDetailLink seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
 
         // dashboardController needed for find bid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
@@ -85,15 +90,17 @@ public class Application extends JFrame{
         dashboardController = new ApplicationController();
         dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe(findBidPage);
-        dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for find bid page to update all its button
+        dashboardController.subscribe(findBidDetailLink);
+//        dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for find bid page to update all its button
         dashboardController.subscribe(seeBidsPage);
-        dashboardController.subscribe((ObserverOutputInterface) seeBidListener); // for see bid page to update all its button
+        dashboardController.subscribe(seeBidDetailLink);
+//        dashboardController.subscribe((ObserverOutputInterface) seeBidListener); // for see bid page to update all its button
 
         contractController = new ApplicationController();
         contractListener = new ContractListener(createBidPage, contractController);
         contractController.subscribe(dashboardPage);
 
-        responseOpenBidListener = new ResponseBidListener(findBidsDetail, responseOpenBid, responseCloseBid);
+        responseOpenBidListener = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid);
 
         // controller for user to open bid
         // TODO: refactor openbid listener so that constructor nonid controller if no other class subscribing it
