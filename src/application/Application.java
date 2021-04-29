@@ -2,6 +2,8 @@ package application;
 
 import application.bid_pages.*;
 import controller.*;
+import links.FindBidDetailLink;
+import links.SeeBidDetailLink;
 import listeners.*;
 
 import javax.swing.*;
@@ -62,23 +64,27 @@ public class Application extends JFrame{
         loginController.subscribe(createBidPage);
 
         // passing bidId between FindBidPage and FindBidsDetail page
-        findBidController = new ApplicationController();
-        findBidListener = new FindBidListener(findBidPage, findBidController);
-        findBidController.subscribe(findBidsDetail);
+//        findBidController = new ApplicationController();
+//        findBidListener = new FindBidListener(findBidPage, findBidController);
+//        findBidController.subscribe(findBidsDetail);
+        FindBidDetailLink findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
 
         // passing bidId between SeeBidPage and ViewBid page
-        seeBidController = new ApplicationController();
-        seeBidListener = new SeeBidListener(seeBidsPage, seeBidController);
-        seeBidController.subscribe(findBidsDetail);
+//        seeBidController = new ApplicationController();
+//        seeBidListener = new SeeBidListener(seeBidsPage, seeBidController);
+//        seeBidController.subscribe(findBidsDetail);
+        SeeBidDetailLink seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
 
         // dashboardController needed for find bid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
         dashboardController = new ApplicationController();
         dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe(findBidPage);
-        dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for find bid page to update all its button
+        dashboardController.subscribe(findBidDetailLink);
+//        dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for find bid page to update all its button
         dashboardController.subscribe(seeBidsPage);
-        dashboardController.subscribe((ObserverOutputInterface) seeBidListener); // for see bid page to update all its button
+        dashboardController.subscribe(seeBidDetailLink);
+//        dashboardController.subscribe((ObserverOutputInterface) seeBidListener); // for see bid page to update all its button
 
 
         contractController = new ApplicationController();
