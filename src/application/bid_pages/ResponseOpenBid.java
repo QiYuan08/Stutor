@@ -67,7 +67,7 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         this.add(lessonInput, c);
 
         // Preferred Day
-        dayField = new JLabel("Day: ");
+        dayField = new JLabel("Preferred Day(s): ");
         c.gridx = 0;
         c.gridy = 2;
         c.gridwidth = 1;
@@ -100,7 +100,7 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         this.add(durationLabel, c);
 
         // Session per week
-        sessionField = new JLabel("Preferred Session: ");
+        sessionField = new JLabel("Preferred No of Lesson(s): ");
         c.gridx = 0;
         c.gridy = 4;
         c.gridwidth = 1;
@@ -116,7 +116,7 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         c.weightx = 1;
         this.add(sessionInput, c);
 
-        sessionLabel = new JLabel("sessions per week");
+        sessionLabel = new JLabel("lessons per week");
         c.gridx = 2;
         c.gridy = 4;
         c.gridwidth = 1;
@@ -129,7 +129,7 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         this.add(endTime, c);
 
         // Start time
-        startTimeField = new JLabel("Start Time: ");
+        startTimeField = new JLabel("Preferred Time: ");
         c.gridx = 0;
         c.gridy = 5;
         c.gridwidth = 1;

@@ -110,16 +110,16 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         if (additionalInfo.has("nofOfLesson")){
             noOfLesson = new JLabel("No of Lesson: " + additionalInfo.get("nofOfLesson"));
         } else {
-            noOfLesson = new JLabel("Session not provided");
+            noOfLesson = new JLabel("No of Lesson not provided");
         }
         c.gridy = this.getComponentCount();
         this.add(noOfLesson, c);
 
         // if day is provided in the bid
         if (additionalInfo.has("day")){
-            day = new JLabel("Day: " + additionalInfo.get("day"));
+            day = new JLabel("Preferred Day(s): " + additionalInfo.get("day"));
         } else {
-            day = new JLabel("Day not provided");
+            day = new JLabel("Days not provided");
         }
         c.gridy = this.getComponentCount();
         this.add(day, c);
@@ -135,7 +135,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
 
         // if duration is provided in the bid
         if (additionalInfo.has("day")){
-            duration = new JLabel("Duration: " + additionalInfo.get("duration") + " lessons per lesson");
+            duration = new JLabel("Duration: " + additionalInfo.get("duration") + " hours per lesson");
         } else {
             duration = new JLabel("Duration not provided");
         }
@@ -144,9 +144,9 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
 
         // if start time is provided in the bid
         if (additionalInfo.has("day")){
-            startTime = new JLabel("Start Time: " + additionalInfo.get("startTime"));
+            startTime = new JLabel("Preferred Time: " + additionalInfo.get("startTime"));
         } else {
-            startTime = new JLabel("Start Time not provided");
+            startTime = new JLabel("Preferred Time not provided");
         }
         c.gridy = this.getComponentCount();
         this.add(startTime, c);

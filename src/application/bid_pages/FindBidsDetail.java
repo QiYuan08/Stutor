@@ -110,15 +110,6 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         c.gridy = this.getComponentCount();
         this.add(competency, c);
 
-        // if no of lesson is provided
-        if (additionalInfo.has("nofOfLesson")){
-            noOfLesson = new JLabel("No of Lesson: " + additionalInfo.get("nofOfLesson"));
-        } else {
-            noOfLesson = new JLabel("Session not provided");
-        }
-        c.gridy = this.getComponentCount();
-        this.add(noOfLesson, c);
-
         // if day is provided in the bid
         if (additionalInfo.has("day")){
             day = new JLabel("Day: " + additionalInfo.get("day"));
@@ -130,7 +121,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
 
         // if preferred session is provided in the bid
         if (additionalInfo.has("day")){
-            preferredSession = new JLabel("Preferred: " + additionalInfo.get("preferredSession") + " lessons per week");
+            preferredSession = new JLabel("Preferred no of lessons: " + additionalInfo.get("preferredSession") + " lessons per week");
         } else {
             preferredSession = new JLabel("Preferred sessions not provided");
         }
@@ -139,7 +130,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
 
         // if duration is provided in the bid
         if (additionalInfo.has("day")){
-            duration = new JLabel("Duration: " + additionalInfo.get("duration") + " lessons per lesson");
+            duration = new JLabel("Duration: " + additionalInfo.get("duration") + " hours per lesson");
         } else {
             duration = new JLabel("Duration not provided");
         }
