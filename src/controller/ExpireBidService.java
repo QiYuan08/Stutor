@@ -18,7 +18,7 @@ import java.util.TimerTask;
 /**
  * Utility class to automatically close bids
  */
-public class CloseBidService {
+public class ExpireBidService {
 
     private long counter; //counter of timer in miliseconds
     private TimerTask openBidTask, closeBidTask;
@@ -28,7 +28,7 @@ public class CloseBidService {
         this.counter = minutes * 60000;
     }
 
-    public void closeOpenBidService() {
+    public void expireBidService() {
         openBidTask = new TimerTask() {
             @Override
             public void run() {
@@ -60,8 +60,12 @@ public class CloseBidService {
                             response =  ApiRequest.post("/bid/" + bid.get("id") +"/close-down", closeDate.toString()); // pass empty json object since this API call don't need it
                             String msg;
 
-                            if (response.statusCode() == 200){
-                                msg = "Bid expire at: " + closeDate;
+                            if (response.statusCode() == 200) {
+
+                                // TODO: find the last tutor that responded
+                                // TODO: add contract for winning tutor
+
+                                msg = "Bid expired at: " + closeDate;
                                 JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Success", JOptionPane.INFORMATION_MESSAGE);
                                 ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
                             } else {

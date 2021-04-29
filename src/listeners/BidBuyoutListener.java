@@ -15,13 +15,13 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 
-public class BidClosingListener implements ActionListener, ObserverOutputInterface {
+public class BidBuyoutListener implements ActionListener, ObserverOutputInterface {
 
     private FindBidsDetail inputPage;
     private ApplicationController applicationController;
     private String userId; // needed to update other bid view
 
-    public BidClosingListener(FindBidsDetail inputPage, ApplicationController applicationController) {
+    public BidBuyoutListener(FindBidsDetail inputPage, ApplicationController applicationController) {
         this.inputPage = inputPage;
         this.applicationController = applicationController;
         inputPage.addCloseBidListener(this);
@@ -35,7 +35,7 @@ public class BidClosingListener implements ActionListener, ObserverOutputInterfa
     }
 
     /***
-     * Function for a tutor to close a bid immideately if he agree to a tutor bid
+     * Function for a tutor to close a bid immideately if he agree to the student's bid
      */
     public void closeBid(String bidId){
 
@@ -57,6 +57,7 @@ public class BidClosingListener implements ActionListener, ObserverOutputInterfa
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
         }
 
+        // TODO: add contract
     }
 
     /**

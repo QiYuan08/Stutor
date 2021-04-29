@@ -3,6 +3,7 @@ package application;
 import application.bid_pages.*;
 import controller.*;
 import links.FindBidDetailLink;
+import links.ResponseBidLink;
 import links.SeeBidDetailLink;
 import listeners.*;
 
@@ -16,6 +17,8 @@ public class Application extends JFrame{
     private static CardLayout cardLayout;
     ApplicationController loginController, contractController, findBidController,seeBidController, responseOpenBidController, dashboardController, bidClosingController;
     ActionListener contractListener, loginListener, responseOpenBidListener, findBidListener, seeBidListener, createBidListener, bidClosingListener, dashboardListener;
+    FindBidDetailLink findBidDetailLink;
+    SeeBidDetailLink seeBidDetailLink;
 
     private Application() {
         super("StuTor");
@@ -49,16 +52,6 @@ public class Application extends JFrame{
         rootPanel.add(responseOpenBid, ApplicationManager.RESPONSE_OPEN_BID);
         rootPanel.add(responseCloseBid, ApplicationManager.RESPONSE_CLOSE_BID);
 
-        /***
-         * Split up different process into different process
-         * to remove unnecessary controller observer call
-         */
-        // listener for closing bid
-        // TODO: update findBidPage after closing
-        bidClosingController = new ApplicationController();
-        bidClosingListener = new BidClosingListener(findBidsDetail, bidClosingController);
-        bidClosingController.subscribe(findBidPage);
-        bidClosingController.subscribe(seeBidsPage);
 
         // passing studentId between classes
         loginController = new ApplicationController();
@@ -71,18 +64,19 @@ public class Application extends JFrame{
         loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
         loginController.subscribe(createBidPage);
 
-        // passing bidId between FindBidPage and FindBidsDetail page
-//        findBidController = new ApplicationController();
-//        findBidListener = new FindBidListener(findBidPage, findBidController);
-//        findBidController.subscribe(findBidsDetail);
-//
-//        // passing bidId between SeeBidPage and SeeBidDetail page
-//        seeBidController = new ApplicationController();
-//        seeBidListener = new SeeBidListener(seeBidsPage, seeBidController);
-//        seeBidController.subscribe(seeBidDetail);
+        /***
+         * Split up different process into different process
+         * to remove unnecessary controller observer call
+         */
+        // listener for closing bid
+        // TODO: update findBidPage after closing
+        bidClosingController = new ApplicationController();
+        bidClosingListener = new BidBuyoutListener(findBidsDetail, bidClosingController);
+        bidClosingController.subscribe(findBidPage);
+        bidClosingController.subscribe(seeBidsPage);
 
-        FindBidDetailLink findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
-        SeeBidDetailLink seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
+        findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
+        seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
 
         // dashboardController needed for find bid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
@@ -91,10 +85,8 @@ public class Application extends JFrame{
         dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe(findBidPage);
         dashboardController.subscribe(findBidDetailLink);
-//        dashboardController.subscribe((ObserverOutputInterface) findBidListener); // for find bid page to update all its button
         dashboardController.subscribe(seeBidsPage);
         dashboardController.subscribe(seeBidDetailLink);
-//        dashboardController.subscribe((ObserverOutputInterface) seeBidListener); // for see bid page to update all its button
 
         contractController = new ApplicationController();
         contractListener = new ContractListener(createBidPage, contractController);
@@ -120,9 +112,9 @@ public class Application extends JFrame{
                 try {
 
                     // create a service class
-                    CloseBidService service = new CloseBidService();
+                    ExpireBidService service = new ExpireBidService();
                     service.setDuration(60); //set the interval before closing automatically
-                    service.closeOpenBidService();
+                    service.expireBidService();
 
                     Application application = new Application();
                 } catch (Exception e) {
