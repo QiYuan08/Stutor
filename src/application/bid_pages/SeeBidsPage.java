@@ -101,6 +101,12 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface, Obse
                 bidLabel.setText("Subject: " + bid.getJSONObject("subject").get("name"));
                 bidPanel.add(bidLabel, bidPanelConstraint);
 
+                // type jlabel
+                JLabel bidType = new JLabel();
+                bidType.setText("Type: " + bid.getString("type"));
+                bidPanelConstraint.gridy = 1;
+                bidPanel.add(bidType, bidPanelConstraint);
+
                 // add view detail button
                 bidPanelConstraint.gridx = 6;
                 bidPanelConstraint.gridwidth = 1;
@@ -135,8 +141,6 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface, Obse
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("back btn pressed");
-                //TODO: refactor to return to see bids page instead of dashboard cuz if go back to seebids need to find a way to update the view also
                 ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
             }
         });

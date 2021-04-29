@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 // TODO: show all bidder in open bid
+// TODO: show check message instead of bid button if tutor already reply to a close bid
+
 public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
 
     private String bidId;
@@ -169,7 +171,9 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         c.gridwidth = 2;
         c.gridx = 0;
         c.anchor = GridBagConstraints.PAGE_START;
-        closeBtn.setName(this.bidId);
+        String data = new JSONObject().put("bidId", this.bidId).put("userId", initiator.get("id")).toString();
+        System.out.println(data);
+        replyBtn.setName(data);
         this.add(replyBtn, c);
     }
 

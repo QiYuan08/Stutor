@@ -15,7 +15,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -266,6 +268,11 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
         Integer competency = Integer.valueOf(competencyCombo.getSelectedItem().toString());
         String subjectId = subjectMapping.get(subjectCombo.getSelectedItem());
 
+        // getting local timestamp
+        Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
+        Instant now = ts.toInstant();
+        System.out.println("bid created at: " + now);
+
         JSONObject additionalInfo = new JSONObject();
         additionalInfo.put("minCompetency", competency);
         additionalInfo.put("noOfoLesson", noOfLesson);
@@ -279,7 +286,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
         jsonObj.put("subjectId", subjectId);
         jsonObj.put("type", typeCombo.getSelectedItem().toString());
         jsonObj.put("initiatorId", this.userId);
-        jsonObj.put("dateCreated", Instant.now());
+        jsonObj.put("dateCreated", now);
         jsonObj.put("additionalInfo", additionalInfo);
 
         return jsonObj;

@@ -72,7 +72,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         scrollPane = new JScrollPane(contentPanel);
         this.add(scrollPane, c);
 
-        c.insets = new Insets(2,3,2,3); //spacing between each bids
+        c.insets = new Insets(1,3,1,3); //spacing between each bids
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.PAGE_START;
         c.ipady = 50;
@@ -101,12 +101,28 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
                 bidPanelConstraint.anchor = GridBagConstraints.WEST;
                 JLabel bidLabel = new JLabel();
                 bidLabel.setText(bid.getJSONObject("subject").get("name") + " (Level " +
-                        bid.getJSONObject("additionalInfo").get("minCompetency") + ")");
+                        bid.getJSONObject("additionalInfo").get("minCompetency") + ")" +
+                        " " + bid.get("type"));
                 bidPanel.add(bidLabel, bidPanelConstraint);
 
+                // type jlabel
+                JLabel bidType = new JLabel();
+                bidType.setText("Type: " + bid.getString("type"));
+                bidPanelConstraint.gridy = 1;
+                bidPanel.add(bidType, bidPanelConstraint);
+
+                // initiator jlabel
+                JLabel bidInitiator = new JLabel();
+                bidInitiator.setText("Created By: " + bid.getJSONObject("initiator").getString("givenName") + " " +
+                        bid.getJSONObject("initiator").getString("familyName"));
+                bidPanelConstraint.gridy = 2;
+                bidPanel.add(bidInitiator, bidPanelConstraint);
+
                 // add view detail button
+                bidPanelConstraint.gridy = 0;
                 bidPanelConstraint.gridx = 6;
                 bidPanelConstraint.gridwidth = 1;
+                bidPanelConstraint.gridheight = 2;
                 bidPanelConstraint.weightx = 0.2;
                 viewBidBtn = new JButton("View Bid");
 //                System.out.println(bid);
@@ -196,7 +212,6 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
             }
         }
 
-
         // remake the jpanel
         this.removeAll();
         this.repaint();
@@ -221,7 +236,6 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
     public void addActionListener(ActionListener actionListener) {
 
         if (buttonArr != null) {
-            System.out.println("hello from findbidListener");
             for (JButton button: buttonArr){
                 button.addActionListener(actionListener);
             }

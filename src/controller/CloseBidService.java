@@ -47,6 +47,10 @@ public class CloseBidService {
                         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
                         Instant now = ts.toInstant();
 
+                        System.out.println(bidStart);
+                        System.out.println(expireTime);
+                        System.out.println(now);
+
                         // if expire time greater than now close the bid
                         if (now.compareTo(expireTime) > 0){
 
@@ -57,7 +61,7 @@ public class CloseBidService {
                             String msg;
 
                             if (response.statusCode() == 200){
-                                msg = "Bid closed successfully at: " + closeDate;
+                                msg = "Bid expire at: " + closeDate;
                                 JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Success", JOptionPane.INFORMATION_MESSAGE);
                                 ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
                             } else {

@@ -11,8 +11,11 @@ public class ApplicationManager {
     public static final String PROFILE_PAGE = "ProfilePage";
     public static final String OPEN_BID_PAGE = "OpenBidPage";
     public static final String FIND_BID = "FindBidPage";
-    public static final String VIEW_BID = "ViewBidPage";
-    public static final String USER_BIDS = "UserBidsPage";
+    public static final String FIND_BID_DETAIL = "FindBidDetailPage";
+    public static final String SEE_BID = "SeeBidPage";
+    public static final String SEE_BID_DETAIL = "SeeBidDetailPage";
+    public static final String RESPONSE_OPEN_BID = "ResponseOpenBidPage";
+    public static final String RESPONSE_CLOSE_BID = "ResponseCloseBidPage";
 
     private static JPanel rootPanel;
 

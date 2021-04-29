@@ -11,7 +11,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
+import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 
 public class BidClosingListener implements ActionListener, ObserverOutputInterface {
 
@@ -38,7 +40,10 @@ public class BidClosingListener implements ActionListener, ObserverOutputInterfa
     public void closeBid(String bidId){
 
         JSONObject closeDate = new JSONObject();
-        closeDate.put("dateClosedDown", Instant.now());
+
+        Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
+        Instant now = ts.toInstant();
+        closeDate.put("dateClosedDown", now);
         HttpResponse<String> response =  ApiRequest.post("/bid/" + bidId +"/close-down", closeDate.toString()); // pass empty json object since this API call don't need it
         String msg;
 

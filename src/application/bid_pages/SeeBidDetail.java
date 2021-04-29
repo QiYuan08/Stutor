@@ -68,7 +68,8 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.FIND_BID);
+                //TODO: refactor to return to see bids page instead of dashboard cuz if go back to seebids need to find a way to update the view also
+                ApplicationManager.loadPage(ApplicationManager.SEE_BID);
             }
         });
 
@@ -178,7 +179,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
 
 
     /**
-     * Get the bidId from Find Bid page one user click on view bid to retrieve data from db
+     * Get the bidId from See Bid page one user click on view bid to retrieve data from db
      * @param data any data that is crucial to the pages for them to request the information that they need from the database
      */
     @Override
