@@ -1,6 +1,8 @@
 package listeners;
 
+import application.Application;
 import application.ApplicationManager;
+import application.DashboardPage;
 import controller.ApplicationController;
 import controller.ObserverInputInterface;
 
@@ -29,7 +31,7 @@ public class DashBoardListener implements ActionListener {
 
         JButton thisBtn = (JButton) e.getSource();
         if (thisBtn.getText() == "See Your Bids"){
-            ApplicationManager.loadPage(ApplicationManager.SEE_BID);
+            ApplicationManager.loadPage(ApplicationManager.SEE_BIDS_PAGE);
         } else if (thisBtn.getText() == "Find Bids"){
             ApplicationManager.loadPage(ApplicationManager.FIND_BID);
         }
