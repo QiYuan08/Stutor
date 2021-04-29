@@ -3,6 +3,7 @@ package application.bid_pages;
 import api.ApiRequest;
 import application.Application;
 import application.ApplicationManager;
+import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONObject;
 
@@ -16,7 +17,7 @@ import java.net.http.HttpResponse;
 // TODO: show all bidder in open bid
 // TODO: show check message instead of bid button if tutor already reply to a close bid
 
-public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
+public class FindBidsDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
     private String bidId;
     private JLabel title, subjectLabel, name, rate, competency, noOfLesson, duration, startTime, day, preferredSession;
@@ -24,9 +25,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
     private JButton replyBtn = new JButton("Bid");
     private JButton backBtn;
 
-    public FindBidsDetail() {
-
-    }
+    public FindBidsDetail() {}
 
     /**
      * Create the content to display the detail of the bid after user enter this page
@@ -51,7 +50,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         c.weightx = 0.5;
         c.weighty = 0.5;
 
-        title = new JLabel("Bid Detail");
+        title = new JLabel("Bid Details");
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalAlignment(JLabel.TOP);
         title.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -112,9 +111,9 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
 
         // if day is provided in the bid
         if (additionalInfo.has("day")){
-            day = new JLabel("Day: " + additionalInfo.get("day"));
+            day = new JLabel("Preferred Day(s): " + additionalInfo.get("day"));
         } else {
-            day = new JLabel("Day not provided");
+            day = new JLabel("Preferred day(s) not provided");
         }
         c.gridy = this.getComponentCount();
         this.add(day, c);
@@ -137,11 +136,11 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         c.gridy = this.getComponentCount();
         this.add(duration, c);
 
-        // if start time is provided in the bid
+        // if preferred time is provided in the bid
         if (additionalInfo.has("day")){
-            startTime = new JLabel("Start Time: " + additionalInfo.get("startTime"));
+            startTime = new JLabel("Preferred Time: " + additionalInfo.get("startTime"));
         } else {
-            startTime = new JLabel("Start Time not provided");
+            startTime = new JLabel("Preferred Time not provided");
         }
         c.gridy = this.getComponentCount();
         this.add(startTime, c);
@@ -153,7 +152,11 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         c.gridx = 2;
         c.gridy = this.getComponentCount();
         c.anchor = GridBagConstraints.PAGE_END;
-        closeBtn.setName(this.bidId);
+        // putting the bidId and tutorId for calling the BidClosingListener
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("bidId", bidId);
+        jsonObject.put("tutorId", "");
+        closeBtn.setName(jsonObject.toString());
         this.add(closeBtn, c);
 
         // add replyBid Button
@@ -163,7 +166,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         c.gridx = 0;
         c.anchor = GridBagConstraints.PAGE_START;
         String data = new JSONObject().put("bidId", this.bidId).put("userId", initiator.get("id")).toString();
-        System.out.println(data);
+//        System.out.println(data);
         replyBtn.setName(data);
         this.add(replyBtn, c);
     }
@@ -192,12 +195,18 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
         }
 
-
     }
 
-    public void addCloseBidListener(ActionListener listener){
-        this.closeBtn.addActionListener(listener);
+    @Override
+    public JSONObject retrieveInputs() {
+        return null;
     }
+
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+        this.closeBtn.addActionListener(actionListener);
+    }
+
 
     public void addReplyBidListener(ActionListener listener) {
         this.replyBtn.addActionListener(listener);

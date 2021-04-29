@@ -55,7 +55,7 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface, Obse
         c.anchor = GridBagConstraints.PAGE_START;
         contentPanel.add(backBtn, c);
 
-        activityTitle = new JLabel("Your Bid");
+        activityTitle = new JLabel("Your Bids");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));

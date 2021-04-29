@@ -58,6 +58,5 @@ public class CreateBidListener implements ActionListener {
                 }
             }
         }
-
     }
 }

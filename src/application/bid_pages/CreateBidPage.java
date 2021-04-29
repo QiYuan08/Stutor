@@ -54,7 +54,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
             // for every competencies, add into the hashmap mapping
             for (int i=0; i<competencies.length(); i++){
 
-                JSONObject subject = (JSONObject) competencies.getJSONObject(i).getJSONObject("subject");
+                JSONObject subject = competencies.getJSONObject(i).getJSONObject("subject");
 
                 subjectMapping.put(subject.get("name").toString(), subject.get("id").toString());
 
@@ -80,7 +80,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
         c.weightx = 0.2;
         this.add(backBtn, c);
 
-        activityTitle = new JLabel("Request Tutor");
+        activityTitle = new JLabel("Request for a Tutor");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));

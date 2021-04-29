@@ -46,7 +46,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         c.weightx = 0.5;
         c.weighty = 0.5;
 
-        title = new JLabel("Bid Detail");
+        title = new JLabel("Bid Details");
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalAlignment(JLabel.TOP);
         title.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -119,14 +119,14 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         if (additionalInfo.has("day")){
             day = new JLabel("Preferred Day(s): " + additionalInfo.get("day"));
         } else {
-            day = new JLabel("Days not provided");
+            day = new JLabel("Preferred day(s) not provided");
         }
         c.gridy = this.getComponentCount();
         this.add(day, c);
 
         // if preferred session is provided in the bid
         if (additionalInfo.has("day")){
-            preferredSession = new JLabel("Preferred: " + additionalInfo.get("preferredSession") + " lessons per week");
+            preferredSession = new JLabel("Preferred no of lessons: " + additionalInfo.get("preferredSession") + " lessons per week");
         } else {
             preferredSession = new JLabel("Preferred sessions not provided");
         }
@@ -142,7 +142,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         c.gridy = this.getComponentCount();
         this.add(duration, c);
 
-        // if start time is provided in the bid
+        // if preferred time is provided in the bid
         if (additionalInfo.has("day")){
             startTime = new JLabel("Preferred Time: " + additionalInfo.get("startTime"));
         } else {

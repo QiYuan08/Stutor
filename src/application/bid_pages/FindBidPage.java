@@ -41,7 +41,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         buttonArr = new ArrayList<>();
 
         contentPanel.setLayout(new GridBagLayout());
-        contentPanel.setBackground(new Color(153, 255, 255));
+//        contentPanel.setBackground(new Color(153, 255, 255));
         contentPanel.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
         c = new GridBagConstraints();
         c.weightx = 1;
@@ -57,7 +57,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         c.anchor = GridBagConstraints.PAGE_START;
         contentPanel.add(backBtn, c);
 
-        activityTitle = new JLabel("Request List");
+        activityTitle = new JLabel("Student Requests");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -185,7 +185,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
                 JSONObject bid = returnedBids.getJSONObject(i);
 
                 // if the bid still open
-                if (bid.get("dateClosedDown").equals(null) ) {
+                if (bid.isNull("dateClosedDown")) {
                     // for some bids that doesn't have min competency
                     if (!bid.getJSONObject("additionalInfo").has("minCompetency")) {
                         bids.put(bid);

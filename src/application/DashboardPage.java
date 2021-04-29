@@ -35,7 +35,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Ob
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 3;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.BOTH;
         this.add(activityTitle, c);
 
         tutorialsTaken = new JLabel("Tutorials you are taking: ");
@@ -110,7 +110,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Ob
                 GridBagConstraints c = new GridBagConstraints();
                 c.weightx = 1;
                 c.weighty = 1;
-                c.fill = GridBagConstraints.HORIZONTAL;
+                c.fill = GridBagConstraints.BOTH;
                 c.insets = new Insets(5, 5, 0, 5);
 
                 if (!user.getBoolean("isStudent")) {
