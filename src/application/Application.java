@@ -2,6 +2,7 @@ package application;
 
 import application.bid_pages.*;
 import controller.*;
+import links.BidderDetailLink;
 import links.FindBidDetailLink;
 import links.ResponseBidLink;
 import links.SeeBidDetailLink;
@@ -19,6 +20,7 @@ public class Application extends JFrame{
     ActionListener contractListener, loginListener, responseOpenBidListener, findBidListener, seeBidListener, createBidListener, bidClosingListener, dashboardListener;
     FindBidDetailLink findBidDetailLink;
     SeeBidDetailLink seeBidDetailLink;
+    BidderDetailLink bidderDetailLink;
 
     private Application() {
         super("StuTor");
@@ -39,6 +41,7 @@ public class Application extends JFrame{
         SeeBidDetail seeBidDetail = new SeeBidDetail();
         ResponseOpenBid responseOpenBid = new ResponseOpenBid();
         ResponseCloseBid responseCloseBid = new ResponseCloseBid();
+        TutorBidDetail tutorBidDetail = new TutorBidDetail();
 
         /***
          * Split up different process into different process
@@ -62,6 +65,7 @@ public class Application extends JFrame{
         rootPanel.add(seeBidDetail, ApplicationManager.SEE_BID_DETAIL);
         rootPanel.add(responseOpenBid, ApplicationManager.RESPONSE_OPEN_BID);
         rootPanel.add(responseCloseBid, ApplicationManager.RESPONSE_CLOSE_BID);
+        rootPanel.add(tutorBidDetail, ApplicationManager.TUTOR_BID_DETAIL);
 
         // passing studentId between classes
         loginController = new ApplicationController();
@@ -74,8 +78,26 @@ public class Application extends JFrame{
         loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
         loginController.subscribe(createBidPage);
 
+        bidderDetailLink = new BidderDetailLink(findBidsDetail, tutorBidDetail);
+
+//        passing bidId between FindBidPage and FindBidsDetail page
+        findBidController = new ApplicationController();
+        findBidListener = new FindBidListener(findBidPage, findBidController);
+        findBidController.subscribe(findBidsDetail);
+        findBidController.subscribe(bidderDetailLink);
+
+        // link findbidpage and findbiddetail page
         findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
+        // link seebidpage and seebiddetail page
         seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
+        // link findbiddetailpage and tutorbiddetail page
+
+
+        // TODO: add controller for findbiddetail to bidderdetaillink
+        ApplicationController bidderLinkController = new ApplicationController();
+        bidderLinkController.subscribe(findBidsDetail);
+        bidderLinkController.subscribe(bidderDetailLink);
+
 
         // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
@@ -83,6 +105,7 @@ public class Application extends JFrame{
         dashboardController = new ApplicationController();
         dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe(findBidPage);
+        dashboardController.subscribe((ObserverOutputInterface) findBidListener);
         dashboardController.subscribe(findBidDetailLink);
         dashboardController.subscribe(seeBidsPage);
         dashboardController.subscribe(seeBidDetailLink);

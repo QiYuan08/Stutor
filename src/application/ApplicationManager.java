@@ -17,6 +17,7 @@ public class ApplicationManager {
     public static final String RESPONSE_CLOSE_BID = "ResponseCloseBidPage";
     public static final String RESPONSE_OPEN_BID = "ResponseOpenBidPage";
     public static final String SEE_BID_DETAIL = "SeeBidDetailPage";
+    public static final String TUTOR_BID_DETAIL = "TutorBidDetailPage";
 
     private static JPanel rootPanel;
 

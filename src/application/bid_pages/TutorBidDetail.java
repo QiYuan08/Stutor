@@ -14,22 +14,16 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-// TODO: show all bidder in open bid
-// TODO: show check message instead of bid button if tutor already reply to a close bid
-
-public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
-
+public class TutorBidDetail extends JPanel implements ObserverOutputInterface {
     private String bidId, userId;
-    private JLabel title, subjectLabel, name, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
-    private JButton closeBtn = new JButton("Buy Out");
-    private JButton replyBtn = new JButton("Bid");
+    private JLabel title, name, rate, competency, duration, startTime, day, preferredSession;
     private JButton backBtn, viewBidBtn;
     private JPanel bidsPane, detailPane, btnPane;
     private JScrollPane scrollPane;
     ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
 
-    public FindBidsDetail() {
+    public TutorBidDetail() {
         this.setLayout(new GridBagLayout());
         mainConst = new GridBagConstraints();
 
@@ -41,10 +35,9 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
      */
     void createContent(JSONObject bid){
 
-        JSONObject initiator = bid.getJSONObject("initiator");
-        JSONObject subject = bid.getJSONObject("subject");
+        System.out.println(bid);
+        JSONObject initiator = bid.getJSONObject("poster");
         JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
-        JSONArray messages = bid.getJSONArray("messages");
 
         detailPane = new JPanel();
         detailPane.setBorder(new EmptyBorder(15, 15,15,15));
@@ -68,31 +61,6 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         c.gridx = 1;
         c.anchor = GridBagConstraints.PAGE_START;
         detailPane.add(title, c);
-
-        backBtn = new JButton("Back");
-        c.gridy = 0;
-        c.weightx = 0.0;
-        c.gridwidth = 1;
-        c.gridx = 0;
-        c.anchor = GridBagConstraints.PAGE_START;
-        detailPane.add(backBtn, c);
-
-        // TODO: can talk about this in design rationale, nonid to create a listener for this cuz very simple and wont change forever
-        // TODO: fix view not updated when student bid on it
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
-            }
-        });
-
-        subjectLabel = new JLabel("Subject: " + subject.get("name"));
-        c.weightx = 0.5;
-        c.gridx = 0;
-        c.gridwidth = 3;
-        c.gridy = detailPane.getComponentCount();
-        c.anchor = GridBagConstraints.PAGE_START;
-        detailPane.add(subjectLabel, c);
 
         name = new JLabel("Name: " + initiator.get("givenName") +" " + initiator.get("familyName"));
         c.gridx = 0;
@@ -165,72 +133,6 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         mainConst.fill = GridBagConstraints.BOTH;
 //        this.add(detailPane, mainConst);
 
-
-        // if bid type is open
-        if (bid.getString("type").equals("open")){
-
-            buttonArr = new ArrayList<>();
-
-            // create a Panel to show each message replied by tutor
-            if (messages.length() > 0){
-
-                bidderLabel = new JLabel("Bidders");
-                bidderLabel.setHorizontalAlignment(JLabel.CENTER);
-                bidderLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-                detailPane.add(bidderLabel, c);
-
-                for (int i=0; i < messages.length(); i++){
-                    JSONObject message = messages.getJSONObject(i);
-
-                    // create the panel for each bid item
-                    JPanel bidPanel = new JPanel();
-                    GridBagConstraints bidPanelConstraint = new GridBagConstraints();
-                    bidPanelConstraint.fill = GridBagConstraints.HORIZONTAL;
-                    bidPanelConstraint.weightx = 1;
-                    bidPanelConstraint.insets = new Insets(1,2,1,2);
-                    bidPanel.setLayout(new GridBagLayout());
-                    bidPanel.setBackground(Color.lightGray);
-                    bidPanel.setMinimumSize(new Dimension(100, 120));
-                    bidPanel.setMaximumSize(new Dimension(100, 120));
-
-                    // add a description jlabel
-                    bidPanelConstraint.gridx = 0;
-                    bidPanelConstraint.gridy = 0;
-                    bidPanelConstraint.gridwidth = 5;
-                    bidPanelConstraint.anchor = GridBagConstraints.WEST;
-                    JLabel bidLabel = new JLabel();
-                    JSONObject bidder = message.getJSONObject("poster");
-                    bidLabel.setText(bidder.get("givenName") + " " + bidder.get("familyName"));
-                    bidPanel.add(bidLabel, bidPanelConstraint);
-
-                    // type jlabel
-                    JLabel rate = new JLabel();
-                    rate.setText("Rate: " + message.getJSONObject("additionalInfo").get("rate") + " dollars per hour");
-                    bidPanelConstraint.gridy = 1;
-                    bidPanel.add(rate, bidPanelConstraint);
-
-                    // add view detail button
-                    bidPanelConstraint.gridy = 0;
-                    bidPanelConstraint.gridx = 6;
-                    bidPanelConstraint.gridwidth = 1;
-                    bidPanelConstraint.gridheight = 2;
-                    bidPanelConstraint.weightx = 0.2;
-                    viewBidBtn = new JButton("View Bid");
-
-                    // set button name to bidId and userId for ResponseCloseBid class to close Bid
-                    JSONObject btnData = new JSONObject();
-                    btnData.put("bidId", message.get("id"));
-                    btnData.put("userId", this.userId);
-                    viewBidBtn.setName(btnData.toString());
-                    buttonArr.add(viewBidBtn); // add the button into button array
-                    bidPanel.add(viewBidBtn, bidPanelConstraint);
-
-                    c.gridy = detailPane.getComponentCount();
-                    detailPane.add(bidPanel, c);
-                }
-            }
-
-        }
         // wrap detailPane with a scrollPane
         scrollPane = new JScrollPane(detailPane);
 
@@ -247,17 +149,12 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
 
         // button Pane
         btnPane = new JPanel();
-        btnPane.setLayout(new GridLayout(1,2));
+        btnPane.setLayout(new GridLayout(1,1));
         btnPane.setBorder(new EmptyBorder(10, 10,10,10));
 
-        // add closeBid Button
-        closeBtn.setName(this.bidId);
-        btnPane.add(closeBtn);
-
-        // add replyBid Button
-        String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
-        replyBtn.setName(data);
-        btnPane.add(replyBtn);
+        // add back Button
+        backBtn = new JButton("Back");
+        btnPane.add(backBtn);
 
         // add btnPanel into this
         mainConst.weighty = 0.2;
@@ -267,6 +164,15 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         mainConst.gridy = 30;
         c.gridwidth = 10;
         this.add(btnPane, mainConst);
+
+        // TODO: can talk about this in design rationale, nonid to create a listener for this cuz very simple and wont change forever
+        // TODO: fix view not updated when student bid on it
+        backBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
+            }
+        });
 
     }
 
@@ -281,7 +187,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
 
         this.bidId = new JSONObject(data).getString("bidId");
         this.userId = new JSONObject(data).getString("userId");
-        HttpResponse<String> response = ApiRequest.get("/bid/"+ this.bidId + "?fields=messages");
+        HttpResponse<String> response = ApiRequest.get("/message/"+ this.bidId + "?fields=messages");
 
         // if retrieve success
         if (response.statusCode() == 200){
@@ -297,22 +203,5 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         }
 
 
-    }
-
-    public  void addViewBidListener(ActionListener listener) {
-
-        if (buttonArr != null){ // check when the page first load during apps startup
-            for (JButton btn: buttonArr){
-                btn.addActionListener(listener);
-            }
-        }
-    }
-
-    public void addCloseBidListener(ActionListener listener){
-        this.closeBtn.addActionListener(listener);
-    }
-
-    public void addReplyBidListener(ActionListener listener) {
-        this.replyBtn.addActionListener(listener);
     }
 }
