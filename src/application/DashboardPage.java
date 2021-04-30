@@ -1,6 +1,7 @@
 package application;
 
 import api.ApiRequest;
+import controller.ListenerLinkInterface;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -13,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class DashboardPage extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
+public class DashboardPage extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private JLabel activityTitle, tutorialsTaken, tutorialsTaught;
     private JButton viewProfileButton, seeBidsButton, createBidButton, findBidsButton;
@@ -184,17 +185,8 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Ob
         }
     }
 
-//    public String getUserId() {
-//        return this.userId;
-//    }
-
     @Override
-    public JSONObject retrieveInputs() {
-        return null;
-    }
-
-    @Override
-    public void addActionListener(ActionListener actionListener) {
+    public void addLinkListener(ActionListener actionListener) {
         this.findBidsButton.addActionListener(actionListener);
         this.seeBidsButton.addActionListener(actionListener);
     }

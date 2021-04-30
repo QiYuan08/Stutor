@@ -26,43 +26,17 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
-    private JButton submitButton = new JButton("Submit Request");
+    private JButton submitButton;
     private JButton backBtn;
     private JComboBox<String> startMeridiem, typeCombo, subjectCombo, competencyCombo;
     private JSpinner startTime, duration;
-//    private String userId;
     private HashMap<String, String> subjectMapping;
     private OpenBidUtil util = new OpenBidUtil();
     private String userId;
 
     public CreateBidPage(){
+        submitButton = new JButton("Submit Request");
     }
-
-    /**
-     * Get the user competency to populate the jcombo box for the subject that the student can
-     * request for tutor
-     */
-    private void getUserCompetency() {
-        subjectMapping = new HashMap<>();
-
-        System.out.println(this.userId);
-        if (this.userId != null){
-            HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=competencies&fields=competencies.subject");
-            JSONObject user = new JSONObject(response.body());
-            JSONArray competencies = new JSONArray(user.getJSONArray("competencies"));
-
-            // for every competencies, add into the hashmap mapping
-            for (int i=0; i<competencies.length(); i++){
-
-                JSONObject subject = competencies.getJSONObject(i).getJSONObject("subject");
-
-                subjectMapping.put(subject.get("name").toString(), subject.get("id").toString());
-
-            }
-        }
-
-    }
-
     private void buildPage(){
         String[] meridiem = {"AM", "PM"};
 
@@ -258,6 +232,31 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
             }
         });
     }
+
+    /**
+     * Get the user competency to populate the jcombo box for the subject that the student can
+     * request for tutor
+     */
+    private void getUserCompetency() {
+        subjectMapping = new HashMap<>();
+
+        System.out.println(this.userId);
+        if (this.userId != null){
+            HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=competencies&fields=competencies.subject");
+            JSONObject user = new JSONObject(response.body());
+            JSONArray competencies = new JSONArray(user.getJSONArray("competencies"));
+
+            // for every competencies, add into the hashmap mapping
+            for (int i=0; i<competencies.length(); i++){
+
+                JSONObject subject = competencies.getJSONObject(i).getJSONObject("subject");
+
+                subjectMapping.put(subject.get("name").toString(), subject.get("id").toString());
+
+            }
+        }
+    }
+
     @Override
     public JSONObject retrieveInputs() {
 

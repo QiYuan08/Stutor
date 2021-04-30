@@ -3,6 +3,7 @@ package application.bid_pages;
 import api.ApiRequest;
 import application.Application;
 import application.ApplicationManager;
+import controller.ListenerLinkInterface;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -17,7 +18,7 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 // TODO: fix the layout =.=
-public class SeeBidsPage extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
+public class SeeBidsPage extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -146,17 +147,12 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface, Obse
         });
     }
 
-    @Override
-    public JSONObject retrieveInputs() {
-        return null;
-    }
-
     /**
      * Update every view detail button in this page
      * @param actionListener action listener class for each button
      */
     @Override
-    public void addActionListener(ActionListener actionListener) {
+    public void addLinkListener(ActionListener actionListener) {
         if (buttonArr != null) {
             for (JButton button: buttonArr){
                 button.addActionListener(actionListener);

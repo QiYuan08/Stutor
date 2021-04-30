@@ -3,6 +3,7 @@ package application.bid_pages;
 import api.ApiRequest;
 import application.Application;
 import application.ApplicationManager;
+import controller.ListenerLinkInterface;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -17,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class FindBidPage extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
+public class FindBidPage extends JPanel implements ListenerLinkInterface, ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -139,7 +140,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
 
         } else { // if not relevant bid found
             JPanel bidPanel = new JPanel();
-            JLabel noBid = new JLabel("No Bid Found");
+            JLabel noBid = new JLabel("No Bids Found");
             activityTitle.setHorizontalAlignment(JLabel.CENTER);
             activityTitle.setVerticalAlignment(JLabel.CENTER);
             activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -223,23 +224,17 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         createContent();
     }
 
-    @Override
-    public JSONObject retrieveInputs() {
-        return null;
-    }
-
     /**
      * Method to set event listener for every view bid button
      * @param actionListener actionListener for the view bid button
      */
     @Override
-    public void addActionListener(ActionListener actionListener) {
+    public void addLinkListener(ActionListener actionListener) {
 
         if (buttonArr != null) {
             for (JButton button: buttonArr){
                 button.addActionListener(actionListener);
             }
         }
-
     }
 }

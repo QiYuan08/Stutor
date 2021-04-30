@@ -14,8 +14,8 @@ import java.awt.event.ActionListener;
 public class Application extends JFrame{
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
-    private ApplicationController loginController, dashboardController, bidClosingController;
-    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, dashboardListener;
+    private ApplicationController loginController, bidUpdateController, bidClosingController;
+    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
     private FindBidDetailLink findBidDetailLink;
     private SeeBidDetailLink seeBidDetailLink;
 
@@ -91,12 +91,12 @@ public class Application extends JFrame{
         // dashboardController needed for find bid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
         // from dashboard to see bid or find bid
-        dashboardController = new ApplicationController();
-        dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
-        dashboardController.subscribe(findBidPage);
-        dashboardController.subscribe(findBidDetailLink);
-        dashboardController.subscribe(seeBidsPage);
-        dashboardController.subscribe(seeBidDetailLink);
+        bidUpdateController = new ApplicationController();
+        bidUpdateListener = new BidUpdateListener(dashboardPage, bidUpdateController); // userId are updated from here
+        bidUpdateController.subscribe(findBidPage);
+        bidUpdateController.subscribe(findBidDetailLink);
+        bidUpdateController.subscribe(seeBidsPage);
+        bidUpdateController.subscribe(seeBidDetailLink);
 
 
         // controller for user to open bid
