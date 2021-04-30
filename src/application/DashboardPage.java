@@ -1,6 +1,7 @@
 package application;
 
 import api.ApiRequest;
+import controller.ListenerLinkInterface;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -13,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class DashboardPage extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
+public class DashboardPage extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private JLabel activityTitle, tutorialsTaken, tutorialsTaught;
     private JButton viewProfileButton, seeBidsButton, createBidButton, findBidsButton;
@@ -35,7 +36,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Ob
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 3;
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.BOTH;
         this.add(activityTitle, c);
 
         tutorialsTaken = new JLabel("Tutorials you are taking: ");
@@ -110,7 +111,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Ob
                 GridBagConstraints c = new GridBagConstraints();
                 c.weightx = 1;
                 c.weighty = 1;
-                c.fill = GridBagConstraints.HORIZONTAL;
+                c.fill = GridBagConstraints.BOTH;
                 c.insets = new Insets(5, 5, 0, 5);
 
                 if (!user.getBoolean("isStudent")) {
@@ -184,17 +185,8 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Ob
         }
     }
 
-//    public String getUserId() {
-//        return this.userId;
-//    }
-
     @Override
-    public JSONObject retrieveInputs() {
-        return null;
-    }
-
-    @Override
-    public void addActionListener(ActionListener actionListener) {
+    public void addLinkListener(ActionListener actionListener) {
         this.findBidsButton.addActionListener(actionListener);
         this.seeBidsButton.addActionListener(actionListener);
     }

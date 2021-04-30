@@ -1,7 +1,7 @@
 package links;
 
 import application.ApplicationManager;
-import controller.ObserverInputInterface;
+import controller.ListenerLinkInterface;
 import controller.ObserverOutputInterface;
 
 import javax.swing.*;
@@ -10,17 +10,17 @@ import java.awt.event.ActionListener;
 
 public class FindBidDetailLink implements ActionListener, ObserverOutputInterface {
 
-    private ObserverInputInterface inputPage;
+    private ListenerLinkInterface inputPage;
     private ObserverOutputInterface outputPage;
 
-    public FindBidDetailLink(ObserverInputInterface inputPage, ObserverOutputInterface outputPage) {
+    public FindBidDetailLink(ListenerLinkInterface inputPage, ObserverOutputInterface outputPage) {
         this.inputPage = inputPage;
         this.outputPage = outputPage;
     }
 
     @Override
     public void update(String data) {
-        inputPage.addActionListener(this);
+        inputPage.addLinkListener(this);
     }
 
     @Override

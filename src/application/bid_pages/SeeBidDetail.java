@@ -46,7 +46,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         c.weightx = 0.5;
         c.weighty = 0.5;
 
-        title = new JLabel("Bid Detail");
+        title = new JLabel("Bid Details");
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalAlignment(JLabel.TOP);
         title.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -119,7 +119,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         if (additionalInfo.has("day")){
             day = new JLabel("Preferred Day(s): " + additionalInfo.get("day"));
         } else {
-            day = new JLabel("Days not provided");
+            day = new JLabel("Preferred day(s) not provided");
         }
         c.gridy = this.getComponentCount();
         this.add(day, c);

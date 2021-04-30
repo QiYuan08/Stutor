@@ -17,7 +17,7 @@ import java.util.ArrayList;
 // TODO: show all bidder in open bid
 // TODO: show check message instead of bid button if tutor already reply to a close bid
 
-public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
+public class FindBidsDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
 
     private String bidId, userId;
     private JLabel title, subjectLabel, name, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
@@ -59,7 +59,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         c.weightx = 0.5;
         c.weighty = 0.5;
 
-        title = new JLabel("Bid Detail");
+        title = new JLabel("Bid Details");
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalAlignment(JLabel.TOP);
         title.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -123,7 +123,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
         if (additionalInfo.has("day")){
             day = new JLabel("Preferred Day(s): " + additionalInfo.get("day"));
         } else {
-            day = new JLabel("Day not provided");
+            day = new JLabel("Preferred day(s) not provided");
         }
         c.gridy = detailPane.getComponentCount();
         detailPane.add(day, c);
@@ -296,7 +296,14 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
         }
 
+    }
 
+    /**
+     * Links the responseBtn with the appropriate page depending on whether the current bid is an open or closed bid
+     */
+    @Override
+    public void addLinkListener(ActionListener listener) {
+        this.replyBtn.addActionListener(listener);
     }
 
     public  void addViewBidListener(ActionListener listener) {
@@ -310,9 +317,20 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface {
 
     public void addCloseBidListener(ActionListener listener){
         this.closeBtn.addActionListener(listener);
+    /**
+     * called by BidClosingListener, which is activate by buyoutBtn
+     */
+    @Override
+    public JSONObject retrieveInputs() {
+        JSONObject bidInfo = new JSONObject();
+        bidInfo.put("bidId", bidId);
+        bidInfo.put("tutorId", "");
+        bidInfo.put("hasExpired", false);
+        return bidInfo;
     }
 
-    public void addReplyBidListener(ActionListener listener) {
-        this.replyBtn.addActionListener(listener);
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+        this.closeBtn.addActionListener(actionListener);
     }
 }

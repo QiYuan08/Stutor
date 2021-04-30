@@ -1,9 +1,7 @@
 package listeners;
 
 import api.ApiRequest;
-import application.Application;
 import application.ApplicationManager;
-import application.ProfilePage;
 import controller.ApplicationController;
 import controller.ObserverInputInterface;
 import org.json.JSONArray;
@@ -27,7 +25,7 @@ public class LoginListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JSONObject jsonObj = this.inputPage.retrieveInputs();
+        JSONObject jsonObj = inputPage.retrieveInputs();
         HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj.toString());
 
         if (response.statusCode() == 200) {

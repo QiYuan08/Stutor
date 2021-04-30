@@ -1,27 +1,26 @@
 package links;
 
 import application.ApplicationManager;
-import controller.ObserverInputInterface;
+import controller.ListenerLinkInterface;
 import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class SeeBidDetailLink implements ActionListener, ObserverOutputInterface {
 
-    private ObserverInputInterface inputPage;
+    private ListenerLinkInterface inputPage;
     private ObserverOutputInterface outputPage;
 
-    public SeeBidDetailLink(ObserverInputInterface inputPage, ObserverOutputInterface outputPage) {
+    public SeeBidDetailLink(ListenerLinkInterface inputPage, ObserverOutputInterface outputPage) {
         this.inputPage = inputPage;
         this.outputPage = outputPage;
     }
 
     @Override
     public void update(String data) {
-        inputPage.addActionListener(this);
+        inputPage.addLinkListener(this);
     }
 
     @Override

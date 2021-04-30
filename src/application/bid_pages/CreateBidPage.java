@@ -26,16 +26,16 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
-    private JButton submitButton = new JButton("Submit Request");
+    private JButton submitButton;
     private JButton backBtn;
     private JComboBox<String> startMeridiem, typeCombo, subjectCombo, competencyCombo;
     private JSpinner startTime, duration;
-//    private String userId;
     private HashMap<String, String> subjectMapping;
     private OpenBidUtil util = new OpenBidUtil();
     private String userId;
 
     public CreateBidPage(){
+        submitButton = new JButton("Submit Request");
     }
 
     /**
@@ -79,7 +79,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
         c.weightx = 0.2;
         this.add(backBtn, c);
 
-        activityTitle = new JLabel("Request Tutor");
+        activityTitle = new JLabel("Request for a Tutor");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));

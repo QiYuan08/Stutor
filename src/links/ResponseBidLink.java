@@ -5,6 +5,7 @@ import application.ApplicationManager;
 import application.bid_pages.FindBidsDetail;
 import application.bid_pages.ResponseCloseBid;
 import application.bid_pages.ResponseOpenBid;
+import controller.ObserverInputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -19,15 +20,15 @@ import java.net.http.HttpResponse;
  */
 public class ResponseBidLink implements ActionListener {
 
-    private FindBidsDetail inputPage;
+    private FindBidsDetail findBidsDetail;
     private ResponseOpenBid responseOpenBid;
     private ResponseCloseBid responseCloseBid;
 
-    public ResponseBidLink(FindBidsDetail inputPage, ResponseOpenBid responseOpenBid, ResponseCloseBid responseCloseBid){
-        this.inputPage = inputPage;
+    public ResponseBidLink(FindBidsDetail findBidsDetail, ResponseOpenBid responseOpenBid, ResponseCloseBid responseCloseBid){
+        this.findBidsDetail = findBidsDetail;
         this.responseOpenBid = responseOpenBid;
         this.responseCloseBid = responseCloseBid;
-        inputPage.addReplyBidListener(this);
+        findBidsDetail.addLinkListener(this);
         responseOpenBid.addActionListener(this);
         responseCloseBid.addActionListener(this);
     }
@@ -45,33 +46,15 @@ public class ResponseBidLink implements ActionListener {
         // create a message to update bid
         if (thisBtn.getText().equals("Submit Open Bid")){
 
-            JSONObject inputData = responseOpenBid.retrieveInputs();
-            response = ApiRequest.post("/message", inputData.toString());
-
-            if (response.statusCode() == 201) { // success
-                JOptionPane.showMessageDialog(new JFrame(), "Success", "Bid Send Success", JOptionPane.INFORMATION_MESSAGE);
-
-            } else { // failed API call
-                String msg = "Error: " + new JSONObject(response.body()).get("message");
-                JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
-            }
+            submitBid(responseOpenBid);
 
         } else if (thisBtn.getText().equals("Submit Close Bid")) { // if submitting open bid
 
-            JSONObject inputData = responseCloseBid.retrieveInputs();
-            response = ApiRequest.post("/message", inputData.toString());
-
-            if (response.statusCode() == 201) { // success
-                JOptionPane.showMessageDialog(new JFrame(), "Success", "Bid Send Success", JOptionPane.INFORMATION_MESSAGE);
-
-            } else { // failed API call
-                String msg = "Error: " + new JSONObject(response.body()).get("message");
-                JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
-            }
-
+            submitBid(responseCloseBid);
 
         }else {
-            // if bid button in find bids detail page is clicked check if open or close bid then go to appriopriate page
+
+            // if bid button in find bids detail page is clicked check if open or close bid then go to appropriate page
             // go to either responseOpenBid or responseCloseBid
             if (bid.get("type").equals("open")){
                 responseOpenBid.update(thisBtn.getName());
@@ -80,9 +63,19 @@ public class ResponseBidLink implements ActionListener {
                 responseCloseBid.update(thisBtn.getName());
                 ApplicationManager.loadPage(ApplicationManager.RESPONSE_CLOSE_BID);
             }
-
         }
+    }
 
+    private void submitBid(ObserverInputInterface responseBidPage) {
+        JSONObject inputData = responseBidPage.retrieveInputs();
+        HttpResponse<String> response = ApiRequest.post("/message", inputData.toString());
 
+        if (response.statusCode() == 201) { // success
+            JOptionPane.showMessageDialog(new JFrame(), "Response Submitted", "Your response to the bid has been successfully submitted!", JOptionPane.INFORMATION_MESSAGE);
+
+        } else { // failed API call
+            String msg = "Responding to Bid: Error " + response.statusCode();
+            JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

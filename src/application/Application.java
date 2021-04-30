@@ -2,7 +2,6 @@ package application;
 
 import application.bid_pages.*;
 import controller.*;
-import links.BidderDetailLink;
 import links.FindBidDetailLink;
 import links.ResponseBidLink;
 import links.SeeBidDetailLink;
@@ -14,13 +13,11 @@ import java.awt.event.ActionListener;
 
 public class Application extends JFrame{
     private static JPanel rootPanel;
-//    private static JPanel loginPage, registrationPage, dashboardPage, profilePage, openBidPage, viewBidPage, userBidsPage;
     private static CardLayout cardLayout;
-    ApplicationController loginController, contractController, findBidController,seeBidController, responseOpenBidController, dashboardController, bidClosingController;
-    ActionListener contractListener, loginListener, responseOpenBidListener, findBidListener, seeBidListener, createBidListener, bidClosingListener, dashboardListener;
-    FindBidDetailLink findBidDetailLink;
-    SeeBidDetailLink seeBidDetailLink;
-    BidderDetailLink bidderDetailLink;
+    private ApplicationController loginController, bidUpdateController, bidClosingController;
+    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
+    private FindBidDetailLink findBidDetailLink;
+    private SeeBidDetailLink seeBidDetailLink;
 
     private Application() {
         super("StuTor");
@@ -43,17 +40,6 @@ public class Application extends JFrame{
         ResponseCloseBid responseCloseBid = new ResponseCloseBid();
         TutorBidDetail tutorBidDetail = new TutorBidDetail();
 
-        /***
-         * Split up different process into different process
-         * to remove unnecessary controller observer call
-         */
-        // listener for closing bid
-        // TODO: update findBidPage after closing
-        bidClosingController = new ApplicationController();
-        bidClosingListener = new BidBuyoutListener(findBidsDetail, bidClosingController);
-        bidClosingController.subscribe(findBidPage);
-        bidClosingController.subscribe(seeBidsPage);
-
         rootPanel.add(loginPage, ApplicationManager.LOGIN_PAGE);
         rootPanel.add(registrationPage, ApplicationManager.REGISTRATION_PAGE);
         rootPanel.add(dashboardPage, ApplicationManager.DASHBOARD_PAGE);
@@ -67,7 +53,26 @@ public class Application extends JFrame{
         rootPanel.add(responseCloseBid, ApplicationManager.RESPONSE_CLOSE_BID);
         rootPanel.add(tutorBidDetail, ApplicationManager.TUTOR_BID_DETAIL);
 
-        // passing studentId between classes
+        // create a expireBidService class
+        ExpireBidService expireBidService = new ExpireBidService();
+        expireBidService.setDuration(1); //set the interval before closing automatically
+        expireBidService.expireBidService();
+
+        /*
+         Split up different process into different process
+         to remove unnecessary controller observer call
+         */
+        // listener for closing bid
+        // TODO: update findBidPage after closing
+        bidClosingController = new ApplicationController();
+        bidClosingListener = new BidClosingListener(bidClosingController);
+        findBidsDetail.addActionListener(bidClosingListener);
+        expireBidService.addActionListener(bidClosingListener);
+        bidClosingController.subscribe(findBidPage);
+        bidClosingController.subscribe(seeBidsPage);
+        bidClosingController.subscribe(dashboardPage);
+
+        // passing userId to view classes and services that require it
         loginController = new ApplicationController();
         loginListener = new LoginListener(loginPage, loginController);
         loginController.subscribe(profilePage);
@@ -75,8 +80,9 @@ public class Application extends JFrame{
         loginController.subscribe(createBidPage);
         loginController.subscribe(seeBidsPage);
         loginController.subscribe(findBidPage);
-        loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
         loginController.subscribe(createBidPage);
+        loginController.subscribe(expireBidService);
+        loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
 
         bidderDetailLink = new BidderDetailLink(findBidsDetail, tutorBidDetail);
 
@@ -92,6 +98,8 @@ public class Application extends JFrame{
         seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
         // link findbiddetailpage and tutorbiddetail page
 
+        // links findBidsDetail to the appropriate response page based on the student's request bid
+        responseBidLink = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid);
 
         // TODO: add controller for findbiddetail to bidderdetaillink
         ApplicationController bidderLinkController = new ApplicationController();
@@ -110,16 +118,11 @@ public class Application extends JFrame{
         dashboardController.subscribe(seeBidsPage);
         dashboardController.subscribe(seeBidDetailLink);
 
-        contractController = new ApplicationController();
-        contractListener = new ContractListener(createBidPage, contractController);
-        contractController.subscribe(dashboardPage);
-
-        responseOpenBidListener = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid);
 
         // controller for user to open bid
-        // TODO: refactor openbid listener so that constructor nonid controller if no other class subscribing it
-//        createBidController = new ApplicationController();
-        createBidListener = new CreateBidListener(createBidPage);
+        // TODO: refactor createbid listener so that constructor nonid controller if no other class subscribing it
+        // createBidController = new ApplicationController();
+        createBidListener = new BidCreateListener(createBidPage);
 
         ApplicationManager.setRootPanel(rootPanel);
 
@@ -132,12 +135,6 @@ public class Application extends JFrame{
             @Override
             public void run() {
                 try {
-
-                    // create a service class
-                    ExpireBidService service = new ExpireBidService();
-                    service.setDuration(60); //set the interval before closing automatically
-                    service.expireBidService();
-
                     Application application = new Application();
                 } catch (Exception e) {
                     e.printStackTrace();

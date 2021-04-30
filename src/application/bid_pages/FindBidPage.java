@@ -3,6 +3,7 @@ package application.bid_pages;
 import api.ApiRequest;
 import application.Application;
 import application.ApplicationManager;
+import controller.ListenerLinkInterface;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -17,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class FindBidPage extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
+public class FindBidPage extends JPanel implements ListenerLinkInterface, ObserverOutputInterface {
 
     JPanel contentPanel = new JPanel();
     JScrollPane scrollPane;
@@ -41,7 +42,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         buttonArr = new ArrayList<>();
 
         contentPanel.setLayout(new GridBagLayout());
-        contentPanel.setBackground(new Color(153, 255, 255));
+//        contentPanel.setBackground(new Color(153, 255, 255));
         contentPanel.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
         c = new GridBagConstraints();
         c.weightx = 1;
@@ -57,7 +58,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         c.anchor = GridBagConstraints.PAGE_START;
         contentPanel.add(backBtn, c);
 
-        activityTitle = new JLabel("Request List");
+        activityTitle = new JLabel("Student Requests");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -142,7 +143,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
 
         } else { // if not relevant bid found
             JPanel bidPanel = new JPanel();
-            JLabel noBid = new JLabel("No Bid Found");
+            JLabel noBid = new JLabel("No Bids Found");
             activityTitle.setHorizontalAlignment(JLabel.CENTER);
             activityTitle.setVerticalAlignment(JLabel.CENTER);
             activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
@@ -188,7 +189,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
                 JSONObject bid = returnedBids.getJSONObject(i);
 
                 // if the bid still open
-                if (bid.get("dateClosedDown").equals(null) ) {
+                if (bid.isNull("dateClosedDown")) {
                     // for some bids that doesn't have min competency
                     if (!bid.getJSONObject("additionalInfo").has("minCompetency")) {
                         bids.put(bid);
@@ -226,23 +227,17 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
         createContent();
     }
 
-    @Override
-    public JSONObject retrieveInputs() {
-        return null;
-    }
-
     /**
      * Method to set event listener for every view bid button
      * @param actionListener actionListener for the view bid button
      */
     @Override
-    public void addActionListener(ActionListener actionListener) {
+    public void addLinkListener(ActionListener actionListener) {
 
         if (buttonArr != null) {
             for (JButton button: buttonArr){
                 button.addActionListener(actionListener);
             }
         }
-
     }
 }

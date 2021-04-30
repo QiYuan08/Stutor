@@ -1,10 +1,8 @@
 package listeners;
 
-import application.Application;
 import application.ApplicationManager;
-import application.DashboardPage;
 import controller.ApplicationController;
-import controller.ObserverInputInterface;
+import controller.ListenerLinkInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,18 +11,17 @@ import java.awt.event.ActionListener;
 /***
  * Listener for find bid button in dashboard
  */
-public class DashBoardListener implements ActionListener {
+public class BidUpdateListener implements ActionListener {
 
-    ObserverInputInterface inputPage;
+    ListenerLinkInterface inputPage;
     ApplicationController applicationController;
 
-    public DashBoardListener(ObserverInputInterface inputPage, ApplicationController applicationController) {
+    public BidUpdateListener(ListenerLinkInterface inputPage, ApplicationController applicationController) {
         this.inputPage = inputPage;
         this.applicationController = applicationController;
-        inputPage.addActionListener(this);
-//        inputPage.addFindBidListener(this); // add listener for find bid button
-//        inputPage.addSeeBidListener(this);  // add listener for see bid button
+        inputPage.addLinkListener(this);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         applicationController.notifySubscribers(null);
