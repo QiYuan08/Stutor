@@ -29,6 +29,7 @@ public class FindBidListener implements ObserverOutputInterface, ActionListener 
     // to add listener for all the list of bids;
     @Override
     public void update(String data) {
-        inputPage.addViewBidListener(this);
+//        inputPage.addViewBidListener(this);
+        inputPage.addLinkListener(this);
     }
 }

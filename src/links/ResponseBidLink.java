@@ -33,7 +33,6 @@ public class ResponseBidLink implements ActionListener {
         this.responseCloseBid = responseCloseBid;
         findBidsDetail.addLinkListener(this);
         this.messagesPage = messagesPage;
-        inputPage.addReplyBidListener(this);
         responseOpenBid.addActionListener(this);
         responseCloseBid.addActionListener(this);
     }

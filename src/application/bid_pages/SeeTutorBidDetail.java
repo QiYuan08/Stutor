@@ -190,6 +190,7 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
         mainConst.gridy = 30;
         c.gridwidth = 10;
         this.add(btnPane, mainConst);
+        detailPane.add(btnPane, mainConst);
 
         // TODO: can talk about this in design rationale, nonid to create a listener for this cuz very simple and wont change forever
         // TODO: fix view not updated when student message on it
@@ -198,7 +199,7 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
         mainConst.gridx = 0;
         mainConst.gridheight = 1;
         mainConst.gridwidth = 1;
-        this.add(backBtn, mainConst);
+        detailPane.add(backBtn, mainConst);
 
         backBtn.addActionListener(new ActionListener() {
             @Override

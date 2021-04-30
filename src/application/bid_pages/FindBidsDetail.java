@@ -2,6 +2,8 @@ package application.bid_pages;
 
 import api.ApiRequest;
 import application.ApplicationManager;
+import controller.ListenerLinkInterface;
+import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -300,6 +302,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
      */
     @Override
     public void update(String data) {
+        System.out.println(data);
 
         System.out.println("2 Hi from find bid detail");
 
@@ -342,8 +345,10 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         }
     }
 
-    public void addCloseBidListener(ActionListener listener){
+    public void addCloseBidListener(ActionListener listener) {
         this.closeBtn.addActionListener(listener);
+    }
+
     /**
      * called by BidClosingListener, which is activate by buyoutBtn
      */

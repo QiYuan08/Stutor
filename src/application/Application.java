@@ -18,10 +18,10 @@ public class Application extends JFrame{
     SeeBidDetailLink seeBidDetailLink;
     SeeBidderDetailLink seeBidderDetailLink;
     FindBidderDetailLink findBidderDetailLink;
-    private ApplicationController loginController, bidUpdateController, bidClosingController;
-    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
-    private FindBidDetailLink findBidDetailLink;
-    private SeeBidDetailLink seeBidDetailLink;
+//    private ApplicationController loginController, bidUpdateController, bidClosingController;
+//    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
+//    private FindBidDetailLink findBidDetailLink;
+//    private SeeBidDetailLink seeBidDetailLink;
 
     private Application() {
         super("StuTor");
@@ -118,13 +118,13 @@ public class Application extends JFrame{
         // link findbiddetailpage and tutorbiddetail page
 
         // links findBidsDetail to the appropriate response page based on the student's request bid
-        responseBidLink = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid);
+//        responseBidLink = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid, messagesPage);
 
         // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
         // from dashboard to see bid or find bid
-        dashboardController = new ApplicationController();
-        dashboardListener = new DashBoardListener(dashboardPage, dashboardController); // userId are updated from here
+        ApplicationController dashboardController = new ApplicationController();
+        BidUpdateListener bidUpdateListener = new BidUpdateListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe(findBidPage);
         dashboardController.subscribe((ObserverOutputInterface) findBidListener);
         dashboardController.subscribe(findBidDetailLink);
