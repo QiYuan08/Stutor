@@ -21,15 +21,18 @@ import java.util.TimerTask;
 /**
  * Utility class to automatically close bids
  */
-public class ExpireBidService implements ObserverInputInterface {
+public class ExpireBidService implements ObserverInputInterface, ObserverOutputInterface {
 
     private long counter; //counter of timer in miliseconds
     private TimerTask openBidTask, closeBidTask;
     private Timer timer = new Timer();
     private ActionListener actionListener;
+    JSONObject expiredBid;
+    Instant currentTime;
+    String expiredBidId, userId;
 
     public void setDuration(int minutes) {
-        this.counter = minutes * 60000;
+        this.counter = minutes * 60000L;
     }
 
     public void expireBidService() {
@@ -46,7 +49,7 @@ public class ExpireBidService implements ObserverInputInterface {
                     JSONObject bid = bids.getJSONObject(i);
                     String bidId = bid.getString("id");
                     // if bid type is open
-                    if (bid.get("type").equals("open") && bid.isNull("dateClosedDown")){
+                    if (bid.get("type").equals("open") && bid.isNull("dateClosedDown") && bid.getJSONObject("initiator").getString("id").equals(userId)){
                         Instant bidStart = Instant.parse(bid.getString("dateCreated"));
                         Instant expireTime = bidStart.plus(counter, ChronoUnit.MILLIS);
                         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
@@ -56,29 +59,14 @@ public class ExpireBidService implements ObserverInputInterface {
                         if (now.compareTo(expireTime) > 0){
 
                             // TODO: remove the JOptionPANEL later
-                            JSONObject closeDate = new JSONObject();
-                            closeDate.put("dateClosedDown", now);
-                            JSONArray messages = bid.optJSONArray("messages");
+                            // TODO: add the userId to this class so it would only expire the bids owned by the user?
+                            expiredBid = bid;
+                            expiredBidId = bidId;
+                            currentTime = now;
 
-                            if (messages.length() == 0) {
-                                HttpResponse<String> bidCloseDownResponse =  ApiRequest.post("/bid/" + bidId + "/close-down", closeDate.toString()); // pass empty json object since this API call don't need it
-                                if (bidCloseDownResponse.statusCode() == 200) {
-                                    JOptionPane.showMessageDialog(new JFrame(), "Bid expired at " + now, "Bid Expired", JOptionPane.INFORMATION_MESSAGE);
-                                } else { // failed to close bid
-                                    JOptionPane.showMessageDialog(new JFrame(), "Bid expired but failed to close: Error " + bidCloseDownResponse.statusCode(), "Bad request", JOptionPane.ERROR_MESSAGE);
-                                }
-                            } else {
-                                JSONObject bidInfo = new JSONObject();
-                                bidInfo.put("bidId", bidId);
-                                String tutorId = messages.getJSONObject(messages.length()-1).getJSONObject("poster").getString("id");
-                                bidInfo.put("tutorId", tutorId);
+                            ActionEvent actionEvent = new ActionEvent(ExpireBidService.this, ActionEvent.ACTION_PERFORMED, "Expire Bid");
+                            actionListener.actionPerformed(actionEvent);
 
-                                JButton expireBid = new JButton();
-                                expireBid.setName(bidInfo.toString());
-                                expireBid.addActionListener(actionListener);
-                                ActionEvent actionEvent = new ActionEvent(expireBid, ActionEvent.ACTION_PERFORMED, "Expire Bid");
-                                actionListener.actionPerformed(actionEvent);
-                            }
                         }
                     }
                 }
@@ -88,14 +76,33 @@ public class ExpireBidService implements ObserverInputInterface {
         timer.schedule(openBidTask, 10, 30000);
     }
 
-
     @Override
     public JSONObject retrieveInputs() {
-        return null;
+        JSONArray messages = expiredBid.optJSONArray("messages");
+        JSONObject closeDate = new JSONObject();
+        closeDate.put("dateClosedDown", currentTime);
+
+        JSONObject bidInfo = new JSONObject();
+        bidInfo.put("bidId", expiredBidId);
+
+        if (messages.length() == 0) {
+            bidInfo.put("hasExpired", true);
+            bidInfo.put("tutorId", "");
+        } else {
+            bidInfo.put("hasExpired", false);
+            String tutorId = messages.getJSONObject(messages.length()-1).getJSONObject("poster").getString("id");
+            bidInfo.put("tutorId", tutorId);
+        }
+        return bidInfo;
     }
 
     @Override
     public void addActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
+    }
+
+    @Override
+    public void update(String data) {
+        this.userId = data;
     }
 }

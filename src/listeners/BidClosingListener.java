@@ -4,6 +4,7 @@ import api.ApiRequest;
 import application.ApplicationManager;
 import application.bid_pages.FindBidsDetail;
 import controller.ApplicationController;
+import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,9 +31,18 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton thisBtn = (JButton) e.getSource();
-        String bidInfo = thisBtn.getName();
-        JSONObject jsonBid = new JSONObject(bidInfo);
+        ObserverInputInterface inputPage;
+        if (e.getSource() instanceof JButton) {
+            JButton btn = (JButton) e.getSource();
+            inputPage = (ObserverInputInterface) btn.getParent();
+        } else {
+            inputPage = (ObserverInputInterface) e.getSource();
+        }
+//        JButton thisBtn = (JButton) e.getSource();
+//        thisBtn.getParent(); /////////////////////////////
+//        String bidInfo = thisBtn.getName();
+//        JSONObject jsonBid = new JSONObject(bidInfo);
+        JSONObject jsonBid = inputPage.retrieveInputs();
         closeBid(jsonBid);
     }
 
@@ -43,11 +53,16 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
 
         String bidId = bidInfo.getString("bidId");
         String tutorId = bidInfo.getString("tutorId");
+        boolean hasExpired = bidInfo.getBoolean("hasExpired");
 
-        // robustness check to not close the same bid twice
-        HttpResponse<String> bidResponse = ApiRequest.get("/bid/" + bidId + "?fields=messages");
+
+        HttpResponse<String> bidResponse = ApiRequest.get("/bid/" + bidId + "fields=messages");
         JSONObject bid = new JSONObject(bidResponse.body());
-        if (!bid.isNull("dateClosedDown")) {return;}
+        // robustness check to not close the same bid twice
+//        if (!bid.isNull("dateClosedDown")) {
+//            System.out.println(bidInfo);
+//            System.out.println(bid);
+//            return;}
 
         JSONObject closeDate = new JSONObject();
         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
@@ -57,6 +72,11 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
         String msg;
 
         if (bidCloseDownResponse.statusCode() == 200) {
+
+            if (hasExpired) {
+                JOptionPane.showMessageDialog(new JFrame(), "Bid expired at " + now, "Bid Expired", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
 
             JSONObject contract = new JSONObject();
             if (tutorId.equals("")) { // buyout action

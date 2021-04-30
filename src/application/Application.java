@@ -54,10 +54,10 @@ public class Application extends JFrame{
 
         // create a expireBidService class
         ExpireBidService expireBidService = new ExpireBidService();
-        expireBidService.setDuration(60); //set the interval before closing automatically
+        expireBidService.setDuration(1); //set the interval before closing automatically
         expireBidService.expireBidService();
 
-        /**
+        /*
          Split up different process into different process
          to remove unnecessary controller observer call
          */
@@ -71,7 +71,7 @@ public class Application extends JFrame{
         bidClosingController.subscribe(seeBidsPage);
         bidClosingController.subscribe(dashboardPage);
 
-        // passing userId to classes
+        // passing userId to view classes and services that require it
         loginController = new ApplicationController();
         loginListener = new LoginListener(loginPage, loginController);
         loginController.subscribe(profilePage);
@@ -80,13 +80,14 @@ public class Application extends JFrame{
         loginController.subscribe(seeBidsPage);
         loginController.subscribe(findBidPage);
         loginController.subscribe(createBidPage);
+        loginController.subscribe(expireBidService);
         loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
 
-        // links findBidsDetail to the appropriate response page based on the student's request bid
-        responseBidLink = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid);
-        // links each bids' buttons to the respective bid info page
+        // links each bids' buttons to the respective bid details page
         findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
         seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
+        // links findBidsDetail to the appropriate response page based on the student's request bid
+        responseBidLink = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid);
 
         // dashboardController needed for find bid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
@@ -102,7 +103,7 @@ public class Application extends JFrame{
         // controller for user to open bid
         // TODO: refactor createbid listener so that constructor nonid controller if no other class subscribing it
         // createBidController = new ApplicationController();
-        createBidListener = new CreateBidListener(createBidPage);
+        createBidListener = new BidCreateListener(createBidPage);
 
         ApplicationManager.setRootPanel(rootPanel);
 

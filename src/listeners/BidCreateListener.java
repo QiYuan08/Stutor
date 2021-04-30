@@ -14,11 +14,11 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.time.Instant;
 
-public class CreateBidListener implements ActionListener {
+public class BidCreateListener implements ActionListener {
 
     private ObserverInputInterface inputPage;
 
-    public CreateBidListener(ObserverInputInterface inputPage) {
+    public BidCreateListener(ObserverInputInterface inputPage) {
         this.inputPage = inputPage;
         inputPage.addActionListener(this);
     }
@@ -44,7 +44,6 @@ public class CreateBidListener implements ActionListener {
 
                 // if the user competency is 2 level lower
                 if (competency.getInt("level") + 2 > (bidDetails.getJSONObject("additionalInfo").getInt("minCompetency"))) {
-                    System.out.println(true);
                     JOptionPane.showMessageDialog(new JFrame(), "The minimum competency level must be at least 2 levels higher than your subject level. Please try again.",
                         "Invalid Minimum Competency Level", JOptionPane.ERROR_MESSAGE);
                 } else {

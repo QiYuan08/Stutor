@@ -22,8 +22,8 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
 
     private String bidId;
     private JLabel title, subjectLabel, name, rate, competency, noOfLesson, duration, startTime, day, preferredSession;
-    private JButton closeBtn = new JButton("Buy Out");
-    private JButton replyBtn = new JButton("Bid");
+    private JButton buyoutBtn = new JButton("Buy Out");
+    private JButton responseBtn = new JButton("Bid");
     private JButton backBtn;
 
     public FindBidsDetail() {}
@@ -153,12 +153,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         c.gridx = 2;
         c.gridy = this.getComponentCount();
         c.anchor = GridBagConstraints.PAGE_END;
-        // putting the bidId and tutorId for calling the BidClosingListener
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("bidId", bidId);
-        jsonObject.put("tutorId", "");
-        closeBtn.setName(jsonObject.toString());
-        this.add(closeBtn, c);
+        this.add(buyoutBtn, c);
 
         // add replyBid Button
         c.weighty = 0;
@@ -167,9 +162,8 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         c.gridx = 0;
         c.anchor = GridBagConstraints.PAGE_START;
         String data = new JSONObject().put("bidId", this.bidId).put("userId", initiator.get("id")).toString();
-//        System.out.println(data);
-        replyBtn.setName(data);
-        this.add(replyBtn, c);
+        responseBtn.setName(data);
+        this.add(responseBtn, c);
     }
 
 
@@ -198,20 +192,28 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
 
     }
 
+    /**
+     * Links the responseBtn with the appropriate page depending on whether the current bid is an open or closed bid
+     */
+    @Override
+    public void addLinkListener(ActionListener listener) {
+        this.responseBtn.addActionListener(listener);
+    }
+
+    /**
+     * called by BidClosingListener, which is activate by buyoutBtn
+     */
     @Override
     public JSONObject retrieveInputs() {
-        return null;
+        JSONObject bidInfo = new JSONObject();
+        bidInfo.put("bidId", bidId);
+        bidInfo.put("tutorId", "");
+        bidInfo.put("hasExpired", false);
+        return bidInfo;
     }
 
     @Override
     public void addActionListener(ActionListener actionListener) {
-        this.closeBtn.addActionListener(actionListener);
+        this.buyoutBtn.addActionListener(actionListener);
     }
-
-
-    @Override
-    public void addLinkListener(ActionListener listener) {
-        this.replyBtn.addActionListener(listener);
-    }
-
 }
