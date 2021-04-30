@@ -74,7 +74,7 @@ public class ExpireBidService implements ObserverInputInterface {
                                 bidInfo.put("tutorId", tutorId);
 
                                 JButton expireBid = new JButton();
-                                expireBid.setName(bidId);
+                                expireBid.setName(bidInfo.toString());
                                 expireBid.addActionListener(actionListener);
                                 ActionEvent actionEvent = new ActionEvent(expireBid, ActionEvent.ACTION_PERFORMED, "Expire Bid");
                                 actionListener.actionPerformed(actionEvent);

@@ -3,6 +3,7 @@ package application.bid_pages;
 import api.ApiRequest;
 import application.Application;
 import application.ApplicationManager;
+import controller.ListenerLinkInterface;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONObject;
@@ -17,7 +18,7 @@ import java.net.http.HttpResponse;
 // TODO: show all bidder in open bid
 // TODO: show check message instead of bid button if tutor already reply to a close bid
 
-public class FindBidsDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
+public class FindBidsDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
 
     private String bidId;
     private JLabel title, subjectLabel, name, rate, competency, noOfLesson, duration, startTime, day, preferredSession;
@@ -208,7 +209,9 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
     }
 
 
-    public void addReplyBidListener(ActionListener listener) {
+    @Override
+    public void addLinkListener(ActionListener listener) {
         this.replyBtn.addActionListener(listener);
     }
+
 }

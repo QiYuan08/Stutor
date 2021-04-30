@@ -45,7 +45,7 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
         String tutorId = bidInfo.getString("tutorId");
 
         // robustness check to not close the same bid twice
-        HttpResponse<String> bidResponse = ApiRequest.get("/bid/" + bidId);
+        HttpResponse<String> bidResponse = ApiRequest.get("/bid/" + bidId + "?fields=messages");
         JSONObject bid = new JSONObject(bidResponse.body());
         if (!bid.isNull("dateClosedDown")) {return;}
 
