@@ -98,8 +98,8 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         this.add(rate, c);
 
         // if competency is provided in the bid
-        if (additionalInfo.has("rate")){
-            competency = new JLabel("Competency: " + additionalInfo.get("minCompetency"));
+        if (additionalInfo.has("minCompetency")){
+            competency = new JLabel("Minimum competency: " + additionalInfo.get("minCompetency"));
         } else {
             competency = new JLabel("Competency not provided");
         }
@@ -107,7 +107,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         this.add(competency, c);
 
         // if no of lesson is provided
-        if (additionalInfo.has("nofOfLesson")){
+        if (additionalInfo.has("noOfLesson")){
             noOfLesson = new JLabel("No of Lesson: " + additionalInfo.get("nofOfLesson"));
         } else {
             noOfLesson = new JLabel("No of Lesson not provided");
@@ -125,7 +125,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         this.add(day, c);
 
         // if preferred session is provided in the bid
-        if (additionalInfo.has("day")){
+        if (additionalInfo.has("preferredSession")){
             preferredSession = new JLabel("Preferred: " + additionalInfo.get("preferredSession") + " lessons per week");
         } else {
             preferredSession = new JLabel("Preferred sessions not provided");
@@ -134,7 +134,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         this.add(preferredSession, c);
 
         // if duration is provided in the bid
-        if (additionalInfo.has("day")){
+        if (additionalInfo.has("duration")){
             duration = new JLabel("Duration: " + additionalInfo.get("duration") + " hours per lesson");
         } else {
             duration = new JLabel("Duration not provided");
@@ -143,7 +143,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         this.add(duration, c);
 
         // if start time is provided in the bid
-        if (additionalInfo.has("day")){
+        if (additionalInfo.has("startTime")){
             startTime = new JLabel("Preferred Time: " + additionalInfo.get("startTime"));
         } else {
             startTime = new JLabel("Preferred Time not provided");
@@ -169,9 +169,6 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
         c.anchor = GridBagConstraints.PAGE_START;
         closeBtn.setName(this.bidId);
         this.add(replyBtn, c);
-
-
-
 
         // TODO: add JPanel to see all tutors' bids or a message panel depending on open or closed bid
     }

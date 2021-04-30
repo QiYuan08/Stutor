@@ -37,7 +37,7 @@ public class ResponseBidLink implements ActionListener {
         JButton thisBtn = (JButton) e.getSource();
 
         // get the bid from bidId
-        JSONObject data = new JSONObject(thisBtn.getName());
+        JSONObject data = new JSONObject(thisBtn.getName().trim());
         HttpResponse<String> response = ApiRequest.get("/bid/" + data.get("bidId"));
         JSONObject bid = new JSONObject(response.body());
 

@@ -101,8 +101,7 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
                 bidPanelConstraint.anchor = GridBagConstraints.WEST;
                 JLabel bidLabel = new JLabel();
                 bidLabel.setText(bid.getJSONObject("subject").get("name") + " (Level " +
-                        bid.getJSONObject("additionalInfo").get("minCompetency") + ")" +
-                        " " + bid.get("type"));
+                        bid.getJSONObject("additionalInfo").get("minCompetency") + ")");
                 bidPanel.add(bidLabel, bidPanelConstraint);
 
                 // type jlabel
@@ -125,8 +124,12 @@ public class FindBidPage extends JPanel implements ObserverInputInterface, Obser
                 bidPanelConstraint.gridheight = 2;
                 bidPanelConstraint.weightx = 0.2;
                 viewBidBtn = new JButton("View Bid");
-//                System.out.println(bid);
-                viewBidBtn.setName(bid.get("id").toString()); // give a unique name to a button to distinguish the
+
+                // set button name to bidId and userId for ResponseCloseBid class to close Bid
+                JSONObject btnData = new JSONObject();
+                btnData.put("bidId", bid.get("id"));
+                btnData.put("userId", this.userId);
+                viewBidBtn.setName(btnData.toString());
                 buttonArr.add(viewBidBtn); // add the button into button array
                 bidPanel.add(viewBidBtn, bidPanelConstraint);
 

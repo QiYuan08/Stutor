@@ -45,7 +45,6 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
     private void getUserCompetency() {
         subjectMapping = new HashMap<>();
 
-        System.out.println(this.userId);
         if (this.userId != null){
             HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=competencies&fields=competencies.subject");
             JSONObject user = new JSONObject(response.body());
@@ -275,7 +274,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
 
         JSONObject additionalInfo = new JSONObject();
         additionalInfo.put("minCompetency", competency);
-        additionalInfo.put("noOfoLesson", noOfLesson);
+        additionalInfo.put("noOfLesson", noOfLesson);
         additionalInfo.put("day", day);
         additionalInfo.put("startTime", time);
         additionalInfo.put("duration", duration.getValue().toString());

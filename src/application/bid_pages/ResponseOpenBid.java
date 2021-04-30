@@ -244,6 +244,9 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         String subjectName = new JSONObject(response.body()).getJSONObject("subject").getString("name");
         activityTitle.setText(subjectName);
 
-        submitButton.setName(bidId); // set the name of this button as bidId for quering with db
+        JSONObject btnData = new JSONObject();
+        btnData.put("bidId", this.bidId);
+        btnData.put("userId", this.userId);
+        submitButton.setName(btnData.toString()); // set the name of this button as bidId for quering with db
     }
 }

@@ -40,6 +40,17 @@ public class Application extends JFrame{
         ResponseOpenBid responseOpenBid = new ResponseOpenBid();
         ResponseCloseBid responseCloseBid = new ResponseCloseBid();
 
+        /***
+         * Split up different process into different process
+         * to remove unnecessary controller observer call
+         */
+        // listener for closing bid
+        // TODO: update findBidPage after closing
+        bidClosingController = new ApplicationController();
+        bidClosingListener = new BidBuyoutListener(findBidsDetail, bidClosingController);
+        bidClosingController.subscribe(findBidPage);
+        bidClosingController.subscribe(seeBidsPage);
+
         rootPanel.add(loginPage, ApplicationManager.LOGIN_PAGE);
         rootPanel.add(registrationPage, ApplicationManager.REGISTRATION_PAGE);
         rootPanel.add(dashboardPage, ApplicationManager.DASHBOARD_PAGE);
@@ -52,7 +63,6 @@ public class Application extends JFrame{
         rootPanel.add(responseOpenBid, ApplicationManager.RESPONSE_OPEN_BID);
         rootPanel.add(responseCloseBid, ApplicationManager.RESPONSE_CLOSE_BID);
 
-
         // passing studentId between classes
         loginController = new ApplicationController();
         loginListener = new LoginListener(loginPage, loginController);
@@ -64,21 +74,10 @@ public class Application extends JFrame{
         loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
         loginController.subscribe(createBidPage);
 
-        /***
-         * Split up different process into different process
-         * to remove unnecessary controller observer call
-         */
-        // listener for closing bid
-        // TODO: update findBidPage after closing
-        bidClosingController = new ApplicationController();
-        bidClosingListener = new BidBuyoutListener(findBidsDetail, bidClosingController);
-        bidClosingController.subscribe(findBidPage);
-        bidClosingController.subscribe(seeBidsPage);
-
         findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
         seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
 
-        // dashboardController needed for find bid pages to add event listener for all of its button
+        // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
         // from dashboard to see bid or find bid
         dashboardController = new ApplicationController();
