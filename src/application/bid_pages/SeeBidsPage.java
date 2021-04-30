@@ -112,7 +112,12 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface, Obse
                 bidPanelConstraint.gridwidth = 1;
                 bidPanelConstraint.weightx = 0.2;
                 viewBidBtn = new JButton("View Bid");
-                viewBidBtn.setName(bid.get("id").toString()); // give a unique name to a button to distinguish the
+
+                // set button name to bidId and userId for ResponseCloseBid class to close Bid
+                JSONObject btnData = new JSONObject();
+                btnData.put("bidId", bid.get("id"));
+                btnData.put("userId", this.userId);
+                viewBidBtn.setName(btnData.toString()); // give a unique name to a button to distinguish the
                 buttonArr.add(viewBidBtn); // add the button into button array
                 bidPanel.add(viewBidBtn, bidPanelConstraint);
 
@@ -171,7 +176,8 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface, Obse
     @Override
     public void update(String data) {
         if (this.userId == null) {
-        this.userId = data;}
+            this.userId = data;
+        }
 
         // get all bid
         HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids");

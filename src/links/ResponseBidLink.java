@@ -3,6 +3,7 @@ package links;
 import api.ApiRequest;
 import application.ApplicationManager;
 import application.bid_pages.FindBidsDetail;
+import application.bid_pages.MessagesPage;
 import application.bid_pages.ResponseCloseBid;
 import application.bid_pages.ResponseOpenBid;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
+// TODO: might want to refactor into controller cuz too many subsribers
 /**
  * A listener that listen to two classes
  * To avoid having another controller with only one subsriber in application.java
@@ -22,11 +24,13 @@ public class ResponseBidLink implements ActionListener {
     private FindBidsDetail inputPage;
     private ResponseOpenBid responseOpenBid;
     private ResponseCloseBid responseCloseBid;
+    private MessagesPage messagesPage;
 
-    public ResponseBidLink(FindBidsDetail inputPage, ResponseOpenBid responseOpenBid, ResponseCloseBid responseCloseBid){
+    public ResponseBidLink(FindBidsDetail inputPage, ResponseOpenBid responseOpenBid, ResponseCloseBid responseCloseBid, MessagesPage messagesPage){
         this.inputPage = inputPage;
         this.responseOpenBid = responseOpenBid;
         this.responseCloseBid = responseCloseBid;
+        this.messagesPage = messagesPage;
         inputPage.addReplyBidListener(this);
         responseOpenBid.addActionListener(this);
         responseCloseBid.addActionListener(this);
@@ -71,15 +75,25 @@ public class ResponseBidLink implements ActionListener {
 
 
         }else {
-            // if bid button in find bids detail page is clicked check if open or close bid then go to appriopriate page
-            // go to either responseOpenBid or responseCloseBid
-            if (bid.get("type").equals("open")){
-                responseOpenBid.update(thisBtn.getName());
-                ApplicationManager.loadPage(ApplicationManager.RESPONSE_OPEN_BID);
-            } else {
-                responseCloseBid.update(thisBtn.getName());
-                ApplicationManager.loadPage(ApplicationManager.RESPONSE_CLOSE_BID);
+
+            // if message button is clicked for close bid
+            if (thisBtn.getText().equals("Message")){
+                this.messagesPage.update(thisBtn.getName());
+                ApplicationManager.loadPage(ApplicationManager.MESSAGES_PAGE);
+
+            } else { // if bid button is clicked
+
+                // if bid button in find bids detail page is clicked check if open or close bid then go to appriopriate page
+                // go to either responseOpenBid or responseCloseBid
+                if (bid.get("type").equals("open")){
+                    responseOpenBid.update(thisBtn.getName());
+                    ApplicationManager.loadPage(ApplicationManager.RESPONSE_OPEN_BID);
+                } else {
+                    responseCloseBid.update(thisBtn.getName());
+                    ApplicationManager.loadPage(ApplicationManager.RESPONSE_CLOSE_BID);
+                }
             }
+
 
         }
 

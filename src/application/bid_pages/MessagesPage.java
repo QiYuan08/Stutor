@@ -20,7 +20,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
     private JTextField messageInput;
     private JButton backButton, sendMessageButton;
     private JScrollPane messageList;
-    private String bidId;
+    private String bidId, userId;
 
     public MessagesPage() {
 
@@ -80,14 +80,16 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
         backButton.addActionListener(new ActionListener() {
             @Override // TODO: to change to see bids detail page
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.PROFILE_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
             }
         });
     }
 
     @Override
     public void update(String data) {
-        this.bidId = data;
+        this.bidId = new JSONObject(data).getString("bidId");
+        this.userId = new JSONObject(data).getString("userId");
+
         HttpResponse<String> response = ApiRequest.get("/bid/" + this.bidId + "?fields=messages");
         if (response.statusCode() == 200) {
             JSONObject bid = new JSONObject(response.body());
@@ -99,7 +101,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
             for (int j = 0; j < messages.length(); j++) {
                 JPanel componentPanel = new JPanel();
                 JSONObject message = (JSONObject) messages.get(j);
-                componentPanel.add(new JLabel(message.optJSONObject("poster").optString("userName")));
+                componentPanel.add(new JLabel(message.optJSONObject("poster").optString("userName") + ": "));
                 componentPanel.add(new JLabel(message.optString("content")));
                 messagesPanel.add(componentPanel);
             }
@@ -110,7 +112,10 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
     @Override
     public JSONObject retrieveInputs() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message", messageInput.getText());
+        jsonObject.put("bidId", this.bidId);
+        jsonObject.put("posterId", this.userId);
+        jsonObject.put("content", messageInput.getText());
+        jsonObject.put("additionalInfo", new JSONObject());
         return jsonObject;
     }
 

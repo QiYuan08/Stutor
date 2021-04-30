@@ -1,6 +1,7 @@
 package links;
 
 import application.ApplicationManager;
+import application.bid_pages.FindBidsDetail;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 
@@ -12,10 +13,12 @@ public class FindBidDetailLink implements ActionListener, ObserverOutputInterfac
 
     private ObserverInputInterface inputPage;
     private ObserverOutputInterface outputPage;
+    private FindBidderDetailLink findBidderDetailLink;
 
-    public FindBidDetailLink(ObserverInputInterface inputPage, ObserverOutputInterface outputPage) {
+    public FindBidDetailLink(ObserverInputInterface inputPage, ObserverOutputInterface outputPage, FindBidderDetailLink findBidderDetailLink) {
         this.inputPage = inputPage;
         this.outputPage = outputPage;
+        this.findBidderDetailLink = findBidderDetailLink;
     }
 
     @Override
@@ -25,9 +28,13 @@ public class FindBidDetailLink implements ActionListener, ObserverOutputInterfac
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println("1 Hi from find bid detail link");
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
+        this.findBidderDetailLink.update(bidId);
         ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
+
     }
+
 }

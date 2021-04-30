@@ -3,7 +3,6 @@ package application.bid_pages;
 import api.ApiRequest;
 import application.ApplicationManager;
 import controller.ObserverOutputInterface;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class TutorBidDetail extends JPanel implements ObserverOutputInterface {
+public class FindTutorBidDetail extends JPanel implements ObserverOutputInterface {
     private String bidId, userId;
     private JLabel title, name, rate, competency, duration, startTime, day, preferredSession;
     private JButton backBtn, viewBidBtn;
@@ -23,7 +22,7 @@ public class TutorBidDetail extends JPanel implements ObserverOutputInterface {
     ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
 
-    public TutorBidDetail() {
+    public FindTutorBidDetail() {
         this.setLayout(new GridBagLayout());
         mainConst = new GridBagConstraints();
 
@@ -170,7 +169,7 @@ public class TutorBidDetail extends JPanel implements ObserverOutputInterface {
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
+                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
             }
         });
 
