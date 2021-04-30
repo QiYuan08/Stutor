@@ -184,7 +184,7 @@ public class FindBidPage extends JPanel implements ListenerLinkInterface, Observ
         if (user.get("isTutor").equals(true)){
 
             // add every bid that is qualified to be teached by this user to bids
-            for (int i =0; i < returnedBids.length(); i++){
+            for (int i = returnedBids.length() - 1; i > -1; i--){
 
                 JSONObject bid = returnedBids.getJSONObject(i);
 

@@ -101,8 +101,9 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
             this.messageList.setViewportView(messagesPanel);
         }
 
+        JSONObject user = new JSONObject(ApiRequest.get("/user/" + userId).body());
         // if tutor replying to student in findtutorbiddetail class
-        if (bid.getJSONObject("initiator").getBoolean("isTutor")){
+        if (user.getBoolean("isTutor")) { // bid.getJSONObject("initiator").getBoolean("isTutor")){
             System.out.println("is Tutor");
             backButton.addActionListener(new ActionListener() {
                 @Override // TODO: to change to see bids detail page
@@ -110,7 +111,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
                     ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
                 }
             });
-        } else { // if student replying to student in seetutorfiddetail class
+        } else if (user.getBoolean("isStudent")){ // if student replying to student in seetutorfiddetail class
 
             System.out.println("is Student");
             backButton.addActionListener(new ActionListener() {
@@ -119,6 +120,8 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
                     ApplicationManager.loadPage(ApplicationManager.SEE_BID_DETAIL);
                 }
             });
+        } else {
+            System.out.println("what kind of user even is this");
         }
 
     }

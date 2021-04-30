@@ -85,6 +85,7 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
 
         JSONObject bidInfo = new JSONObject();
         bidInfo.put("bidId", expiredBidId);
+        bidInfo.put("messageId", "");
 
         if (messages.length() == 0) {
             bidInfo.put("hasExpired", true);

@@ -24,7 +24,7 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
 
     private ApplicationController applicationController;
     private String userId; // needed to update other bid view
-    String bidId, tutorId;
+    String bidId, tutorId, messageId;
 
     public BidClosingListener(ApplicationController applicationController) {
         this.applicationController = applicationController;
@@ -35,6 +35,7 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
         ObserverInputInterface inputPage;
         if (e.getSource() instanceof JButton) {
             JButton btn = (JButton) e.getSource();
+            System.out.println(btn.getParent().getClass());
             inputPage = (ObserverInputInterface) btn.getParent();
         } else {
             inputPage = (ObserverInputInterface) e.getSource();
@@ -49,6 +50,7 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
     private void closeBid(JSONObject bidInfo) {
         bidId = bidInfo.getString("bidId");
         tutorId = bidInfo.getString("tutorId");
+        messageId = bidInfo.getString("messageId");
         boolean hasExpired = bidInfo.getBoolean("hasExpired");
 
         HttpResponse<String> bidResponse = ApiRequest.get("/bid/" + bidId + "?fields=messages");
@@ -102,12 +104,17 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
             contract.put("firstPartyId", userId);
             contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
             contract.put("lessonInfo", bid.getJSONObject("additionalInfo"));
-        } else { // bid closes automatically from timer with a winning bidder
-            JSONArray messages = bid.getJSONArray("messages");
-            JSONObject message = new JSONObject(messages.getJSONObject(messages.length() - 1));
-
+        } else {
             contract.put("firstPartyId", tutorId);
             contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
+
+            JSONObject message;
+            if (messageId.equals("")) { // bid closes automatically from timer with a winning bidder
+                JSONArray messages = bid.getJSONArray("messages");
+                message = new JSONObject(messages.getJSONObject(messages.length() - 1));
+            } else { // student confirms the winning response (message)
+                message = new JSONObject(ApiRequest.get("/message/" + messageId).body());
+            }
             contract.put("lessonInfo", message.getJSONObject("additionalInfo"));
         }
         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
@@ -132,6 +139,7 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
         }
     }
 
+
     /**
      * Receive userId from loginController
      *
@@ -141,5 +149,6 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
     public void update(String data) {
         this.userId = data;
     }
+
 }
 

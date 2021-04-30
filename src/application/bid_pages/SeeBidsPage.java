@@ -78,7 +78,7 @@ public class SeeBidsPage extends JPanel implements ObserverOutputInterface, List
 
         // create a jPanel for each bids available
         if (bids.length() > 0) {
-            for (int i=0; i < bids.length(); i++){
+            for (int i = bids.length() - 1; i > -1; i--){
 
                 JSONObject bid = bids.getJSONObject(i);
 

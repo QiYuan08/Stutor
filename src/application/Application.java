@@ -64,7 +64,7 @@ public class Application extends JFrame{
 
         // create a expireBidService class
         ExpireBidService expireBidService = new ExpireBidService();
-        expireBidService.setDuration(1); //set the interval before closing automatically
+        expireBidService.setDuration(30); //set the interval before closing automatically
         expireBidService.expireBidService();
 
         /*
