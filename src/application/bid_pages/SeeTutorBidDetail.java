@@ -35,7 +35,6 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
      */
     void createContent(JSONObject message){
 
-        System.out.println(message);
         JSONObject initiator = message.getJSONObject("poster");
         JSONObject additionalInfo = message.getJSONObject("additionalInfo");
 
@@ -162,16 +161,14 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
         if (bid.getString("type").equals("open")){  // if its open message
             btnPane.setLayout(new GridLayout(1,1));
 
-            if (bid.getString("dateClosedDown").equals(null)){ // if message have not yet been bought out
+            if (bid.isNull("dateClosedDown")){ // if message have not yet been bought out
                 JButton confirmBtn = new JButton("Confirm Bid");
                 btnPane.add(confirmBtn);
             }
         } else if (bid.getString("type").equals("close")){  // if its close message
 
-
-            if (bid.getString("dateClosedDown").equals(null)){
+            if (bid.isNull("dateClosedDown")){
                 // if the message is not close yet add view message and confirm message button
-
                 btnPane.setLayout(new GridLayout(1,2));
 
                 JButton messageBtn = new JButton("Message");
@@ -189,7 +186,6 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
         mainConst.gridx = 1;
         mainConst.gridy = 30;
         c.gridwidth = 10;
-        this.add(btnPane, mainConst);
         detailPane.add(btnPane, mainConst);
 
         // TODO: can talk about this in design rationale, nonid to create a listener for this cuz very simple and wont change forever
