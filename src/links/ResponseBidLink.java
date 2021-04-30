@@ -3,6 +3,7 @@ package links;
 import api.ApiRequest;
 import application.ApplicationManager;
 import application.bid_pages.FindBidsDetail;
+import application.bid_pages.MessagesPage;
 import application.bid_pages.ResponseCloseBid;
 import application.bid_pages.ResponseOpenBid;
 import controller.ObserverInputInterface;
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
+// TODO: might want to refactor into controller cuz too many subsribers
 /**
  * A listener that listen to two classes
  * To avoid having another controller with only one subsriber in application.java
@@ -23,12 +25,15 @@ public class ResponseBidLink implements ActionListener {
     private FindBidsDetail findBidsDetail;
     private ResponseOpenBid responseOpenBid;
     private ResponseCloseBid responseCloseBid;
+    private MessagesPage messagesPage;
 
-    public ResponseBidLink(FindBidsDetail findBidsDetail, ResponseOpenBid responseOpenBid, ResponseCloseBid responseCloseBid){
+    public ResponseBidLink(FindBidsDetail findBidsDetail, ResponseOpenBid responseOpenBid, ResponseCloseBid responseCloseBid, MessagesPage messagesPage){
         this.findBidsDetail = findBidsDetail;
         this.responseOpenBid = responseOpenBid;
         this.responseCloseBid = responseCloseBid;
         findBidsDetail.addLinkListener(this);
+        this.messagesPage = messagesPage;
+        inputPage.addReplyBidListener(this);
         responseOpenBid.addActionListener(this);
         responseCloseBid.addActionListener(this);
     }
@@ -46,36 +51,54 @@ public class ResponseBidLink implements ActionListener {
         // create a message to update bid
         if (thisBtn.getText().equals("Submit Open Bid")){
 
-            submitBid(responseOpenBid);
+            JSONObject inputData = responseOpenBid.retrieveInputs();
+            response = ApiRequest.post("/message", inputData.toString());
+
+            if (response.statusCode() == 201) { // success
+                JOptionPane.showMessageDialog(new JFrame(), "Success", "Bid Send Success", JOptionPane.INFORMATION_MESSAGE);
+
+            } else { // failed API call
+                String msg = "Error: " + new JSONObject(response.body()).get("message");
+                JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
+            }
 
         } else if (thisBtn.getText().equals("Submit Close Bid")) { // if submitting open bid
 
-            submitBid(responseCloseBid);
+            JSONObject inputData = responseCloseBid.retrieveInputs();
+            response = ApiRequest.post("/message", inputData.toString());
+
+            if (response.statusCode() == 201) { // success
+                JOptionPane.showMessageDialog(new JFrame(), "Success", "Bid Send Success", JOptionPane.INFORMATION_MESSAGE);
+
+            } else { // failed API call
+                String msg = "Error: " + new JSONObject(response.body()).get("message");
+                JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
+            }
+
 
         }else {
 
-            // if bid button in find bids detail page is clicked check if open or close bid then go to appropriate page
-            // go to either responseOpenBid or responseCloseBid
-            if (bid.get("type").equals("open")){
-                responseOpenBid.update(thisBtn.getName());
-                ApplicationManager.loadPage(ApplicationManager.RESPONSE_OPEN_BID);
-            } else {
-                responseCloseBid.update(thisBtn.getName());
-                ApplicationManager.loadPage(ApplicationManager.RESPONSE_CLOSE_BID);
+            // if message button is clicked for close bid
+            if (thisBtn.getText().equals("Message")){
+                this.messagesPage.update(thisBtn.getName());
+                ApplicationManager.loadPage(ApplicationManager.MESSAGES_PAGE);
+
+            } else { // if bid button is clicked
+
+                // if bid button in find bids detail page is clicked check if open or close bid then go to appriopriate page
+                // go to either responseOpenBid or responseCloseBid
+                if (bid.get("type").equals("open")){
+                    responseOpenBid.update(thisBtn.getName());
+                    ApplicationManager.loadPage(ApplicationManager.RESPONSE_OPEN_BID);
+                } else {
+                    responseCloseBid.update(thisBtn.getName());
+                    ApplicationManager.loadPage(ApplicationManager.RESPONSE_CLOSE_BID);
+                }
             }
+
+
         }
-    }
 
-    private void submitBid(ObserverInputInterface responseBidPage) {
-        JSONObject inputData = responseBidPage.retrieveInputs();
-        HttpResponse<String> response = ApiRequest.post("/message", inputData.toString());
 
-        if (response.statusCode() == 201) { // success
-            JOptionPane.showMessageDialog(new JFrame(), "Response Submitted", "Your response to the bid has been successfully submitted!", JOptionPane.INFORMATION_MESSAGE);
-
-        } else { // failed API call
-            String msg = "Responding to Bid: Error " + response.statusCode();
-            JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
-        }
     }
 }

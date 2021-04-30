@@ -2,19 +2,20 @@ package links;
 
 import application.ApplicationManager;
 import application.bid_pages.FindBidsDetail;
-import controller.ObserverInputInterface;
+import application.bid_pages.SeeBidDetail;
+import application.bid_pages.SeeTutorBidDetail;
 import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BidderDetailLink implements ActionListener, ObserverOutputInterface {
+public class SeeBidderDetailLink implements ActionListener, ObserverOutputInterface {
 
-    private FindBidsDetail inputPage;
+    private SeeBidDetail inputPage;
     private ObserverOutputInterface outputPage;
 
-    public BidderDetailLink(FindBidsDetail inputPage, ObserverOutputInterface outputPage) {
+    public SeeBidderDetailLink(SeeBidDetail inputPage, ObserverOutputInterface outputPage) {
         this.inputPage = inputPage;
         this.outputPage = outputPage;
     }
@@ -24,12 +25,12 @@ public class BidderDetailLink implements ActionListener, ObserverOutputInterface
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
-        ApplicationManager.loadPage(ApplicationManager.TUTOR_BID_DETAIL);
+        ApplicationManager.loadPage(ApplicationManager.SEE_TUTOR_BID_DETAIL);
     }
 
     @Override
     public void update(String data) {
-        System.out.println("Bidder Link update called");
+        System.out.println("seebidderdetaillink update method");
         inputPage.addViewBidListener(this);
     }
 }

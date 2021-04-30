@@ -155,15 +155,15 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         c.gridy = detailPane.getComponentCount();
         detailPane.add(startTime, c);
 
-        // add scrollPane into mainPanel
-        mainConst.weighty = 1;
-        mainConst.weightx = 1;
-        mainConst.gridheight = 8;
-        mainConst.gridx = 0;
-        c.gridwidth = 10;
-        mainConst.gridy = 0;
-        mainConst.fill = GridBagConstraints.BOTH;
-//        this.add(detailPane, mainConst);
+//        // add scrollPane into mainPanel
+//        mainConst.weighty = 1;
+//        mainConst.weightx = 1;
+//        mainConst.gridheight = 8;
+//        mainConst.gridx = 0;
+//        c.gridwidth = 10;
+//        mainConst.gridy = 0;
+//        mainConst.fill = GridBagConstraints.BOTH;
+////        this.add(detailPane, mainConst);
 
 
         // if bid type is open
@@ -255,6 +255,11 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         btnPane.add(closeBtn);
 
         // add replyBid Button
+        if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid
+
+            replyBtn.setText("Message");
+            this.repaint();
+        }
         String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
         replyBtn.setName(data);
         btnPane.add(replyBtn);
@@ -270,7 +275,24 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
 
     }
 
+    /**
+     * Method to check if the tutor replied to this bid before
+     * @return true if tutor replied to this message before and false otherwise
+     */
+    private Boolean hasReplied(JSONArray messages){
 
+        if (messages.isEmpty()){ // if this bis has no messages
+            return false;
+        } else {
+            for (int i=0; i< messages.length(); i++){
+                JSONObject message = messages.getJSONObject(i);
+                if (message.getJSONObject("poster").getString("id").equals(this.userId)){ // if user replied to this bid before
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     /**
      * Get the bidId from Find Bid page one user click on view bid to retrieve data from db
@@ -278,6 +300,8 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
      */
     @Override
     public void update(String data) {
+
+        System.out.println("2 Hi from find bid detail");
 
         this.bidId = new JSONObject(data).getString("bidId");
         this.userId = new JSONObject(data).getString("userId");
@@ -289,6 +313,9 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
             this.removeAll();
             this.repaint();
             this.revalidate();
+
+            // set the default value of reply button to Bod
+            replyBtn.setText("Bid");
             createContent(new JSONObject(response.body()));
 
         } else {

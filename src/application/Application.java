@@ -2,9 +2,7 @@ package application;
 
 import application.bid_pages.*;
 import controller.*;
-import links.FindBidDetailLink;
-import links.ResponseBidLink;
-import links.SeeBidDetailLink;
+import links.*;
 import listeners.*;
 
 import javax.swing.*;
@@ -14,6 +12,12 @@ import java.awt.event.ActionListener;
 public class Application extends JFrame{
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
+    ApplicationController loginController, contractController, findBidController,seeBidController, responseOpenBidController, dashboardController, bidClosingController;
+    ActionListener contractListener, loginListener, messageListener, responseOpenBidListener, findBidListener, seeBidListener, createBidListener, bidClosingListener, dashboardListener;
+    FindBidDetailLink findBidDetailLink;
+    SeeBidDetailLink seeBidDetailLink;
+    SeeBidderDetailLink seeBidderDetailLink;
+    FindBidderDetailLink findBidderDetailLink;
     private ApplicationController loginController, bidUpdateController, bidClosingController;
     private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
     private FindBidDetailLink findBidDetailLink;
@@ -38,7 +42,9 @@ public class Application extends JFrame{
         SeeBidDetail seeBidDetail = new SeeBidDetail();
         ResponseOpenBid responseOpenBid = new ResponseOpenBid();
         ResponseCloseBid responseCloseBid = new ResponseCloseBid();
-        TutorBidDetail tutorBidDetail = new TutorBidDetail();
+        FindTutorBidDetail findTutorBidDetail = new FindTutorBidDetail();
+        MessagesPage messagesPage = new MessagesPage();
+        SeeTutorBidDetail seeTutorBidDetail = new SeeTutorBidDetail();
 
         rootPanel.add(loginPage, ApplicationManager.LOGIN_PAGE);
         rootPanel.add(registrationPage, ApplicationManager.REGISTRATION_PAGE);
@@ -51,7 +57,9 @@ public class Application extends JFrame{
         rootPanel.add(seeBidDetail, ApplicationManager.SEE_BID_DETAIL);
         rootPanel.add(responseOpenBid, ApplicationManager.RESPONSE_OPEN_BID);
         rootPanel.add(responseCloseBid, ApplicationManager.RESPONSE_CLOSE_BID);
-        rootPanel.add(tutorBidDetail, ApplicationManager.TUTOR_BID_DETAIL);
+        rootPanel.add(findTutorBidDetail, ApplicationManager.FIND_TUTOR_BID_DETAIL);
+        rootPanel.add(messagesPage, ApplicationManager.MESSAGES_PAGE);
+        rootPanel.add(seeTutorBidDetail, ApplicationManager.SEE_TUTOR_BID_DETAIL);
 
         // create a expireBidService class
         ExpireBidService expireBidService = new ExpireBidService();
@@ -84,28 +92,33 @@ public class Application extends JFrame{
         loginController.subscribe(expireBidService);
         loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
 
-        bidderDetailLink = new BidderDetailLink(findBidsDetail, tutorBidDetail);
+//        // linking findbiddetails page to findtutorbiddetail page
+        findBidderDetailLink = new FindBidderDetailLink(findBidsDetail, findTutorBidDetail);
+//
+//        // passing bidId between FindBidPage and FindBidsDetail page and add actionListener to view detail button
+        findBidListener = new FindBidListener(findBidsDetail);
+//        findBidController.subscribe(findTutorBidDetail);
+//        findBidController.subscribe(findBidderDetailLink);
 
-//        passing bidId between FindBidPage and FindBidsDetail page
-        findBidController = new ApplicationController();
-        findBidListener = new FindBidListener(findBidPage, findBidController);
-        findBidController.subscribe(findBidsDetail);
-        findBidController.subscribe(bidderDetailLink);
+
+        // linking seebiddetails page to seetutorbiddetail page
+        seeBidderDetailLink = new SeeBidderDetailLink(seeBidDetail, seeTutorBidDetail);
+
+        // passing bidId between SeeBidPage and SeeBidsDetail page and add actionListener to view detail button
+        seeBidListener = new SeeBidListener(seeBidDetail);
+//        seeBidController.subscribe(seeTutorBidDetail);
+//        seeBidController.subscribe(seeBidderDetailLink);
 
         // link findbidpage and findbiddetail page
-        findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail);
+        findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail, findBidderDetailLink);
+//        findBidDetailLink.subscribe(findBidderDetailLink);
+
         // link seebidpage and seebiddetail page
-        seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, findBidsDetail);
+        seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, seeBidDetail, seeBidderDetailLink);
         // link findbiddetailpage and tutorbiddetail page
 
         // links findBidsDetail to the appropriate response page based on the student's request bid
         responseBidLink = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid);
-
-        // TODO: add controller for findbiddetail to bidderdetaillink
-        ApplicationController bidderLinkController = new ApplicationController();
-        bidderLinkController.subscribe(findBidsDetail);
-        bidderLinkController.subscribe(bidderDetailLink);
-
 
         // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
@@ -118,6 +131,11 @@ public class Application extends JFrame{
         dashboardController.subscribe(seeBidsPage);
         dashboardController.subscribe(seeBidDetailLink);
 
+        // bid to update data between findbidpage, message and response page
+        responseOpenBidListener = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid, messagesPage);
+
+        // listener for submit message button
+        messageListener = new MessageListener(messagesPage);
 
         // controller for user to open bid
         // TODO: refactor createbid listener so that constructor nonid controller if no other class subscribing it

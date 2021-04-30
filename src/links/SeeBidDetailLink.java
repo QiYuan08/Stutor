@@ -12,10 +12,12 @@ public class SeeBidDetailLink implements ActionListener, ObserverOutputInterface
 
     private ListenerLinkInterface inputPage;
     private ObserverOutputInterface outputPage;
+    private SeeBidderDetailLink seeBidderDetailLink;
 
-    public SeeBidDetailLink(ListenerLinkInterface inputPage, ObserverOutputInterface outputPage) {
+    public SeeBidDetailLink(ListenerLinkInterface inputPage, ObserverOutputInterface outputPage, SeeBidderDetailLink seeBidderDetailLink) {
         this.inputPage = inputPage;
         this.outputPage = outputPage;
+        this.seeBidderDetailLink = seeBidderDetailLink;
     }
 
     @Override
@@ -28,6 +30,7 @@ public class SeeBidDetailLink implements ActionListener, ObserverOutputInterface
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
-        ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
+        seeBidderDetailLink.update(bidId);
+        ApplicationManager.loadPage(ApplicationManager.SEE_BID_DETAIL);
     }
 }
