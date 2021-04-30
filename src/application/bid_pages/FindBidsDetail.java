@@ -253,8 +253,13 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         btnPane.setBorder(new EmptyBorder(10, 10,10,10));
 
         // add closeBid Button
-        closeBtn.setName(this.bidId);
-        btnPane.add(closeBtn);
+        // if its a a open bid add buy out button
+        if (bid.getString("type").equals("open")){
+            btnPane.setLayout(new GridLayout(1,2));
+            closeBtn.setName(this.bidId);
+            btnPane.add(closeBtn);
+        }
+
 
         // add replyBid Button
         if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid

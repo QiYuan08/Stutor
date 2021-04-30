@@ -18,6 +18,7 @@ public class Application extends JFrame{
     SeeBidDetailLink seeBidDetailLink;
     SeeBidderDetailLink seeBidderDetailLink;
     FindBidderDetailLink findBidderDetailLink;
+    SeeMessageLink seeMessageLink;
 //    private ApplicationController loginController, bidUpdateController, bidClosingController;
 //    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
 //    private FindBidDetailLink findBidDetailLink;
@@ -75,6 +76,7 @@ public class Application extends JFrame{
         bidClosingController = new ApplicationController();
         bidClosingListener = new BidClosingListener(bidClosingController);
         findBidsDetail.addActionListener(bidClosingListener);
+        seeTutorBidDetail.addActionListener(bidClosingListener);
         expireBidService.addActionListener(bidClosingListener);
         bidClosingController.subscribe(findBidPage);
         bidClosingController.subscribe(seeBidsPage);
@@ -94,31 +96,25 @@ public class Application extends JFrame{
 
 //        // linking findbiddetails page to findtutorbiddetail page
         findBidderDetailLink = new FindBidderDetailLink(findBidsDetail, findTutorBidDetail);
-//
+
 //        // passing bidId between FindBidPage and FindBidsDetail page and add actionListener to view detail button
         findBidListener = new FindBidListener(findBidsDetail);
-//        findBidController.subscribe(findTutorBidDetail);
-//        findBidController.subscribe(findBidderDetailLink);
 
+        // link to redirect student to reply to a tutor message
+        seeMessageLink = new SeeMessageLink(seeTutorBidDetail, messagesPage);
 
         // linking seebiddetails page to seetutorbiddetail page
         seeBidderDetailLink = new SeeBidderDetailLink(seeBidDetail, seeTutorBidDetail);
 
         // passing bidId between SeeBidPage and SeeBidsDetail page and add actionListener to view detail button
         seeBidListener = new SeeBidListener(seeBidDetail);
-//        seeBidController.subscribe(seeTutorBidDetail);
-//        seeBidController.subscribe(seeBidderDetailLink);
 
         // link findbidpage and findbiddetail page
         findBidDetailLink = new FindBidDetailLink(findBidPage, findBidsDetail, findBidderDetailLink);
-//        findBidDetailLink.subscribe(findBidderDetailLink);
 
         // link seebidpage and seebiddetail page
         seeBidDetailLink = new SeeBidDetailLink(seeBidsPage, seeBidDetail, seeBidderDetailLink);
         // link findbiddetailpage and tutorbiddetail page
-
-        // links findBidsDetail to the appropriate response page based on the student's request bid
-//        responseBidLink = new ResponseBidLink(findBidsDetail, responseOpenBid, responseCloseBid, messagesPage);
 
         // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard

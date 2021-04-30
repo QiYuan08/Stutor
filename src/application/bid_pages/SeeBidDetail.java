@@ -177,51 +177,55 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
             for (int i=0; i < messages.length(); i++){
                 JSONObject message = messages.getJSONObject(i);
 
-                // create the panel for each bid item
-                JPanel bidPanel = new JPanel();
-                GridBagConstraints bidPanelConstraint = new GridBagConstraints();
-                bidPanelConstraint.fill = GridBagConstraints.HORIZONTAL;
-                bidPanelConstraint.weightx = 1;
-                bidPanelConstraint.insets = new Insets(1,2,1,2);
-                bidPanel.setLayout(new GridBagLayout());
-                bidPanel.setBackground(Color.lightGray);
-                bidPanel.setMinimumSize(new Dimension(100, 120));
-                bidPanel.setMaximumSize(new Dimension(100, 120));
+                if (!(message.getJSONObject("additionalInfo").isEmpty())){ // show only non 'message' message
+                    // create the panel for each bid item
+                    JPanel bidPanel = new JPanel();
+                    GridBagConstraints bidPanelConstraint = new GridBagConstraints();
+                    bidPanelConstraint.fill = GridBagConstraints.HORIZONTAL;
+                    bidPanelConstraint.weightx = 1;
+                    bidPanelConstraint.insets = new Insets(1,2,1,2);
+                    bidPanel.setLayout(new GridBagLayout());
+                    bidPanel.setBackground(Color.lightGray);
+                    bidPanel.setMinimumSize(new Dimension(100, 120));
+                    bidPanel.setMaximumSize(new Dimension(100, 120));
 
-                // add a description jlabel
-                bidPanelConstraint.gridx = 0;
-                bidPanelConstraint.gridy = 0;
-                bidPanelConstraint.gridwidth = 5;
-                bidPanelConstraint.anchor = GridBagConstraints.WEST;
-                JLabel bidLabel = new JLabel();
-                JSONObject bidder = message.getJSONObject("poster");
-                bidLabel.setText(bidder.get("givenName") + " " + bidder.get("familyName"));
-                bidPanel.add(bidLabel, bidPanelConstraint);
+                    // add a description jlabel
+                    bidPanelConstraint.gridx = 0;
+                    bidPanelConstraint.gridy = 0;
+                    bidPanelConstraint.gridwidth = 5;
+                    bidPanelConstraint.anchor = GridBagConstraints.WEST;
+                    JLabel bidLabel = new JLabel();
+                    JSONObject bidder = message.getJSONObject("poster");
+                    bidLabel.setText(bidder.get("givenName") + " " + bidder.get("familyName"));
+                    bidPanel.add(bidLabel, bidPanelConstraint);
 
-                // type jlabel
-                JLabel rate = new JLabel();
-                rate.setText("Rate: " + message.getJSONObject("additionalInfo").get("rate") + " dollars per hour");
-                bidPanelConstraint.gridy = 1;
-                bidPanel.add(rate, bidPanelConstraint);
+                    // type jlabel
+                    JLabel rate = new JLabel();
+                    System.out.println(message);
+                    rate.setText("Rate: " + message.getJSONObject("additionalInfo").get("rate") + " dollars per hour");
+                    bidPanelConstraint.gridy = 1;
+                    bidPanel.add(rate, bidPanelConstraint);
 
-                // add view detail button
-                bidPanelConstraint.gridy = 0;
-                bidPanelConstraint.gridx = 6;
-                bidPanelConstraint.gridwidth = 1;
-                bidPanelConstraint.gridheight = 2;
-                bidPanelConstraint.weightx = 0.2;
-                viewBidBtn = new JButton("View Bid");
+                    // add view detail button
+                    bidPanelConstraint.gridy = 0;
+                    bidPanelConstraint.gridx = 6;
+                    bidPanelConstraint.gridwidth = 1;
+                    bidPanelConstraint.gridheight = 2;
+                    bidPanelConstraint.weightx = 0.2;
+                    viewBidBtn = new JButton("View Bid");
 
-                // set button name to bidId and userId for ResponseCloseBid class to close Bid
-                JSONObject btnData = new JSONObject();
-                btnData.put("messageId", message.get("id"));
-                btnData.put("userId", this.userId);
-                viewBidBtn.setName(btnData.toString());
-                buttonArr.add(viewBidBtn); // add the button into button array
-                bidPanel.add(viewBidBtn, bidPanelConstraint);
+                    // set button name to bidId and userId for ResponseCloseBid class to close Bid
+                    JSONObject btnData = new JSONObject();
+                    btnData.put("messageId", message.get("id"));
+                    btnData.put("userId", this.userId);
+                    viewBidBtn.setName(btnData.toString());
+                    buttonArr.add(viewBidBtn); // add the button into button array
+                    bidPanel.add(viewBidBtn, bidPanelConstraint);
 
-                c.gridy = detailPane.getComponentCount();
-                detailPane.add(bidPanel, c);
+                    c.gridy = detailPane.getComponentCount();
+                    detailPane.add(bidPanel, c);
+                }
+
             }
         }
         // wrap detailPane with a scrollPane

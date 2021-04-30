@@ -2,6 +2,7 @@ package application.bid_pages;
 
 import api.ApiRequest;
 import application.ApplicationManager;
+import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import org.json.JSONObject;
 
@@ -13,11 +14,13 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface {
+public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
-    private String messageId, userId;
+    private String messageId, userId, bidId;
     private JLabel title, name, rate, competency, duration, startTime, day, preferredSession;
-    private JButton backBtn, viewBidBtn;
+    private JButton backBtn;
+    private  JButton messageBtn = new JButton("Message");
+    private JButton confirmBtn = new JButton("Confirm Bid");
     private JPanel detailPane, btnPane;
     private JScrollPane scrollPane;
     ArrayList<JButton> buttonArr;
@@ -37,6 +40,7 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
 
         JSONObject initiator = message.getJSONObject("poster");
         JSONObject additionalInfo = message.getJSONObject("additionalInfo");
+        this.bidId = message.getString("bidId");
 
         detailPane = new JPanel();
         detailPane.setBorder(new EmptyBorder(15, 15,15,15));
@@ -162,7 +166,7 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
             btnPane.setLayout(new GridLayout(1,1));
 
             if (bid.isNull("dateClosedDown")){ // if message have not yet been bought out
-                JButton confirmBtn = new JButton("Confirm Bid");
+                confirmBtn.setName(this.bidId);
                 btnPane.add(confirmBtn);
             }
         } else if (bid.getString("type").equals("close")){  // if its close message
@@ -171,10 +175,11 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
                 // if the message is not close yet add view message and confirm message button
                 btnPane.setLayout(new GridLayout(1,2));
 
-                JButton messageBtn = new JButton("Message");
+                JSONObject data = new JSONObject().put("userId", this.userId).put("bidId", this.bidId);
+                messageBtn.setName(data.toString());
                 btnPane.add(messageBtn);
 
-                JButton confirmBtn = new JButton("Confirm Bid");
+                confirmBtn.setName(this.bidId);
                 btnPane.add(confirmBtn);
             }
         }
@@ -206,6 +211,9 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
 
     }
 
+    public void addMessageBtnListener (ActionListener listener){
+        this.messageBtn.addActionListener(listener);
+    }
 
 
     /**
@@ -233,5 +241,15 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
         }
 
 
+    }
+
+    @Override
+    public JSONObject retrieveInputs() {
+        return null;
+    }
+
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+        this.confirmBtn.addActionListener(actionListener);
     }
 }

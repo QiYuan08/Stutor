@@ -175,8 +175,6 @@ public class FindTutorBidDetail extends JPanel implements ObserverOutputInterfac
 
     }
 
-
-
     /**
      * Get the bidId from Find Bid page one user click on view bid to retrieve data from db
      * @param data any data that is crucial to the pages for them to request the information that they need from the database

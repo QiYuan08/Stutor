@@ -76,13 +76,6 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
         sendMessageButton = new JButton("Send");
         c.gridx = 2;
         this.add(sendMessageButton, c);
-
-        backButton.addActionListener(new ActionListener() {
-            @Override // TODO: to change to see bids detail page
-            public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
-            }
-        });
     }
 
     @Override
@@ -91,8 +84,8 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
         this.userId = new JSONObject(data).getString("userId");
 
         HttpResponse<String> response = ApiRequest.get("/bid/" + this.bidId + "?fields=messages");
+        JSONObject bid = new JSONObject(response.body());
         if (response.statusCode() == 200) {
-            JSONObject bid = new JSONObject(response.body());
             this.messages.setText(bid.getJSONObject("initiator").getString("userName"));;
 
             JSONArray messages = bid.optJSONArray("messages");
@@ -107,6 +100,27 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
             }
             this.messageList.setViewportView(messagesPanel);
         }
+
+        // if tutor replying to student in findtutorbiddetail class
+        if (bid.getJSONObject("initiator").getBoolean("isTutor")){
+            System.out.println("is Tutor");
+            backButton.addActionListener(new ActionListener() {
+                @Override // TODO: to change to see bids detail page
+                public void actionPerformed(ActionEvent e) {
+                    ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
+                }
+            });
+        } else { // if student replying to student in seetutorfiddetail class
+
+            System.out.println("is Student");
+            backButton.addActionListener(new ActionListener() {
+                @Override // TODO: to change to see bids detail page
+                public void actionPerformed(ActionEvent e) {
+                    ApplicationManager.loadPage(ApplicationManager.SEE_BID_DETAIL);
+                }
+            });
+        }
+
     }
 
     @Override
