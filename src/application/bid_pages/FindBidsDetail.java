@@ -247,17 +247,20 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         this.setOpaque(false);
         this.add(scrollPane, mainConst);
 
-        // button Pane
-        btnPane = new JPanel();
-        btnPane.setLayout(new GridLayout(1,2));
-        btnPane.setBorder(new EmptyBorder(10, 10,10,10));
-
         // add closeBid Button
         // if its a a open bid add buy out button
+
         if (bid.getString("type").equals("open")){
-            btnPane.setLayout(new GridLayout(1,2));
             closeBtn.setName(this.bidId);
-            btnPane.add(closeBtn);
+            mainConst.weighty = 1;
+            mainConst.weightx = 1;
+            mainConst.gridheight = 2;
+            mainConst.gridx = 0;
+            mainConst.gridy = 21;
+            mainConst.gridwidth = 5;
+//            mainConst.anchor = GridBagConstraints.LAST_LINE_START;
+            mainConst.fill = GridBagConstraints.HORIZONTAL;
+            this.add(closeBtn, mainConst);
         }
 
 
@@ -269,7 +272,15 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         }
         String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
         replyBtn.setName(data);
-        btnPane.add(replyBtn);
+        mainConst.weighty = 1;
+        mainConst.weightx = 1;
+        mainConst.gridheight = 2;
+        mainConst.gridx = 0;
+        mainConst.gridy = 22;
+        mainConst.gridwidth = 5;
+//        mainConst.anchor = GridBagConstraints.LAST_LINE_START;
+        mainConst.fill = GridBagConstraints.HORIZONTAL;
+        this.add(replyBtn, mainConst);
 
         // add btnPanel into this
         mainConst.weighty = 0.2;
@@ -278,7 +289,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         mainConst.gridx = 0;
         mainConst.gridy = 30;
         c.gridwidth = 10;
-        this.add(btnPane, mainConst);
+//        this.add(btnPane, mainConst);
 
     }
 
