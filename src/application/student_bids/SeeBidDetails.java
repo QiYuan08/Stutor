@@ -1,8 +1,8 @@
-package application.bid_pages;
+package application.student_bids;
 
 import api.ApiRequest;
 import application.ApplicationManager;
-import controller.ObserverOutputInterface;
+import listeners.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Class for user to see the detail of each bids that they have opened
  */
-public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
+public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
 
     private String bidId, userId;
     private JLabel title, subjectLabel, name, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
@@ -29,7 +29,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
     ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
 
-    public SeeBidDetail(){
+    public SeeBidDetails(){
         this.setLayout(new GridBagLayout());
         mainConst = new GridBagConstraints();
     }
@@ -214,7 +214,7 @@ public class SeeBidDetail extends JPanel implements ObserverOutputInterface {
                     bidPanelConstraint.weightx = 0.2;
                     viewBidBtn = new JButton("View Bid");
 
-                    // set button name to bidId and userId for ResponseCloseBid class to close Bid
+                    // set button name to bidId and userId for ClosedBidResponse class to close Bid
                     JSONObject btnData = new JSONObject();
                     btnData.put("messageId", message.get("id"));
                     btnData.put("userId", this.userId);

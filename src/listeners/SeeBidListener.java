@@ -1,10 +1,7 @@
 package listeners;
 
 import application.ApplicationManager;
-import application.bid_pages.SeeBidDetail;
-import application.bid_pages.SeeBidsPage;
-import controller.ApplicationController;
-import controller.ObserverOutputInterface;
+import application.student_bids.SeeBidDetails;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,13 +9,13 @@ import java.awt.event.ActionListener;
 
 public class SeeBidListener implements ActionListener, ObserverOutputInterface {
 
-    private SeeBidDetail inputPage;
+    private SeeBidDetails inputPage;
 
-    public SeeBidListener(SeeBidDetail inputPage) {
+    public SeeBidListener(SeeBidDetails inputPage) {
         this.inputPage = inputPage;
     }
 
-    // when the view detail button in SeeBidsPage are clicked
+    // when the view detail button in SeeAllBids are clicked
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
@@ -28,7 +25,7 @@ public class SeeBidListener implements ActionListener, ObserverOutputInterface {
 
 
     /**
-     * Method to add action listener to every view detail button in SeeBidsPage
+     * Method to add action listener to every view detail button in SeeAllBids
      * @param data None
      */
     @Override

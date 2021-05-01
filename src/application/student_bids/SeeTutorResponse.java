@@ -1,9 +1,9 @@
-package application.bid_pages;
+package application.student_bids;
 
 import api.ApiRequest;
 import application.ApplicationManager;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import listeners.ObserverInputInterface;
+import listeners.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -12,9 +12,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 
-public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
+public class SeeTutorResponse extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
     private String messageId, userId, bidId, tutorId;
     private JLabel title, name, rate, competency, duration, startTime, day, preferredSession;
@@ -22,7 +21,7 @@ public class SeeTutorBidDetail extends JPanel implements ObserverOutputInterface
     private  JButton messageBtn = new JButton("Message");
     private JButton confirmBtn = new JButton("Confirm Bid");
 
-    public SeeTutorBidDetail() {
+    public SeeTutorResponse() {
         this.setBorder(new EmptyBorder(15, 15,15,15));
         this.setLayout(new GridBagLayout());
         this.setBackground(new Color(255, 252, 252));

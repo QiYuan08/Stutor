@@ -1,8 +1,7 @@
 package listeners;
 
 import application.ApplicationManager;
-import controller.ApplicationController;
-import controller.ListenerLinkInterface;
+import links.ListenerLinkInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -27,9 +26,9 @@ public class BidUpdateListener implements ActionListener {
         applicationController.notifySubscribers(null);
 
         JButton thisBtn = (JButton) e.getSource();
-        if (thisBtn.getText() == "See Your Bids"){
+        if (thisBtn.getText().equals("See Your Bids")){
             ApplicationManager.loadPage(ApplicationManager.SEE_BIDS_PAGE);
-        } else if (thisBtn.getText() == "Find Bids"){
+        } else if (thisBtn.getText().equals("Find Bids")){
             ApplicationManager.loadPage(ApplicationManager.FIND_BID);
         }
 

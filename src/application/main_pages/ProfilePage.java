@@ -1,7 +1,8 @@
-package application;
+package application.main_pages;
 
 import api.ApiRequest;
-import controller.ObserverOutputInterface;
+import application.ApplicationManager;
+import listeners.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,7 +22,7 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
     private String userId;
 
     // TODO: retrieve userId when get username in LoginListener and pass it here in update functions since most page require id
-    ProfilePage() {
+    public ProfilePage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();

@@ -1,6 +1,7 @@
-package application;
+package application.main_pages;
 
-import controller.ObserverInputInterface;
+import application.ApplicationManager;
+import listeners.ObserverInputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class LoginPage extends JPanel implements ObserverInputInterface {
     private JButton loginUserButton, registerPageButton;
     private HttpResponse<String> response;
 
-    LoginPage() {
+    public LoginPage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();

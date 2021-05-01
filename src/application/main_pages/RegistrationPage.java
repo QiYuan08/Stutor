@@ -1,6 +1,7 @@
-package application;
+package application.main_pages;
 
 import api.ApiRequest;
+import application.ApplicationManager;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,7 +20,7 @@ public class RegistrationPage extends JPanel {
     private JCheckBox studentCheckBox, tutorCheckBox;
     private HttpResponse<String> response;
 
-    RegistrationPage() {
+    public RegistrationPage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();

@@ -1,10 +1,7 @@
 package listeners;
 
 import application.ApplicationManager;
-import application.bid_pages.FindBidPage;
-import application.bid_pages.FindBidsDetail;
-import controller.ApplicationController;
-import controller.ObserverOutputInterface;
+import application.tutor_responds.FindBidDetails;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,9 +9,9 @@ import java.awt.event.ActionListener;
 
 public class FindBidListener implements ObserverOutputInterface, ActionListener {
 
-    private FindBidsDetail inputPage;
+    private FindBidDetails inputPage;
 
-    public FindBidListener(FindBidsDetail inputPage) {
+    public FindBidListener(FindBidDetails inputPage) {
         this.inputPage = inputPage;
     }
 

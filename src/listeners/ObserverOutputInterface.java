@@ -1,4 +1,4 @@
-package controller;
+package listeners;
 
 public interface ObserverOutputInterface {
 

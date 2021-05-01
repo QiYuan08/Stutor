@@ -2,10 +2,6 @@ package listeners;
 
 import api.ApiRequest;
 import application.ApplicationManager;
-import application.bid_pages.FindBidsDetail;
-import controller.ApplicationController;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -1,9 +1,9 @@
-package application;
+package application.main_pages;
 
 import api.ApiRequest;
-import controller.ListenerLinkInterface;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import application.ApplicationManager;
+import links.ListenerLinkInterface;
+import listeners.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,7 +21,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
     private JScrollPane tutorialsTakenList, tutorialsTaughtList;
     private String userId;
 
-    DashboardPage() {
+    public DashboardPage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -54,7 +54,13 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
         createBidButton = new JButton("Create New Bid");
         c.gridy = 6;
         c.gridx = 2;
+        c.gridwidth = 1;
+        c.gridheight = 1;
         this.add(createBidButton, c);
+
+        seeBidsButton = new JButton("See Your Bids");
+        c.gridx = 1;
+        this.add(seeBidsButton, c);
 
         tutorialsTaught = new JLabel("Tutorials you are teaching: ");
         c.gridx = 0;
@@ -76,10 +82,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
         c.gridy = 13;
         c.gridwidth = 1;
         this.add(viewProfileButton, c);
-
-        seeBidsButton = new JButton("See Your Bids");
-        c.gridx = 1;
-        this.add(seeBidsButton, c);
 
         createBidButton.addActionListener(new ActionListener() {
             @Override
@@ -118,6 +120,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                     this.remove(tutorialsTakenList);
                     this.remove(tutorialsTaken);
                     this.remove(createBidButton);
+                    this.remove(seeBidsButton);
                 } else {
                     c.gridy = 1;
                     c.gridwidth = 3;
@@ -135,6 +138,9 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                     c.gridwidth = 1;
                     c.gridheight = 1;
                     this.add(createBidButton, c);
+
+                    c.gridx = 1;
+                    this.add(seeBidsButton, c);
                 }
 
                 if (!user.getBoolean("isTutor")) {

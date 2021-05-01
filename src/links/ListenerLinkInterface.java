@@ -1,4 +1,4 @@
-package controller;
+package links;
 
 import java.awt.event.ActionListener;
 

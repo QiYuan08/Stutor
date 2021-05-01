@@ -1,8 +1,8 @@
 package links;
 
 import application.ApplicationManager;
-import application.bid_pages.FindBidsDetail;
-import controller.ObserverOutputInterface;
+import application.tutor_responds.FindBidDetails;
+import listeners.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -10,10 +10,10 @@ import java.awt.event.ActionListener;
 
 public class FindBidderDetailLink implements ActionListener, ObserverOutputInterface {
 
-    private FindBidsDetail inputPage;
+    private FindBidDetails inputPage;
     private ObserverOutputInterface outputPage;
 
-    public FindBidderDetailLink(FindBidsDetail inputPage, ObserverOutputInterface outputPage) {
+    public FindBidderDetailLink(FindBidDetails inputPage, ObserverOutputInterface outputPage) {
         this.inputPage = inputPage;
         this.outputPage = outputPage;
     }

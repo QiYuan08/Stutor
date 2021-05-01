@@ -1,10 +1,10 @@
-package application.bid_pages;
+package application.tutor_responds;
 
 import api.ApiRequest;
 import application.ApplicationManager;
-import controller.ListenerLinkInterface;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import links.ListenerLinkInterface;
+import listeners.ObserverInputInterface;
+import listeners.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 // TODO: show all bidder in open bid
 // TODO: show check message instead of bid button if tutor already reply to a close bid
 
-public class FindBidsDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
+public class FindBidDetails extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
 
     private String bidId, userId;
     private JLabel title, subjectLabel, name, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
@@ -31,7 +31,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
     ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
 
-    public FindBidsDetail() {
+    public FindBidDetails() {
         this.setLayout(new GridBagLayout());
         mainConst = new GridBagConstraints();
 
@@ -84,7 +84,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.FIND_BID); // TODO: have to go back to dashboard?
+                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
             }
         });
 
@@ -219,7 +219,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
                     bidPanelConstraint.weightx = 0.2;
                     viewBidBtn = new JButton("View Bid");
 
-                    // set button name to bidId and userId for ResponseCloseBid class to close Bid
+                    // set button name to bidId and userId for ClosedBidResponse class to close Bid
                     JSONObject btnData = new JSONObject();
                     btnData.put("bidId", message.get("id"));
                     btnData.put("userId", this.userId);

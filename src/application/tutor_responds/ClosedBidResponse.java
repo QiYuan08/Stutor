@@ -1,9 +1,9 @@
-package application.bid_pages;
+package application.tutor_responds;
 
 import api.ApiRequest;
 import application.ApplicationManager;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import listeners.ObserverInputInterface;
+import listeners.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -16,16 +16,17 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 
-public class ResponseOpenBid extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
+public class ClosedBidResponse extends  JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
-    private JLabel activityTitle, lessonField, dayField,sessionLabel,startTimeField, sessionField, durationLabel, rateLabel, endTimeField, rateField, freeLessonField;
+    private JLabel activityTitle, lessonField, dayField,sessionLabel,startTimeField, sessionField, durationLabel, rateLabel, endTimeField, rateField, freeLessonField, messageField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
+    private JTextArea messageInput;
     private JButton submitButton, backBtn;
     private JComboBox<String> startMeridiem;
     private JSpinner duration, endTime, freeLesson, startTime;
     private String bidId, userId;
 
-    public ResponseOpenBid() {
+    public ClosedBidResponse() {
         String[] meridiem = {"AM", "PM"};
 
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -178,11 +179,28 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         c.gridwidth = 2;
         this.add(freeLesson, c);
 
+        // messages
+        messageField = new JLabel("Message: ");
+        c.gridx = 0;
+        c.gridy = 8;
+        c.gridwidth = 1;
+        this.add(messageField, c);
+
+        messageInput = new JTextArea(5, 20);
+        messageInput.setLineWrap(true);
+        messageInput.setWrapStyleWord(true);
+        c.gridx = 1;
+        c.gridy = 8;
+        c.gridwidth = 3;
+        c.gridheight = 2;
+        c.weighty = 0;
+        this.add(messageInput, c);
+
         //submitBtn
-        submitButton = new JButton("Submit Open Bid");
+        submitButton = new JButton("Submit Close Bid");
         c.gridx = 0;
         c.weightx = 1;
-        c.gridy = 8;
+        c.gridy = 11;
         c.gridwidth = 4;
         this.add(submitButton, c);
 
@@ -223,7 +241,7 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         jsonObj.put("bidId", this.bidId);
         jsonObj.put("posterId", this.userId);
         jsonObj.put("datePosted", now);
-        jsonObj.put("content", "string");
+        jsonObj.put("content", (messageInput.getText().equals("")) ? "string" : messageInput.getText()); // if messageInput empty return string else get messageInput
         jsonObj.put("additionalInfo", additionalInfo);
 
         return jsonObj;
@@ -247,6 +265,6 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         JSONObject btnData = new JSONObject();
         btnData.put("bidId", this.bidId);
         btnData.put("userId", this.userId);
-        submitButton.setName(btnData.toString()); // set the name of this button as bidId for quering with db
+        submitButton.setName(btnData.toString()); // set the name of this button as bidId and userId for quering with db
     }
 }

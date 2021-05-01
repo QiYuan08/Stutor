@@ -1,9 +1,9 @@
-package application.bid_pages;
+package application.main_pages;
 
 import api.ApiRequest;
 import application.ApplicationManager;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import listeners.ObserverInputInterface;
+import listeners.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -86,7 +86,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
         HttpResponse<String> response = ApiRequest.get("/bid/" + this.bidId + "?fields=messages");
         JSONObject bid = new JSONObject(response.body());
         if (response.statusCode() == 200) {
-            this.messages.setText(bid.getJSONObject("initiator").getString("userName"));;
+            this.messages.setText(bid.getJSONObject("initiator").getString("userName"));
 
             JSONArray messages = bid.optJSONArray("messages");
             JPanel messagesPanel = new JPanel();

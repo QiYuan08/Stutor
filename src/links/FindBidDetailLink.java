@@ -1,9 +1,7 @@
 package links;
 
 import application.ApplicationManager;
-import application.bid_pages.FindBidsDetail;
-import controller.ListenerLinkInterface;
-import controller.ObserverOutputInterface;
+import listeners.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -1,19 +1,16 @@
 package controller;
 
 import api.ApiRequest;
-import application.Application;
-import application.ApplicationManager;
+import listeners.ObserverInputInterface;
+import listeners.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Timer;
@@ -50,7 +47,7 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
                     JSONObject bid = bids.getJSONObject(i);
                     String bidId = bid.getString("id");
                     // if bid type is open
-                    if (bid.get("type").equals("open") && bid.get("dateClosedDown").equals(null)){
+                    if (bid.get("type").equals("open") && bid.isNull("dateClosedDown")){
                         Instant bidStart = Instant.parse(bid.getString("dateCreated"));
                         Instant expireTime = bidStart.plus(counter, ChronoUnit.MILLIS);
                         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());

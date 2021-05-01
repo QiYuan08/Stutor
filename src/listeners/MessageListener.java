@@ -2,8 +2,6 @@ package listeners;
 
 import api.ApiRequest;
 import application.ApplicationManager;
-import controller.ApplicationController;
-import controller.ObserverInputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;

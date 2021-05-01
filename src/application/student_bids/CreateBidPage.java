@@ -1,10 +1,9 @@
-package application.bid_pages;
+package application.student_bids;
 
 import api.ApiRequest;
-import application.Application;
 import application.ApplicationManager;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import listeners.ObserverInputInterface;
+import listeners.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.OpenBidUtil;
@@ -53,7 +52,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
             // for every competencies, add into the hashmap mapping
             for (int i=0; i<competencies.length(); i++){
 
-                JSONObject subject = (JSONObject) competencies.getJSONObject(i).getJSONObject("subject");
+                JSONObject subject = competencies.getJSONObject(i).getJSONObject("subject");
 
                 subjectMapping.put(subject.get("name").toString(), subject.get("id").toString());
 

@@ -1,10 +1,8 @@
 package links;
 
 import application.ApplicationManager;
-import application.bid_pages.FindBidsDetail;
-import application.bid_pages.SeeBidDetail;
-import application.bid_pages.SeeTutorBidDetail;
-import controller.ObserverOutputInterface;
+import application.student_bids.SeeBidDetails;
+import listeners.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,10 +10,10 @@ import java.awt.event.ActionListener;
 
 public class SeeBidderDetailLink implements ActionListener, ObserverOutputInterface {
 
-    private SeeBidDetail inputPage;
+    private SeeBidDetails inputPage;
     private ObserverOutputInterface outputPage;
 
-    public SeeBidderDetailLink(SeeBidDetail inputPage, ObserverOutputInterface outputPage) {
+    public SeeBidderDetailLink(SeeBidDetails inputPage, ObserverOutputInterface outputPage) {
         this.inputPage = inputPage;
         this.outputPage = outputPage;
     }

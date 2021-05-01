@@ -1,4 +1,6 @@
-package controller;
+package listeners;
+
+import listeners.ObserverOutputInterface;
 
 import java.util.ArrayList;
 
@@ -8,7 +10,7 @@ public class ApplicationController {
 
     public ApplicationController() {
         this.subscribers = new ArrayList<>();
-    };
+    }
 
     public void subscribe(ObserverOutputInterface subscriber) {
         subscribers.add(subscriber);

@@ -1,10 +1,6 @@
 package listeners;
 
 import api.ApiRequest;
-import application.Application;
-import controller.ApplicationController;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +8,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
-import java.time.Instant;
 
 public class BidCreateListener implements ActionListener {
 
