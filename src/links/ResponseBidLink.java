@@ -5,7 +5,7 @@ import services.ViewManagerService;
 import views.tutor_responds.ClosedBidResponse;
 import views.tutor_responds.FindBidDetails;
 import views.main_pages.MessagesPage;
-import views.tutor_responds.ResponseOpenBid;
+import views.tutor_responds.OpenBidResponse;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -22,17 +22,17 @@ import java.net.http.HttpResponse;
 public class ResponseBidLink implements ActionListener {
 
     private FindBidDetails findBidDetails;
-    private ResponseOpenBid responseOpenBid;
+    private OpenBidResponse openBidResponse;
     private ClosedBidResponse closedBidResponse;
     private MessagesPage messagesPage;
 
-    public ResponseBidLink(FindBidDetails findBidDetails, ResponseOpenBid responseOpenBid, ClosedBidResponse closedBidResponse, MessagesPage messagesPage){
+    public ResponseBidLink(FindBidDetails findBidDetails, OpenBidResponse openBidResponse, ClosedBidResponse closedBidResponse, MessagesPage messagesPage){
         this.findBidDetails = findBidDetails;
-        this.responseOpenBid = responseOpenBid;
+        this.openBidResponse = openBidResponse;
         this.closedBidResponse = closedBidResponse;
         findBidDetails.addLinkListener(this);
         this.messagesPage = messagesPage;
-        responseOpenBid.addActionListener(this);
+        openBidResponse.addActionListener(this);
         closedBidResponse.addActionListener(this);
     }
 
@@ -49,7 +49,7 @@ public class ResponseBidLink implements ActionListener {
         // create a message to update bid
         if (thisBtn.getText().equals("Submit Open Bid")){
 
-            JSONObject inputData = responseOpenBid.retrieveInputs();
+            JSONObject inputData = openBidResponse.retrieveInputs();
             response = ApiRequest.post("/message", inputData.toString());
 
             if (response.statusCode() == 201) { // success
@@ -84,13 +84,13 @@ public class ResponseBidLink implements ActionListener {
             } else { // if bid button is clicked
 
                 // if bid button in find bids detail page is clicked check if open or close bid then go to appriopriate page
-                // go to either responseOpenBid or closedBidResponse
+                // go to either openBidResponse or closedBidResponse
                 if (bid.get("type").equals("open")){
-                    responseOpenBid.update(thisBtn.getName());
-                    ViewManagerService.loadPage(ViewManagerService.RESPONSE_OPEN_BID);
+                    openBidResponse.update(thisBtn.getName());
+                    ViewManagerService.loadPage(ViewManagerService.OPEN_BID_RESPONSE);
                 } else {
                     closedBidResponse.update(thisBtn.getName());
-                    ViewManagerService.loadPage(ViewManagerService.RESPONSE_CLOSE_BID);
+                    ViewManagerService.loadPage(ViewManagerService.CLOSED_BID_RESPONSE);
                 }
             }
 

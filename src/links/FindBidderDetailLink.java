@@ -24,7 +24,7 @@ public class FindBidderDetailLink implements ActionListener, ObserverOutputInter
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
-        ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
     }
 
     @Override

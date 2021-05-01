@@ -210,7 +210,7 @@ public class ClosedBidResponse extends  JPanel implements ObserverOutputInterfac
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAIL);
+                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
             }
         });
     }

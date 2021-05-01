@@ -31,6 +31,6 @@ public class SeeBidDetailLink implements ActionListener, ObserverOutputInterface
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
         seeBidderDetailLink.update(bidId);
-        ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAILS);
     }
 }

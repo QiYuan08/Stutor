@@ -108,7 +108,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
             backButton.addActionListener(new ActionListener() {
                 @Override // TODO: to change to see bids detail page
                 public void actionPerformed(ActionEvent e) {
-                    ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAIL);
+                    ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
                 }
             });
         } else if (user.getBoolean("isStudent")){ // if student replying to student in seetutorfiddetail class
@@ -117,7 +117,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
             backButton.addActionListener(new ActionListener() {
                 @Override // TODO: to change to see bids detail page
                 public void actionPerformed(ActionEvent e) {
-                    ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAIL);
+                    ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAILS);
                 }
             });
         } else {

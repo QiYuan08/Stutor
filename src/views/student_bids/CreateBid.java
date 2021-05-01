@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 // TODO: decide how to get subjectID consistently
-public class CreateBidPage extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
+public class CreateBid extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
@@ -31,7 +31,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
     private HashMap<String, String> subjectMapping;
     private String userId;
 
-    public CreateBidPage(){
+    public CreateBid(){
         submitButton = new JButton("Submit Request");
     }
 

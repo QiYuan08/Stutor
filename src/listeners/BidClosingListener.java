@@ -108,12 +108,12 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
             contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
 
             JSONObject message;
-            if (messageId.equals("")) { // bid closes automatically from timer with a winning bidder
-                JSONArray messages = bid.getJSONArray("messages");
-                message = new JSONObject(messages.getJSONObject(messages.length() - 1));
-            } else { // student confirms the winning response (message)
-                message = new JSONObject(ApiRequest.get("/message/" + messageId).body());
-            }
+//            if (messageId.equals("")) { // bid closes automatically from timer with a winning bidder
+//                JSONArray messages = bid.getJSONArray("messages");
+//                message = new JSONObject(messages.getJSONObject(messages.length() - 1));
+//            } else { // student confirms the winning response (message)
+            message = new JSONObject(ApiRequest.get("/message/" + messageId).body());
+//            }
             contract.put("lessonInfo", message.getJSONObject("additionalInfo"));
         }
         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());

@@ -23,7 +23,7 @@ public class SeeBidderDetailLink implements ActionListener, ObserverOutputInterf
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
-        ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_RESPONSE);
     }
 
     @Override

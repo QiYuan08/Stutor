@@ -21,7 +21,7 @@ public class SeeBidListener implements ActionListener, ObserverOutputInterface {
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
-        ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_RESPONSE);
     }
 
 

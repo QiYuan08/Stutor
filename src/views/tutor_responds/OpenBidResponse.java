@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 
-public class ResponseOpenBid extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
+public class OpenBidResponse extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
     private JLabel activityTitle, lessonField, dayField,sessionLabel,startTimeField, sessionField, durationLabel, rateLabel, endTimeField, rateField, freeLessonField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
@@ -25,7 +25,7 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
     private JSpinner duration, endTime, freeLesson, startTime;
     private String bidId, userId;
 
-    public ResponseOpenBid() {
+    public OpenBidResponse() {
         String[] meridiem = {"AM", "PM"};
 
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -192,7 +192,7 @@ public class ResponseOpenBid extends JPanel implements ObserverInputInterface, O
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAIL);
+                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
             }
         });
     }

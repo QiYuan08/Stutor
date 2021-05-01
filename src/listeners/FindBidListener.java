@@ -20,7 +20,7 @@ public class FindBidListener implements ObserverOutputInterface, ActionListener 
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
-        ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
     }
 
     // this method is called whenever there is an update in bids to display to tutor

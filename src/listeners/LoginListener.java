@@ -27,16 +27,18 @@ public class LoginListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JSONObject jsonObj = inputPage.retrieveInputs();
         HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj.toString());
+        System.out.println(jsonObj.toString());
+        System.out.println(response.body());
+        System.out.println(ApiRequest.post("/user/login", "{\"password\":\"nic\",\"userName\":\"nic\"}"));
 
         if (response.statusCode() == 200) {
             controller.notifySubscribers(getUserId(jsonObj.getString("userName")));
             ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-//            Application.loadPage(Application.DASHBOARD_PAGE, getUserId(jsonObj.getString("userName")));
         } else if (response.statusCode() == 403) {
             JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
                     "Username Invalid", JOptionPane.ERROR_MESSAGE);
         } else {
-            System.out.println(response.statusCode());
+            System.out.println(response.statusCode() + "hi");
         }
     }
 

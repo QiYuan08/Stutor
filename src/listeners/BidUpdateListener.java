@@ -28,9 +28,9 @@ public class BidUpdateListener implements ActionListener {
 
         JButton thisBtn = (JButton) e.getSource();
         if (thisBtn.getText().equals("See Your Bids")){
-            ViewManagerService.loadPage(ViewManagerService.SEE_BIDS_PAGE);
+            ViewManagerService.loadPage(ViewManagerService.SEE_ALL_BIDS);
         } else if (thisBtn.getText().equals("Find Bids")){
-            ViewManagerService.loadPage(ViewManagerService.FIND_BID);
+            ViewManagerService.loadPage(ViewManagerService.FIND_ALL_BIDS);
         }
 
 

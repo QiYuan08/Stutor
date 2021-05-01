@@ -9,22 +9,23 @@ public class ViewManagerService {
     public static final String REGISTRATION_PAGE = "RegistrationPage";
     public static final String DASHBOARD_PAGE = "DashboardPage";
     public static final String PROFILE_PAGE = "ProfilePage";
-    public static final String CREATE_BID_PAGE = "OpenBidPage";
-    public static final String FIND_BID = "FindAllBids";
-    public static final String FIND_BID_DETAIL = "ViewBidPage";
-    public static final String SEE_BIDS_PAGE = "UserBidsPage";
     public static final String MESSAGES_PAGE = "MessagesPage";
-    public static final String RESPONSE_CLOSE_BID = "ResponseCloseBidPage";
-    public static final String RESPONSE_OPEN_BID = "ResponseOpenBidPage";
-    public static final String SEE_BID_DETAIL = "SeeBidDetailPage";
-    public static final String FIND_TUTOR_BID_DETAIL = "TutorBidDetailPage";
-    public static final String SEE_TUTOR_BID_DETAIL = "SeeTutorResponse";
+
+    public static final String CREATE_BID = "CreateBid";
+    public static final String SEE_ALL_BIDS = "SeeAllBids";
+    public static final String SEE_BID_DETAILS = "SeeBidDetails";
+    public static final String SEE_TUTOR_RESPONSE = "SeeTutorResponse";
+
+    public static final String FIND_ALL_BIDS = "FindAllBids";
+    public static final String FIND_BID_DETAILS = "FindBidDetails";
+    public static final String FIND_TUTOR_RESPONSE = "FindTutorResponse";
+    public static final String OPEN_BID_RESPONSE = "OpenBidResponse";
+    public static final String CLOSED_BID_RESPONSE = "ClosedBidResponse";
 
     private static JPanel rootPanel;
 
     public static void setRootPanel(JPanel rootPanel) {
         ViewManagerService.rootPanel = rootPanel;
-
     }
 
     public static void loadPage(String pageName) {

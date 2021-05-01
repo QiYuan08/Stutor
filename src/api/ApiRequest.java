@@ -36,7 +36,7 @@ public class ApiRequest {
         client = HttpClient.newHttpClient();
         request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
                 .setHeader("Authorization", API_KEY)
-                .header("Content-Type", "views/json")
+                .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonObj))
                 .build();
 
@@ -54,7 +54,7 @@ public class ApiRequest {
         client = HttpClient.newHttpClient();
         request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
                 .setHeader("Authorization", API_KEY)
-                .header("Content-Type", "views/json")
+                .header("Content-Type", "application/json")
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonObj))
                 .build();
 

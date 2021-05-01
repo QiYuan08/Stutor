@@ -31,6 +31,6 @@ public class FindBidDetailLink implements ActionListener, ObserverOutputInterfac
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
         this.findBidderDetailLink.update(bidId);
-        ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
     }
 }
