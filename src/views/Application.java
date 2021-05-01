@@ -27,7 +27,8 @@ public class Application extends JFrame{
     SeeBidderDetailLink seeBidderDetailLink;
     FindBidderDetailLink findBidderDetailLink;
     SeeMessageLink seeMessageLink;
-//    private Controller loginController, bidUpdateController, bidClosingController;
+    BackBtnController backBtnController;
+//    private ApplicationController loginController, bidUpdateController, bidClosingController;
 //    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
 //    private FindBidDetailLink findBidDetailLink;
 //    private SeeBidDetailLink seeBidDetailLink;
@@ -72,8 +73,9 @@ public class Application extends JFrame{
 
         // create a expireBidService class
         ExpireBidService expireBidService = new ExpireBidService();
-        expireBidService.setDuration(30); //set the interval before closing automatically
-        expireBidService.expireBidService();
+        expireBidService.setDuration(30); //set the interval before closing open bid automatically in (minutes)
+        expireBidService.expireOpenBidService();
+        expireBidService.expireCloseBidService();
 
         /*
          Split up different process into different process
@@ -101,6 +103,7 @@ public class Application extends JFrame{
         loginController.subscribe(createBidPage);
         loginController.subscribe(expireBidService);
         loginController.subscribe((ObserverOutputInterface) bidClosingListener); // get the userId to update other bidding page
+
 
 //        // linking findbiddetails page to findtutorbiddetail page
         findBidderDetailLink = new FindBidderDetailLink(findBidDetails, findTutorResponse);
@@ -145,6 +148,10 @@ public class Application extends JFrame{
         // TODO: refactor createbid listener so that constructor nonid controller if no other class subscribing it
         // createBidController = new Controller();
         createBidListener = new BidCreateListener(createBidPage);
+
+        // adding backbutton controller for revelent pages
+        backBtnController = new BackBtnController();
+        backBtnController.subscribe(ApplicationManager.FIND_BID_DETAIL, findBidPage);
 
         ViewManagerService.setRootPanel(rootPanel);
 
