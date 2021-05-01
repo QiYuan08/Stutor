@@ -84,7 +84,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
+                ApplicationManager.loadPage(ApplicationManager.FIND_BID); // TODO: have to go back to dashboard?
             }
         });
 
@@ -256,8 +256,8 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
             mainConst.weightx = 1;
             mainConst.gridheight = 2;
             mainConst.gridx = 0;
-            mainConst.gridy = 21;
-            mainConst.gridwidth = 5;
+            mainConst.gridy = 22;
+            mainConst.gridwidth = 1;
 //            mainConst.anchor = GridBagConstraints.LAST_LINE_START;
             mainConst.fill = GridBagConstraints.HORIZONTAL;
             this.add(closeBtn, mainConst);
@@ -266,7 +266,6 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
 
         // add replyBid Button
         if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid
-
             replyBtn.setText("Message");
             this.repaint();
         }
@@ -276,19 +275,19 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
         mainConst.weightx = 1;
         mainConst.gridheight = 2;
         mainConst.gridx = 0;
-        mainConst.gridy = 22;
-        mainConst.gridwidth = 5;
+        mainConst.gridy = 21;
+        mainConst.gridwidth = 1;
 //        mainConst.anchor = GridBagConstraints.LAST_LINE_START;
         mainConst.fill = GridBagConstraints.HORIZONTAL;
         this.add(replyBtn, mainConst);
 
         // add btnPanel into this
-        mainConst.weighty = 0.2;
-        mainConst.weightx = 0.2;
-        mainConst.gridheight = 2;
-        mainConst.gridx = 0;
-        mainConst.gridy = 30;
-        c.gridwidth = 10;
+//        mainConst.weighty = 0.2;
+//        mainConst.weightx = 0.2;
+//        mainConst.gridheight = 2;
+//        mainConst.gridx = 0;
+//        mainConst.gridy = 30;
+//        c.gridwidth = 10;
 //        this.add(btnPane, mainConst);
 
     }
@@ -334,7 +333,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
             this.revalidate();
 
             // set the default value of reply button to Bod
-            replyBtn.setText("Bid");
+            replyBtn.setText("Respond");
             createContent(new JSONObject(response.body()));
 
         } else {
@@ -372,6 +371,7 @@ public class FindBidsDetail extends JPanel implements ObserverOutputInterface, O
     public JSONObject retrieveInputs() {
         JSONObject bidInfo = new JSONObject();
         bidInfo.put("bidId", bidId);
+        bidInfo.put("messageId", "");
         bidInfo.put("tutorId", "");
         bidInfo.put("hasExpired", false);
         return bidInfo;
