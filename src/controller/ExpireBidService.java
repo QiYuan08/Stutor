@@ -1,12 +1,9 @@
 package controller;
 
 import api.ApiRequest;
-import application.Application;
-import application.ApplicationManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
@@ -26,7 +23,8 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
 
     private long counter; //counter of timer in miliseconds
     private TimerTask openBidTask, closeBidTask;
-    private Timer timer = new Timer();
+    private Timer openTimer = new Timer();
+    private Timer closeTimer = new Timer();
     private ActionListener actionListener;
     JSONObject expiredBid;
     Instant currentTime;
@@ -36,7 +34,7 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
         this.counter = minutes * 60000L;
     }
 
-    public void expireBidService() {
+    public void expireOpenBidService() {
         openBidTask = new TimerTask() {
 
             @Override
@@ -74,7 +72,58 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
             }
         };
 
-        timer.schedule(openBidTask, 10, 30000);
+        openTimer.schedule(openBidTask, 10, 30000);
+    }
+
+    public void expireCloseBidService() {
+        closeBidTask = new TimerTask() {
+
+            @Override
+            public void run() {
+
+                HttpResponse<String> bidResponse = ApiRequest.get("/bid?fields=messages");
+                JSONArray bids = new JSONArray(bidResponse.body());
+
+                // check every bid to see if they already expired
+                for (int i=0; i<bids.length(); i++){
+                    JSONObject bid = bids.getJSONObject(i);
+                    String bidId = bid.getString("id");
+
+                    // if bid type is close
+                    if (bid.get("type").equals("close") && bid.get("dateClosedDown").equals(null)){
+                        Instant bidStart = Instant.parse(bid.getString("dateCreated")); // bidStartTime
+
+                        Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
+                        Instant now = ts.toInstant();  // current Time
+
+                        // bidExpire Time
+                        LocalDateTime time = LocalDateTime.ofInstant(bidStart, ZoneOffset.ofHours(0));
+                        time = time.plus(1, ChronoUnit.MINUTES);
+                        Instant expiryDate = time.atZone(ZoneOffset.ofHours(0)).toInstant();
+
+                        System.out.println(now);
+                        System.out.println(expiryDate);
+
+                        // if expire time greater than now close the bid
+                        if (now.compareTo(expiryDate) > 0){
+
+                            System.out.println("closed bid closd");
+                            // TODO: remove the JOptionPANEL later
+                            // TODO: add the userId to this class so it would only expire the bids owned by the user?
+                            expiredBid = bid;
+                            expiredBidId = bidId;
+                            currentTime = now;
+
+                            ActionEvent actionEvent = new ActionEvent(ExpireBidService.this, ActionEvent.ACTION_PERFORMED, "Expire Bid");
+                            actionListener.actionPerformed(actionEvent);
+
+                        }
+                    }
+                }
+            }
+        };
+
+        closeTimer.schedule(closeBidTask, 10, 30000);
     }
 
     @Override
@@ -106,6 +155,11 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
     @Override
     public void update(String data) {
         this.userId = data;
+    }
+
+    @Override
+    public void addBackBtnListener(ActionListener listener) {
+
     }
 
 
