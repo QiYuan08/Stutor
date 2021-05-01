@@ -1,9 +1,9 @@
-package application.student_bids;
+package views.student_bids;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import links.ListenerLinkInterface;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import controller.ListenerLinkInterface;
+import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -145,7 +145,7 @@ public class SeeAllBids extends JPanel implements ObserverOutputInterface, Liste
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         });
     }

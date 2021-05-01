@@ -1,9 +1,9 @@
-package application;
+package services;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ApplicationManager {
+public class ViewManagerService {
 
     public static final String LOGIN_PAGE = "LoginPage";
     public static final String REGISTRATION_PAGE = "RegistrationPage";
@@ -23,13 +23,13 @@ public class ApplicationManager {
     private static JPanel rootPanel;
 
     public static void setRootPanel(JPanel rootPanel) {
-        ApplicationManager.rootPanel = rootPanel;
+        ViewManagerService.rootPanel = rootPanel;
 
     }
 
     public static void loadPage(String pageName) {
-        CardLayout cardLayout = (CardLayout) ApplicationManager.rootPanel.getLayout();
-        cardLayout.show(ApplicationManager.rootPanel, pageName);
+        CardLayout cardLayout = (CardLayout) ViewManagerService.rootPanel.getLayout();
+        cardLayout.show(ViewManagerService.rootPanel, pageName);
     }
 
 }

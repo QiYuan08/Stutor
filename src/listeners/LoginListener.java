@@ -1,7 +1,9 @@
 package listeners;
 
 import api.ApiRequest;
-import application.ApplicationManager;
+import controller.Controller;
+import services.ViewManagerService;
+import controller.ObserverInputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,11 +15,11 @@ import java.net.http.HttpResponse;
 public class LoginListener implements ActionListener {
 
     private ObserverInputInterface inputPage;
-    private ApplicationController applicationController;
+    private Controller controller;
 
-    public LoginListener(ObserverInputInterface inputPage, ApplicationController applicationController) {
+    public LoginListener(ObserverInputInterface inputPage, Controller controller) {
         this.inputPage = inputPage;
-        this.applicationController = applicationController;
+        this.controller = controller;
         inputPage.addActionListener(this);
     }
 
@@ -27,8 +29,8 @@ public class LoginListener implements ActionListener {
         HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj.toString());
 
         if (response.statusCode() == 200) {
-            applicationController.notifySubscribers(getUserId(jsonObj.getString("userName")));
-            ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
+            controller.notifySubscribers(getUserId(jsonObj.getString("userName")));
+            ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
 //            Application.loadPage(Application.DASHBOARD_PAGE, getUserId(jsonObj.getString("userName")));
         } else if (response.statusCode() == 403) {
             JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",

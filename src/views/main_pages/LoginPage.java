@@ -1,7 +1,7 @@
-package application.main_pages;
+package views.main_pages;
 
-import application.ApplicationManager;
-import listeners.ObserverInputInterface;
+import services.ViewManagerService;
+import controller.ObserverInputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -79,7 +79,7 @@ public class LoginPage extends JPanel implements ObserverInputInterface {
         registerPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.REGISTRATION_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.REGISTRATION_PAGE);
             }
         });
     }

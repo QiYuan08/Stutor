@@ -1,7 +1,8 @@
 package listeners;
 
-import application.ApplicationManager;
-import links.ListenerLinkInterface;
+import controller.Controller;
+import services.ViewManagerService;
+import controller.ListenerLinkInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -13,23 +14,23 @@ import java.awt.event.ActionListener;
 public class BidUpdateListener implements ActionListener {
 
     ListenerLinkInterface inputPage;
-    ApplicationController applicationController;
+    Controller controller;
 
-    public BidUpdateListener(ListenerLinkInterface inputPage, ApplicationController applicationController) {
+    public BidUpdateListener(ListenerLinkInterface inputPage, Controller controller) {
         this.inputPage = inputPage;
-        this.applicationController = applicationController;
+        this.controller = controller;
         inputPage.addLinkListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        applicationController.notifySubscribers(null);
+        controller.notifySubscribers(null);
 
         JButton thisBtn = (JButton) e.getSource();
         if (thisBtn.getText().equals("See Your Bids")){
-            ApplicationManager.loadPage(ApplicationManager.SEE_BIDS_PAGE);
+            ViewManagerService.loadPage(ViewManagerService.SEE_BIDS_PAGE);
         } else if (thisBtn.getText().equals("Find Bids")){
-            ApplicationManager.loadPage(ApplicationManager.FIND_BID);
+            ViewManagerService.loadPage(ViewManagerService.FIND_BID);
         }
 
 

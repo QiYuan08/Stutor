@@ -1,8 +1,8 @@
 package links;
 
-import application.ApplicationManager;
-import application.tutor_responds.FindBidDetails;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import views.tutor_responds.FindBidDetails;
+import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -24,7 +24,7 @@ public class FindBidderDetailLink implements ActionListener, ObserverOutputInter
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
-        ApplicationManager.loadPage(ApplicationManager.FIND_TUTOR_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_BID_DETAIL);
     }
 
     @Override

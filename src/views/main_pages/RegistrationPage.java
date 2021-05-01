@@ -1,14 +1,13 @@
-package application.main_pages;
+package views.main_pages;
 
 import api.ApiRequest;
-import application.ApplicationManager;
+import services.ViewManagerService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.http.HttpResponse;
 
 public class RegistrationPage extends JPanel {
@@ -115,7 +114,7 @@ public class RegistrationPage extends JPanel {
                         "\", \"isStudent\": " + isStudent + ", \"isTutor\": " + isTutor + "}";
                 response = ApiRequest.post("/user", jsonObj);
                 if (response.statusCode() == 201) {
-                    ApplicationManager.loadPage(ApplicationManager.LOGIN_PAGE);
+                    ViewManagerService.loadPage(ViewManagerService.LOGIN_PAGE);
                 } else if (response.statusCode() == 409) {
                     JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
                             "Username Taken", JOptionPane.ERROR_MESSAGE);
@@ -128,7 +127,7 @@ public class RegistrationPage extends JPanel {
         loadLoginPage.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.LOGIN_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.LOGIN_PAGE);
             }
         });
     }

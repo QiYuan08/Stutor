@@ -1,11 +1,11 @@
 package links;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import application.tutor_responds.ClosedBidResponse;
-import application.tutor_responds.FindBidDetails;
-import application.main_pages.MessagesPage;
-import application.tutor_responds.ResponseOpenBid;
+import services.ViewManagerService;
+import views.tutor_responds.ClosedBidResponse;
+import views.tutor_responds.FindBidDetails;
+import views.main_pages.MessagesPage;
+import views.tutor_responds.ResponseOpenBid;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -79,7 +79,7 @@ public class ResponseBidLink implements ActionListener {
             // if message button is clicked for close bid
             if (thisBtn.getText().equals("Message")){
                 this.messagesPage.update(thisBtn.getName());
-                ApplicationManager.loadPage(ApplicationManager.MESSAGES_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.MESSAGES_PAGE);
 
             } else { // if bid button is clicked
 
@@ -87,10 +87,10 @@ public class ResponseBidLink implements ActionListener {
                 // go to either responseOpenBid or closedBidResponse
                 if (bid.get("type").equals("open")){
                     responseOpenBid.update(thisBtn.getName());
-                    ApplicationManager.loadPage(ApplicationManager.RESPONSE_OPEN_BID);
+                    ViewManagerService.loadPage(ViewManagerService.RESPONSE_OPEN_BID);
                 } else {
                     closedBidResponse.update(thisBtn.getName());
-                    ApplicationManager.loadPage(ApplicationManager.RESPONSE_CLOSE_BID);
+                    ViewManagerService.loadPage(ViewManagerService.RESPONSE_CLOSE_BID);
                 }
             }
 

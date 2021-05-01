@@ -1,9 +1,9 @@
-package application.main_pages;
+package views.main_pages;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import links.ListenerLinkInterface;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import controller.ListenerLinkInterface;
+import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -86,14 +86,14 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
         createBidButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.CREATE_BID_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.CREATE_BID_PAGE);
             }
         });
 
         viewProfileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.PROFILE_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.PROFILE_PAGE);
             }
         });
     }

@@ -1,12 +1,11 @@
-package application.student_bids;
+package views.student_bids;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import listeners.ObserverInputInterface;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import controller.ObserverInputInterface;
+import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import utils.OpenBidUtil;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -30,7 +29,6 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
     private JComboBox<String> startMeridiem, typeCombo, subjectCombo, competencyCombo;
     private JSpinner startTime, duration;
     private HashMap<String, String> subjectMapping;
-    private OpenBidUtil util = new OpenBidUtil();
     private String userId;
 
     public CreateBidPage(){
@@ -99,9 +97,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
 
         // retrieve all the subject name from the key mapping
         ArrayList<String> subjectsName = new ArrayList<>();
-        for (String key: subjectMapping.keySet()){
-            subjectsName.add(key);
-        }
+        subjectsName.addAll(subjectMapping.keySet());
         // convert arraylist into array for combobox
         String[] subjectsNameArr = new String[subjectsName.size()];
         subjectsName.toArray(subjectsNameArr);
@@ -252,7 +248,7 @@ public class CreateBidPage extends JPanel implements ObserverInputInterface, Obs
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         });
     }

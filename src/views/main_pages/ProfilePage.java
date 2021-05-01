@@ -1,8 +1,8 @@
-package application.main_pages;
+package views.main_pages;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -105,14 +105,14 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
         dashboardPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         });
 
         logOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.LOGIN_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.LOGIN_PAGE);
             }
         });
     }

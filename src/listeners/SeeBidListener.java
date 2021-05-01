@@ -1,7 +1,8 @@
 package listeners;
 
-import application.ApplicationManager;
-import application.student_bids.SeeBidDetails;
+import services.ViewManagerService;
+import views.student_bids.SeeBidDetails;
+import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -20,7 +21,7 @@ public class SeeBidListener implements ActionListener, ObserverOutputInterface {
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
-        ApplicationManager.loadPage(ApplicationManager.SEE_TUTOR_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_BID_DETAIL);
     }
 
 

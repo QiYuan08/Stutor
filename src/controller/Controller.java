@@ -1,14 +1,12 @@
-package listeners;
-
-import listeners.ObserverOutputInterface;
+package controller;
 
 import java.util.ArrayList;
 
-public class ApplicationController {
+public class Controller {
 
     private ArrayList<ObserverOutputInterface> subscribers;
 
-    public ApplicationController() {
+    public Controller() {
         this.subscribers = new ArrayList<>();
     }
 

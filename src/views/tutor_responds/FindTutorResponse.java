@@ -1,8 +1,8 @@
-package application.tutor_responds;
+package views.tutor_responds;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import controller.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -169,7 +169,7 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         });
 

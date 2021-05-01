@@ -1,6 +1,7 @@
 package listeners;
 
 import api.ApiRequest;
+import controller.ObserverInputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

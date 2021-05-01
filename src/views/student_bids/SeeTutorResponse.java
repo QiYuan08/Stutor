@@ -1,9 +1,9 @@
-package application.student_bids;
+package views.student_bids;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import listeners.ObserverInputInterface;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import controller.ObserverInputInterface;
+import controller.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -152,7 +152,7 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         });
 

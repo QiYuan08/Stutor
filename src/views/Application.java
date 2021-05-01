@@ -1,12 +1,15 @@
-package application;
+package views;
 
-import application.student_bids.SeeAllBids;
-import application.tutor_responds.*;
-import application.main_pages.*;
-import application.student_bids.CreateBidPage;
-import application.student_bids.SeeBidDetails;
-import application.student_bids.SeeTutorResponse;
-import controller.*;
+import services.ViewManagerService;
+import services.ExpireBidService;
+import controller.Controller;
+import views.student_bids.SeeAllBids;
+import views.tutor_responds.*;
+import views.main_pages.*;
+import views.student_bids.CreateBidPage;
+import views.student_bids.SeeBidDetails;
+import views.student_bids.SeeTutorResponse;
+import controller.ObserverOutputInterface;
 import links.*;
 import listeners.*;
 
@@ -17,14 +20,14 @@ import java.awt.event.ActionListener;
 public class Application extends JFrame{
     private static JPanel rootPanel;
     private static CardLayout cardLayout;
-    ApplicationController loginController, contractController, findBidController,seeBidController, responseOpenBidController, dashboardController, bidClosingController;
+    Controller loginController, contractController, findBidController,seeBidController, responseOpenBidController, dashboardController, bidClosingController;
     ActionListener contractListener, loginListener, messageListener, responseOpenBidListener, findBidListener, seeBidListener, createBidListener, bidClosingListener, dashboardListener;
     FindBidDetailLink findBidDetailLink;
     SeeBidDetailLink seeBidDetailLink;
     SeeBidderDetailLink seeBidderDetailLink;
     FindBidderDetailLink findBidderDetailLink;
     SeeMessageLink seeMessageLink;
-//    private ApplicationController loginController, bidUpdateController, bidClosingController;
+//    private Controller loginController, bidUpdateController, bidClosingController;
 //    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
 //    private FindBidDetailLink findBidDetailLink;
 //    private SeeBidDetailLink seeBidDetailLink;
@@ -52,20 +55,20 @@ public class Application extends JFrame{
         MessagesPage messagesPage = new MessagesPage();
         SeeTutorResponse seeTutorResponse = new SeeTutorResponse();
 
-        rootPanel.add(loginPage, ApplicationManager.LOGIN_PAGE);
-        rootPanel.add(registrationPage, ApplicationManager.REGISTRATION_PAGE);
-        rootPanel.add(dashboardPage, ApplicationManager.DASHBOARD_PAGE);
-        rootPanel.add(profilePage, ApplicationManager.PROFILE_PAGE);
-        rootPanel.add(createBidPage, ApplicationManager.CREATE_BID_PAGE);
-        rootPanel.add(findAllBids, ApplicationManager.FIND_BID);
-        rootPanel.add(findBidDetails, ApplicationManager.FIND_BID_DETAIL);
-        rootPanel.add(seeAllBids, ApplicationManager.SEE_BIDS_PAGE);
-        rootPanel.add(seeBidDetails, ApplicationManager.SEE_BID_DETAIL);
-        rootPanel.add(responseOpenBid, ApplicationManager.RESPONSE_OPEN_BID);
-        rootPanel.add(closedBidResponse, ApplicationManager.RESPONSE_CLOSE_BID);
-        rootPanel.add(findTutorResponse, ApplicationManager.FIND_TUTOR_BID_DETAIL);
-        rootPanel.add(messagesPage, ApplicationManager.MESSAGES_PAGE);
-        rootPanel.add(seeTutorResponse, ApplicationManager.SEE_TUTOR_BID_DETAIL);
+        rootPanel.add(loginPage, ViewManagerService.LOGIN_PAGE);
+        rootPanel.add(registrationPage, ViewManagerService.REGISTRATION_PAGE);
+        rootPanel.add(dashboardPage, ViewManagerService.DASHBOARD_PAGE);
+        rootPanel.add(profilePage, ViewManagerService.PROFILE_PAGE);
+        rootPanel.add(createBidPage, ViewManagerService.CREATE_BID_PAGE);
+        rootPanel.add(findAllBids, ViewManagerService.FIND_BID);
+        rootPanel.add(findBidDetails, ViewManagerService.FIND_BID_DETAIL);
+        rootPanel.add(seeAllBids, ViewManagerService.SEE_BIDS_PAGE);
+        rootPanel.add(seeBidDetails, ViewManagerService.SEE_BID_DETAIL);
+        rootPanel.add(responseOpenBid, ViewManagerService.RESPONSE_OPEN_BID);
+        rootPanel.add(closedBidResponse, ViewManagerService.RESPONSE_CLOSE_BID);
+        rootPanel.add(findTutorResponse, ViewManagerService.FIND_TUTOR_BID_DETAIL);
+        rootPanel.add(messagesPage, ViewManagerService.MESSAGES_PAGE);
+        rootPanel.add(seeTutorResponse, ViewManagerService.SEE_TUTOR_BID_DETAIL);
 
         // create a expireBidService class
         ExpireBidService expireBidService = new ExpireBidService();
@@ -78,7 +81,7 @@ public class Application extends JFrame{
          */
         // listener for closing bid
         // TODO: update findAllBids after closing
-        bidClosingController = new ApplicationController();
+        bidClosingController = new Controller();
         bidClosingListener = new BidClosingListener(bidClosingController);
         findBidDetails.addActionListener(bidClosingListener);
         seeTutorResponse.addActionListener(bidClosingListener);
@@ -88,7 +91,7 @@ public class Application extends JFrame{
         bidClosingController.subscribe(dashboardPage);
 
         // passing userId to view classes and services that require it
-        loginController = new ApplicationController();
+        loginController = new Controller();
         loginListener = new LoginListener(loginPage, loginController);
         loginController.subscribe(profilePage);
         loginController.subscribe(dashboardPage);
@@ -124,7 +127,7 @@ public class Application extends JFrame{
         // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
         // from dashboard to see bid or find bid
-        ApplicationController dashboardController = new ApplicationController();
+        Controller dashboardController = new Controller();
         BidUpdateListener bidUpdateListener = new BidUpdateListener(dashboardPage, dashboardController); // userId are updated from here
         dashboardController.subscribe(findAllBids);
         dashboardController.subscribe((ObserverOutputInterface) findBidListener);
@@ -140,10 +143,10 @@ public class Application extends JFrame{
 
         // controller for user to open bid
         // TODO: refactor createbid listener so that constructor nonid controller if no other class subscribing it
-        // createBidController = new ApplicationController();
+        // createBidController = new Controller();
         createBidListener = new BidCreateListener(createBidPage);
 
-        ApplicationManager.setRootPanel(rootPanel);
+        ViewManagerService.setRootPanel(rootPanel);
 
         this.add(rootPanel);
         this.setVisible(true);

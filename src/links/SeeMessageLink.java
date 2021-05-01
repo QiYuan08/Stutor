@@ -1,8 +1,8 @@
 package links;
 
-import application.ApplicationManager;
-import application.main_pages.MessagesPage;
-import application.student_bids.SeeTutorResponse;
+import services.ViewManagerService;
+import views.main_pages.MessagesPage;
+import views.student_bids.SeeTutorResponse;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -23,6 +23,6 @@ public class SeeMessageLink implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         outputPage.update(thisBtn.getName());
-        ApplicationManager.loadPage(ApplicationManager.MESSAGES_PAGE);
+        ViewManagerService.loadPage(ViewManagerService.MESSAGES_PAGE);
     }
 }

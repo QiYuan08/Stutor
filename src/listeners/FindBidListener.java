@@ -1,7 +1,8 @@
 package listeners;
 
-import application.ApplicationManager;
-import application.tutor_responds.FindBidDetails;
+import services.ViewManagerService;
+import views.tutor_responds.FindBidDetails;
+import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,7 +20,7 @@ public class FindBidListener implements ObserverOutputInterface, ActionListener 
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
-        ApplicationManager.loadPage(ApplicationManager.FIND_TUTOR_BID_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_BID_DETAIL);
     }
 
     // this method is called whenever there is an update in bids to display to tutor

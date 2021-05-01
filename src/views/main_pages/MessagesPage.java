@@ -1,9 +1,9 @@
-package application.main_pages;
+package views.main_pages;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import listeners.ObserverInputInterface;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import controller.ObserverInputInterface;
+import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -108,7 +108,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
             backButton.addActionListener(new ActionListener() {
                 @Override // TODO: to change to see bids detail page
                 public void actionPerformed(ActionEvent e) {
-                    ApplicationManager.loadPage(ApplicationManager.FIND_BID_DETAIL);
+                    ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAIL);
                 }
             });
         } else if (user.getBoolean("isStudent")){ // if student replying to student in seetutorfiddetail class
@@ -117,7 +117,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
             backButton.addActionListener(new ActionListener() {
                 @Override // TODO: to change to see bids detail page
                 public void actionPerformed(ActionEvent e) {
-                    ApplicationManager.loadPage(ApplicationManager.SEE_BID_DETAIL);
+                    ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAIL);
                 }
             });
         } else {

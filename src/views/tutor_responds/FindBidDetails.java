@@ -1,8 +1,10 @@
-package application.student_bids;
+package views.tutor_responds;
 
 import api.ApiRequest;
-import application.ApplicationManager;
-import listeners.ObserverOutputInterface;
+import services.ViewManagerService;
+import controller.ListenerLinkInterface;
+import controller.ObserverInputInterface;
+import controller.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,24 +16,25 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-/**
- * Class for user to see the detail of each bids that they have opened
- */
-public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
+// TODO: show all bidder in open bid
+// TODO: show check message instead of bid button if tutor already reply to a close bid
+
+public class FindBidDetails extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
 
     private String bidId, userId;
     private JLabel title, subjectLabel, name, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
     private JButton closeBtn = new JButton("Buy Out");
     private JButton replyBtn = new JButton("Bid");
     private JButton backBtn, viewBidBtn;
-    private JPanel detailPane;
+    private JPanel bidsPane, detailPane, btnPane;
     private JScrollPane scrollPane;
     ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
 
-    public SeeBidDetails(){
+    public FindBidDetails() {
         this.setLayout(new GridBagLayout());
         mainConst = new GridBagConstraints();
+
     }
 
     /**
@@ -81,7 +84,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ApplicationManager.loadPage(ApplicationManager.DASHBOARD_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         });
 
@@ -154,30 +157,33 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
         c.gridy = detailPane.getComponentCount();
         detailPane.add(startTime, c);
 
-        // add scrollPane into mainPanel
-        mainConst.weighty = 1;
-        mainConst.weightx = 1;
-        mainConst.gridheight = 8;
-        mainConst.gridx = 0;
-        c.gridwidth = 10;
-        mainConst.gridy = 0;
-        mainConst.fill = GridBagConstraints.BOTH;
-//        this.add(detailPane, mainConst);
+//        // add scrollPane into mainPanel
+//        mainConst.weighty = 1;
+//        mainConst.weightx = 1;
+//        mainConst.gridheight = 8;
+//        mainConst.gridx = 0;
+//        c.gridwidth = 10;
+//        mainConst.gridy = 0;
+//        mainConst.fill = GridBagConstraints.BOTH;
+////        this.add(detailPane, mainConst);
 
-        buttonArr = new ArrayList<>();
-        System.out.println(bid);
-        // create a Panel to show each message replied by tutor
-        if (messages.length() > 0){
 
-            bidderLabel = new JLabel("Bidders");
-            bidderLabel.setHorizontalAlignment(JLabel.CENTER);
-            bidderLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-            detailPane.add(bidderLabel, c);
+        // if bid type is open
+        if (bid.getString("type").equals("open")){
 
-            for (int i=0; i < messages.length(); i++){
-                JSONObject message = messages.getJSONObject(i);
+            buttonArr = new ArrayList<>();
 
-                if (!(message.getJSONObject("additionalInfo").isEmpty())){ // show only non 'message' message
+            // create a Panel to show each message replied by tutor
+            if (messages.length() > 0){
+
+                bidderLabel = new JLabel("Bidders");
+                bidderLabel.setHorizontalAlignment(JLabel.CENTER);
+                bidderLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
+                detailPane.add(bidderLabel, c);
+
+                for (int i=0; i < messages.length(); i++){
+                    JSONObject message = messages.getJSONObject(i);
+
                     // create the panel for each bid item
                     JPanel bidPanel = new JPanel();
                     GridBagConstraints bidPanelConstraint = new GridBagConstraints();
@@ -201,7 +207,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
 
                     // type jlabel
                     JLabel rate = new JLabel();
-                    System.out.println(message);
                     rate.setText("Rate: " + message.getJSONObject("additionalInfo").get("rate") + " dollars per hour");
                     bidPanelConstraint.gridy = 1;
                     bidPanel.add(rate, bidPanelConstraint);
@@ -216,7 +221,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
 
                     // set button name to bidId and userId for ClosedBidResponse class to close Bid
                     JSONObject btnData = new JSONObject();
-                    btnData.put("messageId", message.get("id"));
+                    btnData.put("bidId", message.get("id"));
                     btnData.put("userId", this.userId);
                     viewBidBtn.setName(btnData.toString());
                     buttonArr.add(viewBidBtn); // add the button into button array
@@ -225,8 +230,8 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
                     c.gridy = detailPane.getComponentCount();
                     detailPane.add(bidPanel, c);
                 }
-
             }
+
         }
         // wrap detailPane with a scrollPane
         scrollPane = new JScrollPane(detailPane);
@@ -242,21 +247,83 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
         this.setOpaque(false);
         this.add(scrollPane, mainConst);
 
-        // TODO: add JPanel to see all tutors' bids or a message panel depending on open or closed bid
+        // add closeBid Button
+        // if its a a open bid add buy out button
+
+        if (bid.getString("type").equals("open")){
+            closeBtn.setName(this.bidId);
+            mainConst.weighty = 1;
+            mainConst.weightx = 1;
+            mainConst.gridheight = 2;
+            mainConst.gridx = 0;
+            mainConst.gridy = 22;
+            mainConst.gridwidth = 1;
+//            mainConst.anchor = GridBagConstraints.LAST_LINE_START;
+            mainConst.fill = GridBagConstraints.HORIZONTAL;
+            this.add(closeBtn, mainConst);
+        }
+
+
+        // add replyBid Button
+        if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid
+            replyBtn.setText("Message");
+            this.repaint();
+        }
+        String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
+        replyBtn.setName(data);
+        mainConst.weighty = 1;
+        mainConst.weightx = 1;
+        mainConst.gridheight = 2;
+        mainConst.gridx = 0;
+        mainConst.gridy = 21;
+        mainConst.gridwidth = 1;
+//        mainConst.anchor = GridBagConstraints.LAST_LINE_START;
+        mainConst.fill = GridBagConstraints.HORIZONTAL;
+        this.add(replyBtn, mainConst);
+
+        // add btnPanel into this
+//        mainConst.weighty = 0.2;
+//        mainConst.weightx = 0.2;
+//        mainConst.gridheight = 2;
+//        mainConst.gridx = 0;
+//        mainConst.gridy = 30;
+//        c.gridwidth = 10;
+//        this.add(btnPane, mainConst);
+
     }
 
+    /**
+     * Method to check if the tutor replied to this bid before
+     * @return true if tutor replied to this message before and false otherwise
+     */
+    private Boolean hasReplied(JSONArray messages){
 
+        if (messages.isEmpty()){ // if this bis has no messages
+            return false;
+        } else {
+            for (int i=0; i< messages.length(); i++){
+                JSONObject message = messages.getJSONObject(i);
+                if (message.getJSONObject("poster").getString("id").equals(this.userId)){ // if user replied to this bid before
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
     /**
-     * Get the bidId from See Bid page one user click on view bid to retrieve data from db
-     * @param data userId and bidId
+     * Get the bidId from Find Bid page one user click on view bid to retrieve data from db
+     * @param data any data that is crucial to the pages for them to request the information that they need from the database
      */
     @Override
     public void update(String data) {
+        System.out.println(data);
+
+        System.out.println("2 Hi from find bid detail");
+
         this.bidId = new JSONObject(data).getString("bidId");
         this.userId = new JSONObject(data).getString("userId");
-
-         HttpResponse<String> response = ApiRequest.get("/bid/"+ this.bidId + "?fields=messages");
+        HttpResponse<String> response = ApiRequest.get("/bid/"+ this.bidId + "?fields=messages");
 
         // if retrieve success
         if (response.statusCode() == 200){
@@ -264,6 +331,9 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
             this.removeAll();
             this.repaint();
             this.revalidate();
+
+            // set the default value of reply button to Bod
+            replyBtn.setText("Respond");
             createContent(new JSONObject(response.body()));
 
         } else {
@@ -271,7 +341,14 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
         }
 
+    }
 
+    /**
+     * Links the responseBtn with the appropriate page depending on whether the current bid is an open or closed bid
+     */
+    @Override
+    public void addLinkListener(ActionListener listener) {
+        this.replyBtn.addActionListener(listener);
     }
 
     public  void addViewBidListener(ActionListener listener) {
@@ -282,11 +359,26 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
             }
         }
     }
-    public void addCloseBidListener(ActionListener listener){
+
+    public void addCloseBidListener(ActionListener listener) {
         this.closeBtn.addActionListener(listener);
     }
 
-    public void addReplyBidListener(ActionListener listener) {
-        this.replyBtn.addActionListener(listener);
+    /**
+     * called by BidClosingListener, which is activate by buyoutBtn
+     */
+    @Override
+    public JSONObject retrieveInputs() {
+        JSONObject bidInfo = new JSONObject();
+        bidInfo.put("bidId", bidId);
+        bidInfo.put("messageId", "");
+        bidInfo.put("tutorId", "");
+        bidInfo.put("hasExpired", false);
+        return bidInfo;
+    }
+
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+        this.closeBtn.addActionListener(actionListener);
     }
 }

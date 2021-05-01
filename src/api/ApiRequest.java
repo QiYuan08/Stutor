@@ -1,7 +1,5 @@
 package api;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -26,9 +24,9 @@ public class ApiRequest {
 
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         return response;
@@ -38,7 +36,7 @@ public class ApiRequest {
         client = HttpClient.newHttpClient();
         request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
                 .setHeader("Authorization", API_KEY)
-                .header("Content-Type","application/json")
+                .header("Content-Type", "views/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonObj))
                 .build();
 
@@ -56,7 +54,7 @@ public class ApiRequest {
         client = HttpClient.newHttpClient();
         request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
                 .setHeader("Authorization", API_KEY)
-                .header("Content-Type", "application/json")
+                .header("Content-Type", "views/json")
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(jsonObj))
                 .build();
 
