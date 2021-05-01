@@ -28,7 +28,6 @@ public class SeeBidderDetailLink implements ActionListener, ObserverOutputInterf
 
     @Override
     public void update(String data) {
-        System.out.println("seebidderdetaillink update method");
         inputPage.addViewBidListener(this);
     }
 }

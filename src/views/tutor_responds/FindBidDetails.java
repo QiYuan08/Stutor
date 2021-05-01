@@ -23,10 +23,8 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
 
     private String bidId, userId;
     private JLabel title, subjectLabel, name, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
-    private JButton closeBtn = new JButton("Buy Out");
-    private JButton replyBtn = new JButton("Bid");
-    private JButton backBtn, viewBidBtn;
-    private JPanel bidsPane, detailPane, btnPane;
+    private JButton buyoutButton, respondButton, backButton, viewBidButton;
+    private JPanel detailPane;
     private JScrollPane scrollPane;
     ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
@@ -34,7 +32,8 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     public FindBidDetails() {
         this.setLayout(new GridBagLayout());
         mainConst = new GridBagConstraints();
-
+        buyoutButton = new JButton("Buy Out");
+        respondButton = new JButton("Bid");
     }
 
     /**
@@ -71,17 +70,17 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.anchor = GridBagConstraints.PAGE_START;
         detailPane.add(title, c);
 
-        backBtn = new JButton("Back");
+        backButton = new JButton("Back");
         c.gridy = 0;
         c.weightx = 0.0;
         c.gridwidth = 1;
         c.gridx = 0;
         c.anchor = GridBagConstraints.PAGE_START;
-        detailPane.add(backBtn, c);
+        detailPane.add(backButton, c);
 
-        // TODO: can talk about this in design rationale, nonid to create a listener for this cuz very simple and wont change forever
+        // TODO: can talk about this in design rationale, no need to create a listener for this cuz very simple and wont change forever
         // TODO: fix view not updated when student bid on it
-        backBtn.addActionListener(new ActionListener() {
+        backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
@@ -157,17 +156,6 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridy = detailPane.getComponentCount();
         detailPane.add(startTime, c);
 
-//        // add scrollPane into mainPanel
-//        mainConst.weighty = 1;
-//        mainConst.weightx = 1;
-//        mainConst.gridheight = 8;
-//        mainConst.gridx = 0;
-//        c.gridwidth = 10;
-//        mainConst.gridy = 0;
-//        mainConst.fill = GridBagConstraints.BOTH;
-////        this.add(detailPane, mainConst);
-
-
         // if bid type is open
         if (bid.getString("type").equals("open")){
 
@@ -217,15 +205,15 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                     bidPanelConstraint.gridwidth = 1;
                     bidPanelConstraint.gridheight = 2;
                     bidPanelConstraint.weightx = 0.2;
-                    viewBidBtn = new JButton("View Bid");
+                    viewBidButton = new JButton("View Bid");
 
                     // set button name to bidId and userId for ClosedBidResponse class to close Bid
                     JSONObject btnData = new JSONObject();
                     btnData.put("bidId", message.get("id"));
                     btnData.put("userId", this.userId);
-                    viewBidBtn.setName(btnData.toString());
-                    buttonArr.add(viewBidBtn); // add the button into button array
-                    bidPanel.add(viewBidBtn, bidPanelConstraint);
+                    viewBidButton.setName(btnData.toString());
+                    buttonArr.add(viewBidButton); // add the button into button array
+                    bidPanel.add(viewBidButton, bidPanelConstraint);
 
                     c.gridy = detailPane.getComponentCount();
                     detailPane.add(bidPanel, c);
@@ -251,7 +239,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         // if its a a open bid add buy out button
 
         if (bid.getString("type").equals("open")){
-            closeBtn.setName(this.bidId);
+            buyoutButton.setName(this.bidId);
             mainConst.weighty = 1;
             mainConst.weightx = 1;
             mainConst.gridheight = 2;
@@ -260,17 +248,17 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             mainConst.gridwidth = 1;
 //            mainConst.anchor = GridBagConstraints.LAST_LINE_START;
             mainConst.fill = GridBagConstraints.HORIZONTAL;
-            this.add(closeBtn, mainConst);
+            this.add(buyoutButton, mainConst);
         }
 
 
         // add replyBid Button
         if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid
-            replyBtn.setText("Message");
+            respondButton.setText("Message");
             this.repaint();
         }
         String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
-        replyBtn.setName(data);
+        respondButton.setName(data);
         mainConst.weighty = 1;
         mainConst.weightx = 1;
         mainConst.gridheight = 2;
@@ -279,17 +267,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         mainConst.gridwidth = 1;
 //        mainConst.anchor = GridBagConstraints.LAST_LINE_START;
         mainConst.fill = GridBagConstraints.HORIZONTAL;
-        this.add(replyBtn, mainConst);
-
-        // add btnPanel into this
-//        mainConst.weighty = 0.2;
-//        mainConst.weightx = 0.2;
-//        mainConst.gridheight = 2;
-//        mainConst.gridx = 0;
-//        mainConst.gridy = 30;
-//        c.gridwidth = 10;
-//        this.add(btnPane, mainConst);
-
+        this.add(respondButton, mainConst);
     }
 
     /**
@@ -317,9 +295,6 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
      */
     @Override
     public void update(String data) {
-        System.out.println(data);
-
-        System.out.println("2 Hi from find bid detail");
 
         this.bidId = new JSONObject(data).getString("bidId");
         this.userId = new JSONObject(data).getString("userId");
@@ -332,8 +307,8 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             this.repaint();
             this.revalidate();
 
-            // set the default value of reply button to Bod
-            replyBtn.setText("Respond");
+            // set the default value of reply button to respond
+            respondButton.setText("Respond");
             createContent(new JSONObject(response.body()));
 
         } else {
@@ -348,7 +323,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
      */
     @Override
     public void addLinkListener(ActionListener listener) {
-        this.replyBtn.addActionListener(listener);
+        this.respondButton.addActionListener(listener);
     }
 
     public  void addViewBidListener(ActionListener listener) {
@@ -358,10 +333,6 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 btn.addActionListener(listener);
             }
         }
-    }
-
-    public void addCloseBidListener(ActionListener listener) {
-        this.closeBtn.addActionListener(listener);
     }
 
     /**
@@ -377,8 +348,12 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         return bidInfo;
     }
 
+    /**
+     * adds the action listener from a BidClosingListener object
+     * @param actionListener
+     */
     @Override
     public void addActionListener(ActionListener actionListener) {
-        this.closeBtn.addActionListener(actionListener);
+        this.buyoutButton.addActionListener(actionListener);
     }
 }

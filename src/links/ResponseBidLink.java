@@ -1,6 +1,8 @@
 package links;
 
 import api.ApiRequest;
+import controller.ObserverInputInterface;
+import controller.ObserverOutputInterface;
 import services.ViewManagerService;
 import views.tutor_responds.ClosedBidResponse;
 import views.tutor_responds.FindBidDetails;
@@ -45,45 +47,25 @@ public class ResponseBidLink implements ActionListener {
         HttpResponse<String> response = ApiRequest.get("/bid/" + data.get("bidId"));
         JSONObject bid = new JSONObject(response.body());
 
-        // if submitting open bid
-        // create a message to update bid
+        // if submitting open bid, create a message to update bid
         if (thisBtn.getText().equals("Submit Open Bid")){
 
-            JSONObject inputData = openBidResponse.retrieveInputs();
-            response = ApiRequest.post("/message", inputData.toString());
-
-            if (response.statusCode() == 201) { // success
-                JOptionPane.showMessageDialog(new JFrame(), "Success", "Bid Send Success", JOptionPane.INFORMATION_MESSAGE);
-
-            } else { // failed API call
-                String msg = "Error: " + new JSONObject(response.body()).get("message");
-                JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
-            }
+            responseBidPage(openBidResponse);
 
         } else if (thisBtn.getText().equals("Submit Close Bid")) { // if submitting open bid
 
-            JSONObject inputData = closedBidResponse.retrieveInputs();
-            response = ApiRequest.post("/message", inputData.toString());
-
-            if (response.statusCode() == 201) { // success
-                JOptionPane.showMessageDialog(new JFrame(), "Success", "Bid Send Success", JOptionPane.INFORMATION_MESSAGE);
-
-            } else { // failed API call
-                String msg = "Error: " + new JSONObject(response.body()).get("message");
-                JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
-            }
-
+            responseBidPage(closedBidResponse);
 
         }else {
 
             // if message button is clicked for close bid
             if (thisBtn.getText().equals("Message")){
-                this.messagesPage.update(thisBtn.getName());
+                messagesPage.update(thisBtn.getName());
                 ViewManagerService.loadPage(ViewManagerService.MESSAGES_PAGE);
 
             } else { // if bid button is clicked
 
-                // if bid button in find bids detail page is clicked check if open or close bid then go to appriopriate page
+                // if bid button in find bids detail page is clicked check if open or close bid then go to appropriate page
                 // go to either openBidResponse or closedBidResponse
                 if (bid.get("type").equals("open")){
                     openBidResponse.update(thisBtn.getName());
@@ -93,10 +75,20 @@ public class ResponseBidLink implements ActionListener {
                     ViewManagerService.loadPage(ViewManagerService.CLOSED_BID_RESPONSE);
                 }
             }
-
-
         }
+    }
 
+    private void responseBidPage(ObserverInputInterface observerInputInterface) {
 
+        JSONObject inputData = observerInputInterface.retrieveInputs();
+        HttpResponse<String> response = ApiRequest.post("/message", inputData.toString());
+
+        if (response.statusCode() == 201) { // successfully posted message
+            JOptionPane.showMessageDialog(new JFrame(), "Success", "Bid Send Success", JOptionPane.INFORMATION_MESSAGE);
+
+        } else { // failed API call
+            String msg = "Error: " + new JSONObject(response.body()).get("message");
+            JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

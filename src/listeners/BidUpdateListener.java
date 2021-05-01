@@ -1,6 +1,7 @@
 package listeners;
 
 import controller.Controller;
+import controller.ObserverOutputInterface;
 import services.ViewManagerService;
 import controller.ListenerLinkInterface;
 
@@ -11,7 +12,7 @@ import java.awt.event.ActionListener;
 /***
  * Listener for find bid button in dashboard
  */
-public class BidUpdateListener implements ActionListener {
+public class BidUpdateListener implements ActionListener, ObserverOutputInterface {
 
     ListenerLinkInterface inputPage;
     Controller controller;
@@ -33,6 +34,10 @@ public class BidUpdateListener implements ActionListener {
             ViewManagerService.loadPage(ViewManagerService.FIND_ALL_BIDS);
         }
 
+    }
 
+    @Override
+    public void update(String data) {
+        controller.notifySubscribers(data);
     }
 }

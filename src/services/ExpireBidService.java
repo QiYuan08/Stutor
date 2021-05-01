@@ -21,9 +21,9 @@ import java.util.TimerTask;
 /**
  * Utility class to automatically close bids
  */
-public class ExpireBidService implements ObserverInputInterface, ObserverOutputInterface {
+public class ExpireBidService implements ObserverInputInterface {
 
-    private long counter; //counter of timer in miliseconds
+    private long openCounter, closedCounter; //counter of timer in miliseconds
     private TimerTask openBidTask, closeBidTask;
     private Timer openTimer = new Timer();
     private Timer closeTimer = new Timer();
@@ -32,8 +32,9 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
     Instant currentTime;
     String expiredBidId, userId;
 
-    public void setDuration(int minutes) {
-        this.counter = minutes * 60000L;
+    public void setDuration(int minutes, int days) {
+        this.openCounter = minutes * 60000L;
+        this.closedCounter = days;
     }
 
     public void expireOpenBidService() {
@@ -52,15 +53,13 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
                     // if bid type is open
                     if (bid.get("type").equals("open") && bid.isNull("dateClosedDown")){
                         Instant bidStart = Instant.parse(bid.getString("dateCreated"));
-                        Instant expireTime = bidStart.plus(counter, ChronoUnit.MILLIS);
+                        Instant expireTime = bidStart.plus(openCounter, ChronoUnit.MILLIS);
                         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
                         Instant now = ts.toInstant();
 
                         // if expire time greater than now close the bid
                         if (now.compareTo(expireTime) > 0){
 
-                            // TODO: remove the JOptionPANEL later
-                            // TODO: add the userId to this class so it would only expire the bids owned by the user?
                             expiredBid = bid;
                             expiredBidId = bidId;
                             currentTime = now;
@@ -100,18 +99,13 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
 
                         // bidExpire Time
                         LocalDateTime time = LocalDateTime.ofInstant(bidStart, ZoneOffset.ofHours(0));
-                        time = time.plus(1, ChronoUnit.MINUTES);
+                        time = time.plus(closedCounter, ChronoUnit.DAYS);
                         Instant expiryDate = time.atZone(ZoneOffset.ofHours(0)).toInstant();
-
-                        System.out.println(now);
-                        System.out.println(expiryDate);
 
                         // if expire time greater than now close the bid
                         if (now.compareTo(expiryDate) > 0){
 
                             System.out.println("closing closed bid");
-                            // TODO: remove the JOptionPANEL later
-                            // TODO: add the userId to this class so it would only expire the bids owned by the user?
                             expiredBid = bid;
                             expiredBidId = bidId;
                             currentTime = now;
@@ -153,11 +147,6 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
     @Override
     public void addActionListener(ActionListener actionListener) {
         this.actionListener = actionListener;
-    }
-
-    @Override
-    public void update(String data) {
-        this.userId = data;
     }
 
 }

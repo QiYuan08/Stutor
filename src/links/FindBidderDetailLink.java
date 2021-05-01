@@ -20,7 +20,6 @@ public class FindBidderDetailLink implements ActionListener, ObserverOutputInter
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Find Bidder Detail Link");
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         outputPage.update(bidId);
@@ -29,7 +28,6 @@ public class FindBidderDetailLink implements ActionListener, ObserverOutputInter
 
     @Override
     public void update(String data) {
-        System.out.println("Find Bidder Detail Link");
         inputPage.addViewBidListener(this);
     }
 

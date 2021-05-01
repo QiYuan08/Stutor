@@ -32,11 +32,11 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
     @Override
     public void actionPerformed(ActionEvent e) {
         ObserverInputInterface inputPage;
-        if (e.getSource() instanceof JButton) {
+        if (e.getSource() instanceof JButton) { // triggered by a button
             JButton btn = (JButton) e.getSource();
             System.out.println(btn.getParent().getClass());
             inputPage = (ObserverInputInterface) btn.getParent();
-        } else {
+        } else { // triggered by ExpireBidService
             inputPage = (ObserverInputInterface) e.getSource();
         }
         JSONObject jsonBid = inputPage.retrieveInputs();
@@ -54,7 +54,6 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
 
         HttpResponse<String> bidResponse = ApiRequest.get("/bid/" + bidId + "?fields=messages");
         JSONObject bid = new JSONObject(bidResponse.body());
-//        if (!bid.isNull("dateClosedDown")) {return;} // robustness check to not close the same bid twice
 
         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
         Instant now = ts.toInstant();
@@ -65,7 +64,9 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
 
         if (bidCloseDownResponse.statusCode() == 200) {
             if (hasExpired) {
-                JOptionPane.showMessageDialog(new JFrame(), "Bid expired at " + now, "Bid Expired", JOptionPane.INFORMATION_MESSAGE);
+                if (bid.getJSONObject("initiator").getString("id").equals(userId)) { // only shows expire message to the correct user
+                    JOptionPane.showMessageDialog(new JFrame(), "Bid expired at " + now, "Bid Expired", JOptionPane.INFORMATION_MESSAGE);
+                }
                 return;
             } else {
                 postContract(bid);
@@ -99,38 +100,31 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
 
     private void postContract(JSONObject bid) {
         JSONObject contract = new JSONObject();
-        if (tutorId.equals("")) { // buyout action
+        if (tutorId.equals("")) { // buyout action (there could be no responses for the bid when the tutor buys it out)
             contract.put("firstPartyId", userId);
             contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
             contract.put("lessonInfo", bid.getJSONObject("additionalInfo"));
-        } else {
+        } else { // a confirm bid action from the user or ExpireBidService chooses the last tutor as the winner (has response)
             contract.put("firstPartyId", tutorId);
             contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
-
-            JSONObject message;
-//            if (messageId.equals("")) { // bid closes automatically from timer with a winning bidder
-//                JSONArray messages = bid.getJSONArray("messages");
-//                message = new JSONObject(messages.getJSONObject(messages.length() - 1));
-//            } else { // student confirms the winning response (message)
-            message = new JSONObject(ApiRequest.get("/message/" + messageId).body());
-//            }
+            JSONObject message = new JSONObject(ApiRequest.get("/message/" + messageId).body());
             contract.put("lessonInfo", message.getJSONObject("additionalInfo"));
         }
         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
         Instant now = ts.toInstant();
+        contract.put("dateCreated", now);
         LocalDateTime time = LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.ofHours(0));
-        time = time.plus(1, ChronoUnit.YEARS);
+        time = time.plus(1, ChronoUnit.YEARS); // contract expires after a year
         Instant output = time.atZone(ZoneOffset.ofHours(0)).toInstant();
         Timestamp expiryDate = Timestamp.from(output);
         contract.put("subjectId", bid.getJSONObject("subject").getString("id"));
         contract.put("expiryDate", expiryDate);
-        contract.put("dateCreated", now);
         contract.put("paymentInfo", new JSONObject());
         contract.put("additionalInfo", new JSONObject());
         HttpResponse<String> contractResponse = ApiRequest.post("/contract", contract.toString());
-        contract = new JSONObject(contractResponse.body());
 
         if (contractResponse.statusCode() == 201) {
+            contract = new JSONObject(contractResponse.body());
             signContract(contract);
         } else {
             String msg = "Contract not posted: Error " + contractResponse.statusCode();
@@ -138,12 +132,6 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
         }
     }
 
-
-    /**
-     * Receive userId from loginController
-     *
-     * @param data userId required to update other bidding view
-     */
     @Override
     public void update(String data) {
         this.userId = data;
