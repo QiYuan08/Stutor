@@ -19,7 +19,6 @@ public class Application extends JFrame{
     SeeBidderDetailLink seeBidderDetailLink;
     FindBidderDetailLink findBidderDetailLink;
     SeeMessageLink seeMessageLink;
-    BackBtnController backBtnController;
 //    private ApplicationController loginController, bidUpdateController, bidClosingController;
 //    private ActionListener loginListener, responseBidLink, createBidListener, bidClosingListener, bidUpdateListener;
 //    private FindBidDetailLink findBidDetailLink;
@@ -140,10 +139,6 @@ public class Application extends JFrame{
         // TODO: refactor createbid listener so that constructor nonid controller if no other class subscribing it
         // createBidController = new ApplicationController();
         createBidListener = new BidCreateListener(createBidPage);
-
-        // adding backbutton controller for revelent pages
-        backBtnController = new BackBtnController();
-        backBtnController.subscribe(ApplicationManager.FIND_BID_DETAIL, findBidPage);
 
         ApplicationManager.setRootPanel(rootPanel);
 

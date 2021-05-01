@@ -157,10 +157,5 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
         this.userId = data;
     }
 
-    @Override
-    public void addBackBtnListener(ActionListener listener) {
-
-    }
-
 
 }
