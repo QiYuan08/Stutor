@@ -90,19 +90,26 @@ public class Application extends JFrame{
         // LINKS
 
         // links seeBidDetails page to seeTutorResponse page
-        SeeBidderDetailLink seeBidderDetailLink = new SeeBidderDetailLink(seeBidDetails, seeTutorResponse);
+        SeeBidderDetailLink seeBidderDetailLink = new SeeBidderDetailLink(seeBidDetails);
+        seeBidderDetailLink.subscribe(seeTutorResponse);
 
         // link seeAllBids and seeBidDetails page
-        SeeBidDetailLink seeBidDetailLink = new SeeBidDetailLink(seeAllBids, seeBidDetails, seeBidderDetailLink);
+        SeeBidDetailLink seeBidDetailLink = new SeeBidDetailLink(seeAllBids);
+        seeBidDetailLink.subscribe(seeBidDetails);
+        seeBidDetailLink.subscribe(seeBidderDetailLink);
 
         // link to redirect student to reply to a tutor message
-        SeeMessageLink seeMessageLink = new SeeMessageLink(seeTutorResponse, messagesPage);
+        SeeMessageLink seeMessageLink = new SeeMessageLink(seeTutorResponse);
+        seeMessageLink.subscribe(messagesPage);
 
         // links the buttons for each tutor that responded in findBidDetails page to findTutorResponse page and update it with the correct data
-        FindBidderDetailLink findBidderDetailLink = new FindBidderDetailLink(findBidDetails, findTutorResponse);
+        FindBidderDetailLink findBidderDetailLink = new FindBidderDetailLink(findBidDetails);
+        findBidderDetailLink.subscribe(findTutorResponse);
 
         // link findbidpage and findbiddetail page
-        FindBidDetailLink findBidDetailLink = new FindBidDetailLink(findAllBids, findBidDetails, findBidderDetailLink);
+        FindBidDetailLink findBidDetailLink = new FindBidDetailLink(findAllBids);
+        findBidDetailLink.subscribe(findBidDetails);
+        findBidderDetailLink.subscribe(findBidderDetailLink);
 
         // bid to update data between findbidpage, message and response page
         ResponseBidLink responseBidLink = new ResponseBidLink(findBidDetails, openBidResponse, closedBidResponse, messagesPage);
@@ -111,36 +118,33 @@ public class Application extends JFrame{
         // CONTROLLERS
 
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
-        Controller bidClosingController = new Controller();
-        BidClosingListener bidClosingListener = new BidClosingListener(bidClosingController);
+        BidClosingListener bidClosingListener = new BidClosingListener();
         findBidDetails.addActionListener(bidClosingListener);
         seeTutorResponse.addActionListener(bidClosingListener);
         expireBidService.addActionListener(bidClosingListener);
-        bidClosingController.subscribe(findAllBids);
-        bidClosingController.subscribe(seeAllBids);
-        bidClosingController.subscribe(dashboardPage);
+        bidClosingListener.subscribe(findAllBids);
+        bidClosingListener.subscribe(seeAllBids);
+        bidClosingListener.subscribe(dashboardPage);
 
         // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
         // from dashboard to see bid or find bid
-        Controller dashboardController = new Controller();
-        BidUpdateListener bidUpdateListener = new BidUpdateListener(dashboardPage, dashboardController); // userId are updated from here
-        dashboardController.subscribe(findAllBids);
-        dashboardController.subscribe(findBidListener);
-        dashboardController.subscribe(findBidDetailLink);
-        dashboardController.subscribe(seeAllBids);
-        dashboardController.subscribe(seeBidDetailLink);
+        BidUpdateListener bidUpdateListener = new BidUpdateListener(dashboardPage); // userId are updated from here
+        bidUpdateListener.subscribe(findAllBids);
+        bidUpdateListener.subscribe(findBidListener);
+        bidUpdateListener.subscribe(findBidDetailLink);
+        bidUpdateListener.subscribe(seeAllBids);
+        bidUpdateListener.subscribe(seeBidDetailLink);
 
         // passing the userId to view classes and services that require it
-        Controller loginController = new Controller();
-        LoginListener loginListener = new LoginListener(loginPage, loginController);
-        loginController.subscribe(profilePage);
-        loginController.subscribe(dashboardPage);
-        loginController.subscribe(createBid);
-        loginController.subscribe(seeAllBids);
-        loginController.subscribe(findAllBids);
-        loginController.subscribe(createBid);
-        loginController.subscribe(bidClosingListener); // uses the userId to update views when a bid closes
+        LoginListener loginListener = new LoginListener(loginPage);
+        loginListener.subscribe(profilePage);
+        loginListener.subscribe(dashboardPage);
+        loginListener.subscribe(createBid);
+        loginListener.subscribe(seeAllBids);
+        loginListener.subscribe(findAllBids);
+        loginListener.subscribe(createBid);
+        loginListener.subscribe(bidClosingListener); // uses the userId to update views when a bid closes
 //        loginController.subscribe(bidUpdateListener);
 
         this.add(rootPanel);

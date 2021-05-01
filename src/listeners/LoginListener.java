@@ -1,7 +1,7 @@
 package listeners;
 
 import api.ApiRequest;
-import controller.Controller;
+import controller.Listener;
 import services.ViewManagerService;
 import controller.ObserverInputInterface;
 import org.json.JSONArray;
@@ -12,14 +12,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class LoginListener implements ActionListener {
+public class LoginListener extends Listener implements ActionListener {
 
     private ObserverInputInterface inputPage;
-    private Controller controller;
-
-    public LoginListener(ObserverInputInterface inputPage, Controller controller) {
+    public LoginListener(ObserverInputInterface inputPage) {
+        super();
         this.inputPage = inputPage;
-        this.controller = controller;
         inputPage.addActionListener(this);
     }
 
@@ -27,18 +25,15 @@ public class LoginListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JSONObject jsonObj = inputPage.retrieveInputs();
         HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj.toString());
-        System.out.println(jsonObj.toString());
-        System.out.println(response.body());
-        System.out.println(ApiRequest.post("/user/login", "{\"password\":\"nic\",\"userName\":\"nic\"}"));
-
         if (response.statusCode() == 200) {
-            controller.notifySubscribers(getUserId(jsonObj.getString("userName")));
+            notifySubscribers(getUserId(jsonObj.getString("userName")));
             ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
         } else if (response.statusCode() == 403) {
             JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
                     "Username Invalid", JOptionPane.ERROR_MESSAGE);
         } else {
-            System.out.println(response.statusCode() + "hi");
+            JOptionPane.showMessageDialog(new JFrame(), "Login failed! Error: " + response.statusCode(),
+                    "Username Invalid", JOptionPane.ERROR_MESSAGE);
         }
     }
 

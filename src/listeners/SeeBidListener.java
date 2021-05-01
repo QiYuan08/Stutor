@@ -31,6 +31,6 @@ public class SeeBidListener implements ActionListener, ObserverOutputInterface {
      */
     @Override
     public void update(String data) {
-        this.inputPage.addViewBidListener(this);
+        this.inputPage.addLinkListener(this);
     }
 }

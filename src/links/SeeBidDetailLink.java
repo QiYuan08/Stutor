@@ -1,5 +1,6 @@
 package links;
 
+import controller.Listener;
 import services.ViewManagerService;
 import controller.ListenerLinkInterface;
 import controller.ObserverOutputInterface;
@@ -8,16 +9,13 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SeeBidDetailLink implements ActionListener, ObserverOutputInterface {
+public class SeeBidDetailLink extends Listener implements ActionListener, ObserverOutputInterface {
 
     private ListenerLinkInterface inputPage;
-    private ObserverOutputInterface outputPage;
-    private SeeBidderDetailLink seeBidderDetailLink;
 
-    public SeeBidDetailLink(ListenerLinkInterface inputPage, ObserverOutputInterface outputPage, SeeBidderDetailLink seeBidderDetailLink) {
+    public SeeBidDetailLink(ListenerLinkInterface inputPage) {
+        super();
         this.inputPage = inputPage;
-        this.outputPage = outputPage;
-        this.seeBidderDetailLink = seeBidderDetailLink;
     }
 
     @Override
@@ -29,8 +27,7 @@ public class SeeBidDetailLink implements ActionListener, ObserverOutputInterface
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
-        outputPage.update(bidId);
-        seeBidderDetailLink.update(bidId);
+        notifySubscribers(bidId);
         ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAILS);
     }
 }

@@ -1,6 +1,7 @@
 package views.student_bids;
 
 import api.ApiRequest;
+import controller.ListenerLinkInterface;
 import services.ViewManagerService;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
@@ -13,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class SeeTutorResponse extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
+public class SeeTutorResponse extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
 
     private String messageId, userId, bidId, tutorId;
     private JLabel title, name, rate, competency, duration, startTime, day, preferredSession;
@@ -158,9 +159,9 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
 
     }
 
-    public void addMessageBtnListener (ActionListener listener){
-        this.messageBtn.addActionListener(listener);
-    }
+//    public void addMessageBtnListener (ActionListener listener){
+//        this.messageBtn.addActionListener(listener);
+//    }
 
 
     /**
@@ -204,5 +205,10 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
     @Override
     public void addActionListener(ActionListener actionListener) {
         this.confirmBtn.addActionListener(actionListener);
+    }
+
+    @Override
+    public void addLinkListener(ActionListener actionListener) {
+        this.messageBtn.addActionListener(actionListener);
     }
 }

@@ -1,5 +1,6 @@
 package listeners;
 
+import controller.ListenerLinkInterface;
 import services.ViewManagerService;
 import views.tutor_responds.FindBidDetails;
 import controller.ObserverOutputInterface;
@@ -10,16 +11,14 @@ import java.awt.event.ActionListener;
 
 public class FindBidListener implements ObserverOutputInterface, ActionListener {
 
-    private FindBidDetails inputPage;
+    private ListenerLinkInterface inputPage;
 
-    public FindBidListener(FindBidDetails inputPage) {
+    public FindBidListener(ListenerLinkInterface inputPage) {
         this.inputPage = inputPage;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton thisBtn = (JButton) e.getSource();
-        String bidId = thisBtn.getName();
         ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
     }
 
@@ -27,7 +26,6 @@ public class FindBidListener implements ObserverOutputInterface, ActionListener 
     // to add listener for all the list of bids;
     @Override
     public void update(String data) {
-//        inputPage.addViewBidListener(this);
         inputPage.addLinkListener(this);
     }
 }

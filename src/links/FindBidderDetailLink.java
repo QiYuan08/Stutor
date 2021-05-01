@@ -1,28 +1,27 @@
 package links;
 
+import controller.Listener;
 import services.ViewManagerService;
 import views.tutor_responds.FindBidDetails;
 import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class FindBidderDetailLink implements ActionListener, ObserverOutputInterface {
+public class FindBidderDetailLink extends Listener implements ObserverOutputInterface {
 
     private FindBidDetails inputPage;
-    private ObserverOutputInterface outputPage;
 
-    public FindBidderDetailLink(FindBidDetails inputPage, ObserverOutputInterface outputPage) {
+    public FindBidderDetailLink(FindBidDetails inputPage) {
+        super();
         this.inputPage = inputPage;
-        this.outputPage = outputPage;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
-        outputPage.update(bidId);
+        notifySubscribers(bidId);
         ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
     }
 

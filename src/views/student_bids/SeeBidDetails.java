@@ -1,6 +1,7 @@
 package views.student_bids;
 
 import api.ApiRequest;
+import controller.ListenerLinkInterface;
 import services.ViewManagerService;
 import controller.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Class for user to see the detail of each bids that they have opened
  */
-public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
+public class SeeBidDetails extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private String bidId, userId;
     private JLabel title, subjectLabel, name, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
@@ -274,19 +275,13 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface {
 
     }
 
-    public  void addViewBidListener(ActionListener listener) {
-
+    @Override
+    public void addLinkListener(ActionListener actionListener) {
         if (buttonArr != null){ // check when the page first load during apps startup
             for (JButton btn: buttonArr){
-                btn.addActionListener(listener);
+                btn.addActionListener(actionListener);
             }
         }
-    }
-    public void addCloseBidListener(ActionListener listener){
-        this.closeBtn.addActionListener(listener);
-    }
 
-    public void addReplyBidListener(ActionListener listener) {
-        this.replyBtn.addActionListener(listener);
     }
 }

@@ -1,28 +1,26 @@
 package links;
 
+import controller.ListenerLinkInterface;
+import controller.Listener;
 import services.ViewManagerService;
-import views.main_pages.MessagesPage;
-import views.student_bids.SeeTutorResponse;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SeeMessageLink implements ActionListener {
+public class SeeMessageLink extends Listener implements ActionListener {
 
-    private SeeTutorResponse inputPage;
-    private MessagesPage outputPage;
-
-    public SeeMessageLink(SeeTutorResponse inputPage, MessagesPage outputPage){
+    private ListenerLinkInterface inputPage;
+    public SeeMessageLink(ListenerLinkInterface inputPage){
+        super();
         this.inputPage = inputPage;
-        this.outputPage = outputPage;
-        this.inputPage.addMessageBtnListener(this);
+        this.inputPage.addLinkListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
-        outputPage.update(thisBtn.getName());
+        notifySubscribers(thisBtn.getName());
         ViewManagerService.loadPage(ViewManagerService.MESSAGES_PAGE);
     }
 }

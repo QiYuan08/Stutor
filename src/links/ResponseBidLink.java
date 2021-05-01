@@ -1,6 +1,7 @@
 package links;
 
 import api.ApiRequest;
+import controller.ListenerLinkInterface;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
 import services.ViewManagerService;
@@ -23,19 +24,19 @@ import java.net.http.HttpResponse;
  */
 public class ResponseBidLink implements ActionListener {
 
-    private FindBidDetails findBidDetails;
+    private ListenerLinkInterface inputPage;
     private OpenBidResponse openBidResponse;
     private ClosedBidResponse closedBidResponse;
     private MessagesPage messagesPage;
 
-    public ResponseBidLink(FindBidDetails findBidDetails, OpenBidResponse openBidResponse, ClosedBidResponse closedBidResponse, MessagesPage messagesPage){
-        this.findBidDetails = findBidDetails;
+    public ResponseBidLink(ListenerLinkInterface inputPage, OpenBidResponse openBidResponse, ClosedBidResponse closedBidResponse, MessagesPage messagesPage){
+        this.inputPage = inputPage;
         this.openBidResponse = openBidResponse;
         this.closedBidResponse = closedBidResponse;
-        findBidDetails.addLinkListener(this);
-        this.messagesPage = messagesPage;
+        inputPage.addLinkListener(this);
         openBidResponse.addActionListener(this);
         closedBidResponse.addActionListener(this);
+        this.messagesPage = messagesPage;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class ResponseBidLink implements ActionListener {
 
             responseBidPage(closedBidResponse);
 
-        }else {
+        } else {
 
             // if message button is clicked for close bid
             if (thisBtn.getText().equals("Message")){
@@ -84,7 +85,7 @@ public class ResponseBidLink implements ActionListener {
         HttpResponse<String> response = ApiRequest.post("/message", inputData.toString());
 
         if (response.statusCode() == 201) { // successfully posted message
-            JOptionPane.showMessageDialog(new JFrame(), "Success", "Bid Send Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(new JFrame(), "Success", "Response Sent Successfully", JOptionPane.INFORMATION_MESSAGE);
 
         } else { // failed API call
             String msg = "Error: " + new JSONObject(response.body()).get("message");

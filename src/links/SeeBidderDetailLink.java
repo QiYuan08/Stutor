@@ -1,33 +1,32 @@
 package links;
 
+import controller.ListenerLinkInterface;
+import controller.Listener;
 import services.ViewManagerService;
-import views.student_bids.SeeBidDetails;
 import controller.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class SeeBidderDetailLink implements ActionListener, ObserverOutputInterface {
+public class SeeBidderDetailLink extends Listener implements ObserverOutputInterface {
 
-    private SeeBidDetails inputPage;
-    private ObserverOutputInterface outputPage;
+    private ListenerLinkInterface inputPage;
 
-    public SeeBidderDetailLink(SeeBidDetails inputPage, ObserverOutputInterface outputPage) {
+    public SeeBidderDetailLink(ListenerLinkInterface inputPage) {
+        super();
         this.inputPage = inputPage;
-        this.outputPage = outputPage;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
-        outputPage.update(bidId);
+        notifySubscribers(bidId);
         ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_RESPONSE);
     }
 
     @Override
     public void update(String data) {
-        inputPage.addViewBidListener(this);
+        inputPage.addLinkListener(this);
     }
 }

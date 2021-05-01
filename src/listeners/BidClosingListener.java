@@ -1,11 +1,10 @@
 package listeners;
 
 import api.ApiRequest;
-import controller.Controller;
+import controller.Listener;
 import services.ViewManagerService;
 import controller.ObserverInputInterface;
 import controller.ObserverOutputInterface;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -19,14 +18,13 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class BidClosingListener implements ObserverOutputInterface, ActionListener {
+public class BidClosingListener extends Listener implements ObserverOutputInterface, ActionListener {
 
-    private Controller controller;
     private String userId; // needed to update other bid view
     String bidId, tutorId, messageId;
 
-    public BidClosingListener(Controller controller) {
-        this.controller = controller;
+    public BidClosingListener() {
+        super();
     }
 
     @Override
@@ -88,7 +86,7 @@ public class BidClosingListener implements ObserverOutputInterface, ActionListen
         if (contractSignResponse.statusCode() == 200) {
             msg = "Bid closed successfully at " + now;
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Successfully", JOptionPane.INFORMATION_MESSAGE);
-            controller.notifySubscribers(this.userId);
+            notifySubscribers(this.userId);
             if (tutorId.equals("")) {
                 ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
