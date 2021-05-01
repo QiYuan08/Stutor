@@ -1,19 +1,23 @@
-package links;
+package controllers;
 
-import controller.Listener;
+import abstract_classes.Publisher;
 import services.ViewManagerService;
-import controller.ListenerLinkInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ListenerLinkInterface;
+import interfaces.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SeeBidDetailLink extends Listener implements ActionListener, ObserverOutputInterface {
+/**
+ * Links SeeAllBids to SeeBidDetails (student looks into their own bid)
+ * Updates SeeBidDetails and the pages that lead from it with the bidId of the bid that the user pressed
+ */
+public class SeeBidDetailsController extends Publisher implements ActionListener, ObserverOutputInterface {
 
     private ListenerLinkInterface inputPage;
 
-    public SeeBidDetailLink(ListenerLinkInterface inputPage) {
+    public SeeBidDetailsController(ListenerLinkInterface inputPage) {
         super();
         this.inputPage = inputPage;
     }

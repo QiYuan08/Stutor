@@ -1,22 +1,22 @@
-package listeners;
+package controllers;
 
-import controller.Listener;
-import controller.ObserverOutputInterface;
+import abstract_classes.Publisher;
+import interfaces.ObserverOutputInterface;
 import services.ViewManagerService;
-import controller.ListenerLinkInterface;
+import interfaces.ListenerLinkInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /***
- * Listener for find bid button in dashboard
+ * Notifies its subscribers to update themselves with the latest information before they are shown on the application
  */
-public class BidUpdateListener extends Listener implements ActionListener, ObserverOutputInterface {
+public class BidUpdateController extends Publisher implements ActionListener, ObserverOutputInterface {
 
     ListenerLinkInterface inputPage;
 
-    public BidUpdateListener(ListenerLinkInterface inputPage) {
+    public BidUpdateController(ListenerLinkInterface inputPage) {
         super();
         this.inputPage = inputPage;
         inputPage.addLinkListener(this);

@@ -1,16 +1,20 @@
 package links;
 
-import controller.ListenerLinkInterface;
-import controller.Listener;
+import interfaces.ListenerLinkInterface;
+import abstract_classes.Publisher;
 import services.ViewManagerService;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SeeMessageLink extends Listener implements ActionListener {
+/**
+ * Links from the SeeTutorResponse page to the messages page, and updates it with existing messages by the tutor (and student)
+ */
+public class SeeMessageLink extends Publisher implements ActionListener {
 
     private ListenerLinkInterface inputPage;
+
     public SeeMessageLink(ListenerLinkInterface inputPage){
         super();
         this.inputPage = inputPage;

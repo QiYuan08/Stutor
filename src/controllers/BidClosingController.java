@@ -1,10 +1,10 @@
-package listeners;
+package controllers;
 
 import api.ApiRequest;
-import controller.Listener;
+import abstract_classes.Publisher;
 import services.ViewManagerService;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverInputInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -18,12 +18,15 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class BidClosingListener extends Listener implements ObserverOutputInterface, ActionListener {
+/**
+ * Notifies view components when a bid is closed, making them update themselves to show the correct bids and tutorials (contracts)
+ */
+public class BidClosingController extends Publisher implements ObserverOutputInterface, ActionListener {
 
     private String userId; // needed to update other bid view
     String bidId, tutorId, messageId;
 
-    public BidClosingListener() {
+    public BidClosingController() {
         super();
     }
 

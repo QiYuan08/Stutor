@@ -2,7 +2,7 @@ package views.main_pages;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,7 +21,6 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
     private JButton dashboardPageButton, logOutButton;
     private String userId;
 
-    // TODO: retrieve userId when get username in LoginListener and pass it here in update functions since most page require id
     public ProfilePage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());

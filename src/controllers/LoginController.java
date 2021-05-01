@@ -1,9 +1,9 @@
-package listeners;
+package controllers;
 
 import api.ApiRequest;
-import controller.Listener;
+import abstract_classes.Publisher;
 import services.ViewManagerService;
-import controller.ObserverInputInterface;
+import interfaces.ObserverInputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,10 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-public class LoginListener extends Listener implements ActionListener {
+/**
+ * Notifies necessary components of the user's ID, so that they can update themselves if necessary or process user interaction correctly
+ */
+public class LoginController extends Publisher implements ActionListener {
 
     private ObserverInputInterface inputPage;
-    public LoginListener(ObserverInputInterface inputPage) {
+    public LoginController(ObserverInputInterface inputPage) {
         super();
         this.inputPage = inputPage;
         inputPage.addActionListener(this);

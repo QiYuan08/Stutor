@@ -1,12 +1,10 @@
 package links;
 
 import api.ApiRequest;
-import controller.ListenerLinkInterface;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ListenerLinkInterface;
+import interfaces.ObserverInputInterface;
 import services.ViewManagerService;
 import views.tutor_responds.ClosedBidResponse;
-import views.tutor_responds.FindBidDetails;
 import views.main_pages.MessagesPage;
 import views.tutor_responds.OpenBidResponse;
 import org.json.JSONObject;
@@ -16,20 +14,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
-// TODO: might want to refactor into controller cuz too many subsribers
 /**
- * A listener that listen to two classes
- * To avoid having another controller with only one subsriber in application.java
- * Main function is to pass data
+ * Coming from FindBidDetails, this class loads (and updates) the appropriate page according to the context of the bid,
+ * where tutors can respond with their details or send a message to communicate with the student.
  */
-public class ResponseBidLink implements ActionListener {
+public class BidResponseLink implements ActionListener {
 
     private ListenerLinkInterface inputPage;
     private OpenBidResponse openBidResponse;
     private ClosedBidResponse closedBidResponse;
     private MessagesPage messagesPage;
 
-    public ResponseBidLink(ListenerLinkInterface inputPage, OpenBidResponse openBidResponse, ClosedBidResponse closedBidResponse, MessagesPage messagesPage){
+    public BidResponseLink(ListenerLinkInterface inputPage, OpenBidResponse openBidResponse, ClosedBidResponse closedBidResponse, MessagesPage messagesPage) {
         this.inputPage = inputPage;
         this.openBidResponse = openBidResponse;
         this.closedBidResponse = closedBidResponse;
@@ -49,7 +45,7 @@ public class ResponseBidLink implements ActionListener {
         JSONObject bid = new JSONObject(response.body());
 
         // if submitting open bid, create a message to update bid
-        if (thisBtn.getText().equals("Submit Open Bid")){
+        if (thisBtn.getText().equals("Submit Open Bid")) {
 
             responseBidPage(openBidResponse);
 
@@ -60,7 +56,7 @@ public class ResponseBidLink implements ActionListener {
         } else {
 
             // if message button is clicked for close bid
-            if (thisBtn.getText().equals("Message")){
+            if (thisBtn.getText().equals("Message")) {
                 messagesPage.update(thisBtn.getName());
                 ViewManagerService.loadPage(ViewManagerService.MESSAGES_PAGE);
 
@@ -68,7 +64,7 @@ public class ResponseBidLink implements ActionListener {
 
                 // if bid button in find bids detail page is clicked check if open or close bid then go to appropriate page
                 // go to either openBidResponse or closedBidResponse
-                if (bid.get("type").equals("open")){
+                if (bid.get("type").equals("open")) {
                     openBidResponse.update(thisBtn.getName());
                     ViewManagerService.loadPage(ViewManagerService.OPEN_BID_RESPONSE);
                 } else {

@@ -2,8 +2,8 @@ package views.tutor_responds;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverInputInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;

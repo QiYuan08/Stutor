@@ -1,14 +1,15 @@
 package listeners;
 
-import controller.ListenerLinkInterface;
+import interfaces.ListenerLinkInterface;
 import services.ViewManagerService;
-import views.tutor_responds.FindBidDetails;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverOutputInterface;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Adds an itself to the FindBidDetails page for all of the buttons in the dynamic list of student bids.
+ */
 public class FindBidListener implements ObserverOutputInterface, ActionListener {
 
     private ListenerLinkInterface inputPage;

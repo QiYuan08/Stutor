@@ -2,8 +2,8 @@ package views.main_pages;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ListenerLinkInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ListenerLinkInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +13,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 
 public class DashboardPage extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
@@ -53,13 +56,13 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
 
         createBidButton = new JButton("Create New Bid");
         c.gridy = 6;
-        c.gridx = 2;
+        c.gridx = 1;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(createBidButton, c);
 
         seeBidsButton = new JButton("See Your Bids");
-        c.gridx = 1;
+        c.gridx = 2;
         this.add(seeBidsButton, c);
 
         tutorialsTaught = new JLabel("Tutorials you are teaching: ");
@@ -104,7 +107,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
         HttpResponse<String> response = ApiRequest.get("/contract");
         if (response.statusCode() == 200) {
             JSONArray contracts = new JSONArray(response.body());
-            System.out.println(contracts);
 
             response = ApiRequest.get("/user/" + userId);
             if (response.statusCode() == 200) {
@@ -116,10 +118,11 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                 c.fill = GridBagConstraints.BOTH;
                 c.insets = new Insets(5, 5, 0, 5);
 
+                this.remove(createBidButton);
+
                 if (!user.getBoolean("isStudent")) {
                     this.remove(tutorialsTakenList);
                     this.remove(tutorialsTaken);
-                    this.remove(createBidButton);
                     this.remove(seeBidsButton);
                 } else {
                     c.gridy = 1;
@@ -133,13 +136,32 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                     c.gridheight = 4;
                     this.add(this.tutorialsTakenList, c);
 
+                    // checks if the student has 5 or more active contracts, and disallows them from creating more bids
+                    int counter = 0;
+                    for (int i = 0; i < contracts.length(); i++) {
+                        JSONObject contract = (JSONObject) contracts.get(i);
+                        Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
+                        Instant now = ts.toInstant();
+                        if (contract.getJSONObject("secondParty").getString("id").equals(userId)) {
+                            Instant expiryDate = Instant.parse(contract.getString("expiryDate"));
+                            if (now.compareTo(expiryDate) < 0) {
+                                counter++;
+                            }
+                        }
+                    }
+                    if (counter <= 5) {
+                        c.gridy = 6;
+                        c.gridx = 1;
+                        c.gridwidth = 1;
+                        c.gridheight = 1;
+                        this.add(createBidButton, c);
+                    }
+
+
                     c.gridy = 6;
                     c.gridx = 2;
                     c.gridwidth = 1;
                     c.gridheight = 1;
-                    this.add(createBidButton, c);
-
-                    c.gridx = 1;
                     this.add(seeBidsButton, c);
                 }
 

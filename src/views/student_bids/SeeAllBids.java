@@ -2,8 +2,8 @@ package views.student_bids;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ListenerLinkInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ListenerLinkInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-// TODO: fix the layout =.=
 public class SeeAllBids extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     JPanel contentPanel = new JPanel();

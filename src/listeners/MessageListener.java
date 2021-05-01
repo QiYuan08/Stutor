@@ -2,7 +2,7 @@ package listeners;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ObserverInputInterface;
+import interfaces.ObserverInputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 /**
- * Listener class after tutor replied to a student message
+ * Sends a message (aka response) and leads back to the FindBidDetails page.
  */
 public class MessageListener implements ActionListener {
 

@@ -2,8 +2,8 @@ package views.main_pages;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverInputInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -104,18 +104,14 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
         JSONObject user = new JSONObject(ApiRequest.get("/user/" + userId).body());
         // if tutor replying to student in findtutorbiddetail class
         if (user.getBoolean("isTutor")) { // bid.getJSONObject("initiator").getBoolean("isTutor")){
-            System.out.println("is Tutor");
             backButton.addActionListener(new ActionListener() {
-                @Override // TODO: to change to see bids detail page
                 public void actionPerformed(ActionEvent e) {
                     ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
                 }
             });
         } else if (user.getBoolean("isStudent")){ // if student replying to student in seetutorfiddetail class
 
-            System.out.println("is Student");
             backButton.addActionListener(new ActionListener() {
-                @Override // TODO: to change to see bids detail page
                 public void actionPerformed(ActionEvent e) {
                     ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAILS);
                 }

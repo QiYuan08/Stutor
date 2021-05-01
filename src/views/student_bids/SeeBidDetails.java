@@ -1,9 +1,9 @@
 package views.student_bids;
 
 import api.ApiRequest;
-import controller.ListenerLinkInterface;
+import interfaces.ListenerLinkInterface;
 import services.ViewManagerService;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -77,8 +77,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         c.anchor = GridBagConstraints.PAGE_START;
         detailPane.add(backBtn, c);
 
-        // TODO: can talk about this in design rationale, nonid to create a listener for this cuz very simple and wont change forever
-        // TODO: fix view not updated when student bid on it
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -243,7 +241,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         this.setOpaque(false);
         this.add(scrollPane, mainConst);
 
-        // TODO: add JPanel to see all tutors' bids or a message panel depending on open or closed bid
     }
 
 

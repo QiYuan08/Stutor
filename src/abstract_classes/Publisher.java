@@ -1,18 +1,16 @@
-package controller;
+package abstract_classes;
 
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverInputInterface;
+import interfaces.ObserverOutputInterface;
 
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collections;
 
-public abstract class Listener implements ActionListener {
+public abstract class Publisher {
 
     protected ArrayList<ObserverOutputInterface> subscribers;
     protected ObserverInputInterface inputPage;
 
-//    public Listener(ObserverInputInterface[] inputPages, ObserverOutputInterface[] outputPages) {
+//    public Publisher(ObserverInputInterface[] inputPages, ObserverOutputInterface[] outputPages) {
 //        subscribers = new ArrayList<>();
 //        for (ObserverInputInterface inputPage: inputPages) {
 //            inputPage.addActionListener(this);
@@ -20,12 +18,12 @@ public abstract class Listener implements ActionListener {
 //        Collections.addAll(subscribers, outputPages);
 //    }
 
-    public Listener(ObserverInputInterface inputPage) {
-        subscribers = new ArrayList<>();
-        this.inputPage = inputPage;
-    }
+//    public Publisher(ObserverInputInterface inputPage) {
+//        subscribers = new ArrayList<>();
+//        this.inputPage = inputPage;
+//    }
 
-    public Listener() {
+    public Publisher() {
         subscribers = new ArrayList<>();
     }
 

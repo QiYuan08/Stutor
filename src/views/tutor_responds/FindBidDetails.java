@@ -2,9 +2,9 @@ package views.tutor_responds;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ListenerLinkInterface;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ListenerLinkInterface;
+import interfaces.ObserverInputInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,9 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-
-// TODO: show all bidder in open bid
-// TODO: show check message instead of bid button if tutor already reply to a close bid
 
 public class FindBidDetails extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
 
@@ -78,8 +75,6 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.anchor = GridBagConstraints.PAGE_START;
         detailPane.add(backButton, c);
 
-        // TODO: can talk about this in design rationale, no need to create a listener for this cuz very simple and wont change forever
-        // TODO: fix view not updated when student bid on it
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -206,6 +201,14 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                     bidPanelConstraint.gridheight = 2;
                     bidPanelConstraint.weightx = 0.2;
                     viewBidButton = new JButton("View Bid");
+
+                    // TODO: test out this code without findBidListener
+//                    viewBidButton.addActionListener(new ActionListener() {
+//                        @Override
+//                        public void actionPerformed(ActionEvent e) {
+//                            ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
+//                        }
+//                    });
 
                     // set button name to bidId and userId for ClosedBidResponse class to close Bid
                     JSONObject btnData = new JSONObject();
@@ -336,7 +339,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     }
 
     /**
-     * called by BidClosingListener, which is activate by buyoutBtn
+     * called by BidClosingController, which is activate by buyoutBtn
      */
     @Override
     public JSONObject retrieveInputs() {
@@ -349,8 +352,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     }
 
     /**
-     * adds the action listener from a BidClosingListener object
-     * @param actionListener
+     * adds the action listener from a BidClosingController object
      */
     @Override
     public void addActionListener(ActionListener actionListener) {

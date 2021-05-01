@@ -2,7 +2,7 @@ package views.tutor_responds;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -164,8 +164,6 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
         c.gridwidth = 10;
         this.add(btnPane, mainConst);
 
-        // TODO: can talk about this in design rationale, nonid to create a listener for this cuz very simple and wont change forever
-        // TODO: fix view not updated when student bid on it
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

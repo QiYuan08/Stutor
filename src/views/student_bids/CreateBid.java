@@ -2,8 +2,8 @@ package views.student_bids;
 
 import api.ApiRequest;
 import services.ViewManagerService;
-import controller.ObserverInputInterface;
-import controller.ObserverOutputInterface;
+import interfaces.ObserverInputInterface;
+import interfaces.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-// TODO: decide how to get subjectID consistently
 public class CreateBid extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
     private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
@@ -96,8 +95,7 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         this.add(subjectField, c);
 
         // retrieve all the subject name from the key mapping
-        ArrayList<String> subjectsName = new ArrayList<>();
-        subjectsName.addAll(subjectMapping.keySet());
+        ArrayList<String> subjectsName = new ArrayList<>(subjectMapping.keySet());
         // convert arraylist into array for combobox
         String[] subjectsNameArr = new String[subjectsName.size()];
         subjectsName.toArray(subjectsNameArr);
