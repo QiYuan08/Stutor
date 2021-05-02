@@ -73,12 +73,6 @@ public class Application extends JFrame{
 
         // LISTENERS - process button presses and just go to the next page
 
-        // passing bidId between SeeBidPage and SeeBidsDetail page and add actionListener to view detail button
-        SeeBidListener seeBidListener = new SeeBidListener(seeBidDetails);
-
-        // passing bidId between FindAllBids and FindBidDetails page and add actionListener to view detail button
-        FindBidListener findBidListener = new FindBidListener(findBidDetails);
-
         // listener for submit message button
         MessageListener messageListener = new MessageListener(messagesPage);
 
@@ -130,7 +124,6 @@ public class Application extends JFrame{
         // from dashboard to see bid or find bid
         BidUpdateController bidUpdateController = new BidUpdateController(dashboardPage); // userId are updated from here
         bidUpdateController.subscribe(findAllBids);
-        bidUpdateController.subscribe(findBidListener);
         bidUpdateController.subscribe(findBidDetailsController);
         bidUpdateController.subscribe(seeAllBids);
         bidUpdateController.subscribe(seeBidDetailsController);

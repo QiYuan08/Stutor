@@ -203,12 +203,12 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                     viewBidButton = new JButton("View Bid");
 
                     // TODO: test out this code without findBidListener
-//                    viewBidButton.addActionListener(new ActionListener() {
-//                        @Override
-//                        public void actionPerformed(ActionEvent e) {
-//                            ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
-//                        }
-//                    });
+                    viewBidButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
+                        }
+                    });
 
                     // set button name to bidId and userId for ClosedBidResponse class to close Bid
                     JSONObject btnData = new JSONObject();

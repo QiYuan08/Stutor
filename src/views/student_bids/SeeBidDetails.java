@@ -213,6 +213,14 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
                     bidPanelConstraint.weightx = 0.2;
                     viewBidBtn = new JButton("View Bid");
 
+                    viewBidBtn.addActionListener(new ActionListener() {
+                        // TODO: try without see bids listener
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_RESPONSE);
+                        }
+                    });
+
                     // set button name to bidId and userId for ClosedBidResponse class to close Bid
                     JSONObject btnData = new JSONObject();
                     btnData.put("messageId", message.get("id"));
