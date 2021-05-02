@@ -108,7 +108,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
         if (response.statusCode() == 200) {
             JSONArray contracts = new JSONArray(response.body());
 
-            response = ApiRequest.get("/user/" + userId);
+            response = ApiRequest.get("/user/" + userId + "?fields=initiatedBids");
             if (response.statusCode() == 200) {
 
                 JSONObject user = new JSONObject(response.body());
@@ -136,27 +136,13 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                     c.gridheight = 4;
                     this.add(this.tutorialsTakenList, c);
 
-                    // checks if the student has 5 or more active contracts, and disallows them from creating more bids
-                    int counter = 0;
-                    for (int i = 0; i < contracts.length(); i++) {
-                        JSONObject contract = (JSONObject) contracts.get(i);
-                        Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
-                        Instant now = ts.toInstant();
-                        if (contract.getJSONObject("secondParty").getString("id").equals(userId)) {
-                            Instant expiryDate = Instant.parse(contract.getString("expiryDate"));
-                            if (now.compareTo(expiryDate) < 0) {
-                                counter++;
-                            }
-                        }
-                    }
-                    if (counter <= 5) {
+                    if (checkContractsBidsCount(contracts, user)) {
                         c.gridy = 6;
                         c.gridx = 1;
                         c.gridwidth = 1;
                         c.gridheight = 1;
                         this.add(createBidButton, c);
                     }
-
 
                     c.gridy = 6;
                     c.gridx = 2;
@@ -211,6 +197,36 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                 this.tutorialsTaughtList.setViewportView(tutorialsTaughtPanel);
             }
         }
+    }
+
+    /**
+     * checks if the student has 5 or more active contracts and bids, and disallows them from creating more bids
+      */
+    private boolean checkContractsBidsCount(JSONArray contracts, JSONObject user) {
+
+        Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
+        Instant now = ts.toInstant();
+        int counter = 0;
+        for (int i = 0; i < contracts.length(); i++) {
+            JSONObject contract = (JSONObject) contracts.get(i);
+            if (contract.getJSONObject("secondParty").getString("id").equals(userId)) {
+                Instant expiryDate = Instant.parse(contract.getString("expiryDate"));
+                if (now.compareTo(expiryDate) < 0) {
+                    counter++;
+                }
+            }
+        }
+        JSONArray bids = user.getJSONArray("initiatedBids");
+        for (int i = 0; i < bids.length(); i++) {
+            JSONObject bid = (JSONObject) bids.get(i);
+            if (bid.isNull("dateClosedDown")) {
+                counter++;
+            }
+        }
+        if (counter <= 5) {
+            return true;
+        }
+        return false;
     }
 
     @Override

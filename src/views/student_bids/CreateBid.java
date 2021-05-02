@@ -196,7 +196,7 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         c.weightx = 1;
         this.add(sessionInput, c);
 
-        sessionLabel = new JLabel("lessons per week");
+        sessionLabel = new JLabel("sessions per week");
         c.gridx = 2;
         c.gridy = 7;
         c.gridwidth = 1;

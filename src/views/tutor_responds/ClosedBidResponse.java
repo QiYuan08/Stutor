@@ -117,7 +117,7 @@ public class ClosedBidResponse extends  JPanel implements ObserverOutputInterfac
         c.weightx = 1;
         this.add(sessionInput, c);
 
-        sessionLabel = new JLabel("lessons per week");
+        sessionLabel = new JLabel("sessions per week");
         c.gridx = 2;
         c.gridy = 4;
         c.gridwidth = 1;

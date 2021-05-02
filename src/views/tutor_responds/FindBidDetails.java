@@ -126,7 +126,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
 
         // if preferred session is provided in the bid
         if (additionalInfo.has("preferredSession")){
-            preferredSession = new JLabel("Preferred no of lessons: " + additionalInfo.get("preferredSession") + " lessons per week");
+            preferredSession = new JLabel("Preferred no of sessions: " + additionalInfo.get("preferredSession") + " sessions per week");
         } else {
             preferredSession = new JLabel("Preferred sessions not provided");
         }
