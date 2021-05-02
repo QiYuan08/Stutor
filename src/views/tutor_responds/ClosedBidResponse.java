@@ -1,9 +1,9 @@
 package views.tutor_responds;
 
-import api.ApiRequest;
+import services.ApiRequest;
 import services.ViewManagerService;
-import interfaces.ObserverInputInterface;
-import interfaces.ObserverOutputInterface;
+import abstractions.ObserverInputInterface;
+import abstractions.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;

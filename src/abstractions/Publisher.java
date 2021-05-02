@@ -1,7 +1,4 @@
-package abstract_classes;
-
-import interfaces.ObserverInputInterface;
-import interfaces.ObserverOutputInterface;
+package abstractions;
 
 import java.util.ArrayList;
 

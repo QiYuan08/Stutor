@@ -1,10 +1,10 @@
 package controllers;
 
-import api.ApiRequest;
-import abstract_classes.Publisher;
+import services.ApiRequest;
+import abstractions.Publisher;
 import services.ViewManagerService;
-import interfaces.ObserverInputInterface;
-import interfaces.ObserverOutputInterface;
+import abstractions.ObserverInputInterface;
+import abstractions.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;

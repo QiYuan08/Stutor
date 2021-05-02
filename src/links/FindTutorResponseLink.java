@@ -1,9 +1,9 @@
 package links;
 
-import abstract_classes.Publisher;
+import abstractions.Publisher;
 import services.ViewManagerService;
 import views.tutor_responds.FindBidDetails;
-import interfaces.ObserverOutputInterface;
+import abstractions.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

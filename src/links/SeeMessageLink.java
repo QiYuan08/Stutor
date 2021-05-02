@@ -1,7 +1,7 @@
 package links;
 
-import interfaces.ListenerLinkInterface;
-import abstract_classes.Publisher;
+import abstractions.ListenerLinkInterface;
+import abstractions.Publisher;
 import services.ViewManagerService;
 
 import javax.swing.*;

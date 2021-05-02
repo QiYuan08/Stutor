@@ -1,7 +1,7 @@
 package listeners;
 
-import api.ApiRequest;
-import interfaces.ObserverInputInterface;
+import services.ApiRequest;
+import abstractions.ObserverInputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;

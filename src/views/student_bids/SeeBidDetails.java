@@ -1,9 +1,9 @@
 package views.student_bids;
 
-import api.ApiRequest;
-import interfaces.ListenerLinkInterface;
+import services.ApiRequest;
+import abstractions.ListenerLinkInterface;
 import services.ViewManagerService;
-import interfaces.ObserverOutputInterface;
+import abstractions.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

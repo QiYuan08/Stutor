@@ -1,9 +1,9 @@
 package controllers;
 
-import abstract_classes.Publisher;
-import interfaces.ObserverOutputInterface;
+import abstractions.Publisher;
+import abstractions.ObserverOutputInterface;
 import services.ViewManagerService;
-import interfaces.ListenerLinkInterface;
+import abstractions.ListenerLinkInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

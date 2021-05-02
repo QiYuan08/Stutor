@@ -1,7 +1,6 @@
 package services;
 
-import api.ApiRequest;
-import interfaces.ObserverInputInterface;
+import abstractions.ObserverInputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

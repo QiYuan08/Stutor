@@ -1,10 +1,10 @@
 package views.student_bids;
 
-import api.ApiRequest;
-import interfaces.ListenerLinkInterface;
+import services.ApiRequest;
+import abstractions.ListenerLinkInterface;
 import services.ViewManagerService;
-import interfaces.ObserverInputInterface;
-import interfaces.ObserverOutputInterface;
+import abstractions.ObserverInputInterface;
+import abstractions.ObserverOutputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;

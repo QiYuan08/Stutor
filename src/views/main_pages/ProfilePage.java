@@ -1,8 +1,8 @@
 package views.main_pages;
 
-import api.ApiRequest;
+import services.ApiRequest;
 import services.ViewManagerService;
-import interfaces.ObserverOutputInterface;
+import abstractions.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

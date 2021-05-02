@@ -1,6 +1,6 @@
 package views.main_pages;
 
-import api.ApiRequest;
+import services.ApiRequest;
 import services.ViewManagerService;
 
 import javax.swing.*;

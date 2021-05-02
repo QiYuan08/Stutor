@@ -1,8 +1,8 @@
 package links;
 
-import api.ApiRequest;
-import interfaces.ListenerLinkInterface;
-import interfaces.ObserverInputInterface;
+import services.ApiRequest;
+import abstractions.ListenerLinkInterface;
+import abstractions.ObserverInputInterface;
 import services.ViewManagerService;
 import views.tutor_responds.ClosedBidResponse;
 import views.main_pages.MessagesPage;

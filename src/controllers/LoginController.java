@@ -1,9 +1,9 @@
 package controllers;
 
-import api.ApiRequest;
-import abstract_classes.Publisher;
+import services.ApiRequest;
+import abstractions.Publisher;
 import services.ViewManagerService;
-import interfaces.ObserverInputInterface;
+import abstractions.ObserverInputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

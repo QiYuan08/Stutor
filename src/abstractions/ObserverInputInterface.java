@@ -1,4 +1,4 @@
-package interfaces;
+package abstractions;
 
 import org.json.JSONObject;
 

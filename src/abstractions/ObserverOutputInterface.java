@@ -1,4 +1,4 @@
-package interfaces;
+package abstractions;
 
 public interface ObserverOutputInterface {
 

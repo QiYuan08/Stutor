@@ -1,7 +1,7 @@
 package views.main_pages;
 
 import services.ViewManagerService;
-import interfaces.ObserverInputInterface;
+import abstractions.ObserverInputInterface;
 import org.json.JSONObject;
 
 import javax.swing.*;

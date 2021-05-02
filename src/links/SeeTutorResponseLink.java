@@ -1,9 +1,9 @@
 package links;
 
-import interfaces.ListenerLinkInterface;
-import abstract_classes.Publisher;
+import abstractions.ListenerLinkInterface;
+import abstractions.Publisher;
 import services.ViewManagerService;
-import interfaces.ObserverOutputInterface;
+import abstractions.ObserverOutputInterface;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
