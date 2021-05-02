@@ -8,7 +8,7 @@
 ### Document Links
 - [Class Diagram](https://git.infotech.monash.edu/fit3077-s1-2021/StuTor/project/blob/nic/docs/StuTor%20Class%20Diagram.pdf)
 - [Design Rationale](https://git.infotech.monash.edu/fit3077-s1-2021/StuTor/project/blob/nic/docs/FIT3077%20Assignment%202%20Design%20Rationale.docx)
-- [System Demonstration Video]()
+- [System Demonstration Video](https://git.infotech.monash.edu/fit3077-s1-2021/StuTor/project/blob/nic/docs/demo.mp4)
 
 ### External Libraries Used
 1. [JSON-Java](https://git.infotech.monash.edu/fit3077-s1-2021/StuTor/project/blob/nic/lib/json-20210307.jar)
