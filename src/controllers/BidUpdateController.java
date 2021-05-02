@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
  */
 public class BidUpdateController extends Publisher implements ActionListener, ObserverOutputInterface {
 
-    ListenerLinkInterface inputPage;
+    private ListenerLinkInterface inputPage;
 
     public BidUpdateController(ListenerLinkInterface inputPage) {
         super();

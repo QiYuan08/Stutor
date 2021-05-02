@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.http.HttpResponse;
 
 public class LoginPage extends JPanel implements ObserverInputInterface {
 
@@ -17,14 +16,11 @@ public class LoginPage extends JPanel implements ObserverInputInterface {
     private JTextField usernameInput;
     private JPasswordField passwordInput;
     private JButton loginUserButton, registerPageButton;
-    private HttpResponse<String> response;
 
     public LoginPage() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-//        c.weightx = 1;
-//        c.weighty = 1;
         c.insets = new Insets(5, 5, 0, 5);
 
         activityTitle = new JLabel("User Login");

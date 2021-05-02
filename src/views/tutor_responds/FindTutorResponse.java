@@ -11,15 +11,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 
 public class FindTutorResponse extends JPanel implements ObserverOutputInterface {
     private String bidId, userId;
     private JLabel title, name, rate, competency, duration, startTime, day, preferredSession;
-    private JButton backBtn, viewBidBtn;
-    private JPanel bidsPane, detailPane, btnPane;
+    private JButton backBtn;
+    private JPanel detailPane, btnPane;
     private JScrollPane scrollPane;
-    ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
 
     public FindTutorResponse() {
@@ -34,7 +32,6 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
      */
     void createContent(JSONObject bid){
 
-        System.out.println(bid);
         JSONObject initiator = bid.getJSONObject("poster");
         JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
 

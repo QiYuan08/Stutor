@@ -159,10 +159,6 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
 
     }
 
-//    public void addMessageBtnListener (ActionListener listener){
-//        this.messageBtn.addActionListener(listener);
-//    }
-
 
     /**
      * Get the messageId from Find Bid page one user click on view bid to retrieve data from db

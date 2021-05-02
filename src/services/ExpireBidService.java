@@ -27,9 +27,9 @@ public class ExpireBidService implements ObserverInputInterface {
     private Timer openTimer = new Timer();
     private Timer closeTimer = new Timer();
     private ActionListener actionListener;
-    JSONObject expiredBid;
-    Instant currentTime;
-    String expiredBidId, userId;
+    private JSONObject expiredBid;
+    private Instant currentTime;
+    private String expiredBidId;
 
     public void setDuration(int minutes, int days) {
         this.openCounter = minutes * 60000L;
@@ -104,7 +104,6 @@ public class ExpireBidService implements ObserverInputInterface {
                         // if expire time greater than now close the bid
                         if (now.compareTo(expiryDate) > 0){
 
-                            System.out.println("closing closed bid");
                             expiredBid = bid;
                             expiredBidId = bidId;
                             currentTime = now;

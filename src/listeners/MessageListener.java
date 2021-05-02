@@ -1,7 +1,6 @@
 package listeners;
 
 import api.ApiRequest;
-import services.ViewManagerService;
 import interfaces.ObserverInputInterface;
 import org.json.JSONObject;
 
@@ -30,7 +29,6 @@ public class MessageListener implements ActionListener {
 
         if (response.statusCode() == 201){
             JOptionPane.showMessageDialog(new JFrame(), "Message Send", "Success", JOptionPane.INFORMATION_MESSAGE);
-            ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
         } else {
             String msg = "Error: " + new JSONObject(response.body()).get("message");
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);

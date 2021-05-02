@@ -118,8 +118,6 @@ public class RegistrationPage extends JPanel {
                 } else if (response.statusCode() == 409) {
                     JOptionPane.showMessageDialog(new JFrame(), "This username has already been taken. Please try again.",
                             "Username Taken", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    System.out.println(response.statusCode());
                 }
             }
         });

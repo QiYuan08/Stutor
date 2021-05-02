@@ -32,7 +32,6 @@ public class OpenBidResponse extends JPanel implements ObserverInputInterface, O
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
-//        c.weighty = 1;
         c.insets = new Insets(5, 5, 0, 5);
 
         backBtn = new JButton("Back");

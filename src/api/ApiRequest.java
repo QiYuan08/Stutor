@@ -10,13 +10,11 @@ public class ApiRequest {
 
     private static final String API_KEY = "gwGDjgwTTNqGQDjMpqTLcntBQp8gbz";
     private static final String ROOT_URL = "https://fit3077.com/api/v1";
-    private static HttpClient client;
-    private static HttpRequest request;
     private static HttpResponse<String> response;
 
     public static HttpResponse<String> get(String url) {
-        client = HttpClient.newHttpClient();
-        request = HttpRequest
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest
                 .newBuilder(URI.create(ROOT_URL + url))
                 .setHeader("Authorization", API_KEY)
                 .GET()
@@ -24,17 +22,15 @@ public class ApiRequest {
 
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return response;
     }
 
     public static HttpResponse<String> post(String url, String jsonObj) {
-        client = HttpClient.newHttpClient();
-        request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
                 .setHeader("Authorization", API_KEY)
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonObj))
@@ -42,9 +38,7 @@ public class ApiRequest {
 
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         return response;

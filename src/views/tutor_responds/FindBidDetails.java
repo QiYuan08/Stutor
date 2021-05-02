@@ -23,7 +23,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     private JButton buyoutButton, respondButton, backButton, viewBidButton;
     private JPanel detailPane;
     private JScrollPane scrollPane;
-    ArrayList<JButton> buttonArr;
+    private ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
 
     public FindBidDetails() {

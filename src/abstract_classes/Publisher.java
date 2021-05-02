@@ -10,19 +10,6 @@ public abstract class Publisher {
     protected ArrayList<ObserverOutputInterface> subscribers;
     protected ObserverInputInterface inputPage;
 
-//    public Publisher(ObserverInputInterface[] inputPages, ObserverOutputInterface[] outputPages) {
-//        subscribers = new ArrayList<>();
-//        for (ObserverInputInterface inputPage: inputPages) {
-//            inputPage.addActionListener(this);
-//        }
-//        Collections.addAll(subscribers, outputPages);
-//    }
-
-//    public Publisher(ObserverInputInterface inputPage) {
-//        subscribers = new ArrayList<>();
-//        this.inputPage = inputPage;
-//    }
-
     public Publisher() {
         subscribers = new ArrayList<>();
     }

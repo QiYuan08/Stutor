@@ -17,18 +17,19 @@ import java.util.ArrayList;
 
 public class SeeAllBids extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
-    JPanel contentPanel = new JPanel();
-    JScrollPane scrollPane;
-    JLabel activityTitle;
-    JSONArray bids;
-    GridBagConstraints c;
-    JButton viewBidBtn, backBtn;
-    ArrayList<JButton> buttonArr;
+    private JPanel contentPanel;
+    private JScrollPane scrollPane;
+    private JLabel activityTitle;
+    private JSONArray bids;
+    private GridBagConstraints c;
+    private JButton viewBidBtn, backBtn;
+    private ArrayList<JButton> buttonArr;
     private String userId;
 
     public SeeAllBids() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridLayout(1,1, 2, 2));
+        contentPanel = new JPanel();
     }
 
     /***
@@ -42,7 +43,6 @@ public class SeeAllBids extends JPanel implements ObserverOutputInterface, Liste
         contentPanel.setBackground(new Color(153, 255, 255));
         contentPanel.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
         c = new GridBagConstraints();
-//        c.weighty = 1;
         c.insets = new Insets(1, 1, 1, 1);
 
         backBtn = new JButton("Back");

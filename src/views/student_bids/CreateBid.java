@@ -65,7 +65,6 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
-//        c.weighty = 1;
         c.insets = new Insets(5, 5, 0, 5);
 
         backBtn = new JButton("Back");
@@ -236,7 +235,6 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         this.add(typeCombo, c);
 
         //submitBtn
-//        submitButton = new JButton("Submit Request");
         c.weightx = 0.1;
         c.gridx = 0;
         c.gridy = 10;
@@ -263,7 +261,6 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         // getting local timestamp
         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
         Instant now = ts.toInstant();
-        System.out.println("bid created at: " + now);
 
         JSONObject additionalInfo = new JSONObject();
         additionalInfo.put("minCompetency", competency);

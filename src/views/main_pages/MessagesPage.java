@@ -116,8 +116,6 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
                     ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAILS);
                 }
             });
-        } else {
-            System.out.println("what kind of user even is this");
         }
 
     }

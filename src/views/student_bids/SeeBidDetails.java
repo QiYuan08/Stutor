@@ -27,7 +27,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
     private JButton backBtn, viewBidBtn;
     private JPanel detailPane;
     private JScrollPane scrollPane;
-    ArrayList<JButton> buttonArr;
+    private ArrayList<JButton> buttonArr;
     private GridBagConstraints mainConst;
 
     public SeeBidDetails(){
@@ -55,7 +55,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         c.weighty = 0.2;
         c.insets = new Insets(2, 2, 2, 2);
         c.fill = GridBagConstraints.HORIZONTAL;
-        // innner panel for detail
+        // inner panel for detail
         c.weightx = 0.5;
         c.weighty = 0.5;
 
@@ -164,7 +164,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
 //        this.add(detailPane, mainConst);
 
         buttonArr = new ArrayList<>();
-        System.out.println(bid);
         // create a Panel to show each message replied by tutor
         if (messages.length() > 0){
 
@@ -200,7 +199,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
 
                     // type jlabel
                     JLabel rate = new JLabel();
-                    System.out.println(message);
                     rate.setText("Rate: " + message.getJSONObject("additionalInfo").get("rate") + " dollars per hour");
                     bidPanelConstraint.gridy = 1;
                     bidPanel.add(rate, bidPanelConstraint);

@@ -18,6 +18,7 @@ import java.net.http.HttpResponse;
 public class LoginController extends Publisher implements ActionListener {
 
     private ObserverInputInterface inputPage;
+
     public LoginController(ObserverInputInterface inputPage) {
         super();
         this.inputPage = inputPage;

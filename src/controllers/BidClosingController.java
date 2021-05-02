@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 public class BidClosingController extends Publisher implements ObserverOutputInterface, ActionListener {
 
     private String userId; // needed to update other bid view
-    String bidId, tutorId, messageId;
+    private String bidId, tutorId, messageId;
 
     public BidClosingController() {
         super();
@@ -35,7 +35,6 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
         ObserverInputInterface inputPage;
         if (e.getSource() instanceof JButton) { // triggered by a button
             JButton btn = (JButton) e.getSource();
-            System.out.println(btn.getParent().getClass());
             inputPage = (ObserverInputInterface) btn.getParent();
         } else { // triggered by ExpireBidService
             inputPage = (ObserverInputInterface) e.getSource();
