@@ -76,11 +76,12 @@ public class Application extends JFrame{
         // listener for submit message button
         MessageListener messageListener = new MessageListener(messagesPage);
 
-        // controller for user to create a bid
-        BidCreateListener createBidListener = new BidCreateListener(createBid);
-
 
         // LINKS - process buttons and updates the next page before it loads it
+
+        // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
+        BidCreateLink bidCreateLink = new BidCreateLink(createBid);
+        bidCreateLink.subscribe(dashboardPage);
 
         // links seeBidDetails page to seeTutorResponse page
         SeeTutorResponseLink seeTutorResponseLink = new SeeTutorResponseLink(seeBidDetails);

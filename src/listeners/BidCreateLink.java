@@ -1,5 +1,6 @@
 package listeners;
 
+import abstractions.Publisher;
 import services.ApiRequest;
 import abstractions.ObserverInputInterface;
 import org.json.JSONArray;
@@ -14,11 +15,12 @@ import java.net.http.HttpResponse;
 /**
  * Creates a bid for the student while checking for invalid competency levels and leads back to the DashboardPage.
  */
-public class BidCreateListener implements ActionListener {
+public class BidCreateLink extends Publisher implements ActionListener {
 
     private ObserverInputInterface inputPage;
 
-    public BidCreateListener(ObserverInputInterface inputPage) {
+    public BidCreateLink(ObserverInputInterface inputPage) {
+        super();
         this.inputPage = inputPage;
         inputPage.addActionListener(this);
     }
@@ -32,6 +34,7 @@ public class BidCreateListener implements ActionListener {
         JSONArray competencies = new JSONArray(user.getJSONArray("competencies"));
 
         checkCompetency(competencies, bidDetails);
+        notifySubscribers(initiatorId);
         ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
     }
 
