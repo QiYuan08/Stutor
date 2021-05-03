@@ -41,6 +41,7 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
         }
         JSONObject jsonBid = inputPage.retrieveInputs();
         closeBid(jsonBid);
+        notifySubscribers(this.userId);
     }
 
     /***
@@ -88,7 +89,6 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
         if (contractSignResponse.statusCode() == 200) {
             msg = "Bid closed successfully at " + now;
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Successfully", JOptionPane.INFORMATION_MESSAGE);
-            notifySubscribers(this.userId);
             if (tutorId.equals("")) {
                 ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
