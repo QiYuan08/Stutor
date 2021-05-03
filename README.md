@@ -1,9 +1,16 @@
 # FIT3077 Assignment - StuTor
 
-### Directions on adding the API key to run the application
+### Setup Instructions
+#### Directions on adding the API key to run the application
 1. Go to the `api` package
 2. Click into the `ApiRequest` Class
 3. Add the key under the variable `API_KEY` as a `String`
+
+#### Example users used in the video demonstration:
+| Account Type  | Student | Tutor  |
+|---------------|---------|--------|
+| Username      | nictce  | qiyuna |
+| Password      | nictce  | teh    |
 
 ### Document Links
 - [Class Diagram](https://git.infotech.monash.edu/fit3077-s1-2021/StuTor/project/blob/nic/docs/StuTor%20Class%20Diagram.pdf)
