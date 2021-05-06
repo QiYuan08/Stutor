@@ -19,8 +19,7 @@ public class ViewManagerService {
     public static final String FIND_ALL_BIDS = "FindAllBids";
     public static final String FIND_BID_DETAILS = "FindBidDetails";
     public static final String FIND_TUTOR_RESPONSE = "FindTutorResponse";
-    public static final String OPEN_BID_RESPONSE = "OpenBidResponse";
-    public static final String CLOSED_BID_RESPONSE = "ClosedBidResponse";
+    public static final String BID_RESPONSE = "BidResponse";
 
     private static JPanel rootPanel;
 
