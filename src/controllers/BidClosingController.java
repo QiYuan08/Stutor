@@ -87,7 +87,7 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
         String msg;
 
         if (contractSignResponse.statusCode() == 200) {
-            msg = "Bid closed successfully at " + now;
+            msg = "Bid closed successfully and contract created at " + now;
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Successfully", JOptionPane.INFORMATION_MESSAGE);
             if (tutorId.equals("")) {
                 ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);

@@ -8,8 +8,8 @@ import java.net.http.HttpResponse;
 
 public class ApiRequest {
 
-    private static final String API_KEY = "";
-    private static final String ROOT_URL = "https://fit3077.com/api/v1";
+    private static final String API_KEY = "nnjqQ8GNwFCTg7Fqp9TCbKTqRfQb7H";
+    private static final String ROOT_URL = "https://fit3077.com/api/v2";
     private static HttpResponse<String> response;
 
     public static HttpResponse<String> get(String url) {

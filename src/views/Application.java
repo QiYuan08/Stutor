@@ -79,21 +79,21 @@ public class Application extends JFrame{
 
         // LINKS - process buttons and updates the next page before it loads it
 
-        // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
-        BidCreateLink bidCreateLink = new BidCreateLink(createBid);
-        bidCreateLink.subscribe(dashboardPage);
+        // links the buttons for each tutor that responded in findBidDetails page to findTutorResponse page and update it with the correct data
+        FindTutorResponseLink findTutorResponseLink = new FindTutorResponseLink(findBidDetails);
+        findTutorResponseLink.subscribe(findTutorResponse);
 
         // links seeBidDetails page to seeTutorResponse page
         SeeTutorResponseLink seeTutorResponseLink = new SeeTutorResponseLink(seeBidDetails);
         seeTutorResponseLink.subscribe(seeTutorResponse);
 
+        // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
+        BidCreateLink bidCreateLink = new BidCreateLink(createBid);
+        bidCreateLink.subscribe(dashboardPage);
+
         // link to redirect student to reply to a tutor message
         SeeMessageLink seeMessageLink = new SeeMessageLink(seeTutorResponse);
         seeMessageLink.subscribe(messagesPage);
-
-        // links the buttons for each tutor that responded in findBidDetails page to findTutorResponse page and update it with the correct data
-        FindTutorResponseLink findTutorResponseLink = new FindTutorResponseLink(findBidDetails);
-        findTutorResponseLink.subscribe(findTutorResponse);
 
         // bid to update data between findbidpage, message and response page
         BidResponseLink bidResponseLink = new BidResponseLink(findBidDetails, openBidResponse, closedBidResponse, messagesPage);

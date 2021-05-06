@@ -223,7 +223,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                 counter++;
             }
         }
-        System.out.println(counter);
         if (counter < 5) {
             return true;
         }
