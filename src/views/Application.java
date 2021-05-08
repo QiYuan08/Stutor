@@ -10,7 +10,6 @@ import views.main_pages.*;
 import views.student_bids.SeeBidDetails;
 import views.student_bids.SeeTutorResponse;
 import links.*;
-import listeners.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,19 +59,18 @@ public class Application extends JFrame{
 
         // SERVICES
 
+        // initialises the service that expires bids after a certain time interval
         ExpireBidService expireBidService = new ExpireBidService();
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
         expireBidService.setDuration(30, 7);
         expireBidService.expireOpenBidService();
         expireBidService.expireCloseBidService();
 
+        // configures the service that allows the switching of pages within the card layout
         ViewManagerService.setRootPanel(rootPanel);
 
 
         // LISTENERS - process button presses and just go to the next page
-
-        // listener for submit message button
-        MessageListener messageListener = new MessageListener(messagesPage);
 
 
         // LINKS - process buttons and updates the next page before it loads it
@@ -88,6 +86,10 @@ public class Application extends JFrame{
         // link to redirect student to reply to a tutor message
         SeeMessageLink seeMessageLink = new SeeMessageLink(seeTutorResponse);
         seeMessageLink.subscribe(messagesPage);
+
+        // listener for submit message button to send a message
+        SendMessageLink sendMessageLink = new SendMessageLink(messagesPage);
+        sendMessageLink.subscribe(messagesPage);
 
         // bid to update data between findbidpage, message and response page
         BidResponseLink bidResponseLink = new BidResponseLink(findBidDetails, bidResponse, messagesPage);
