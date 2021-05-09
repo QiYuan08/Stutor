@@ -1,10 +1,10 @@
 package views.tutor_responds;
 
-import services.ApiRequest;
-import services.ViewManagerService;
 import abstractions.ObserverInputInterface;
 import abstractions.ObserverOutputInterface;
 import org.json.JSONObject;
+import services.ApiRequest;
+import services.ViewManagerService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,22 +16,24 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 
-public class ClosedBidResponse extends  JPanel implements ObserverOutputInterface, ObserverInputInterface {
+public class BidResponse extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
     private JLabel activityTitle, lessonField, dayField,sessionLabel,startTimeField, sessionField, durationLabel, rateLabel, endTimeField, rateField, freeLessonField, messageField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
-    private JTextArea messageInput;
     private JButton submitButton, backBtn;
+    private JTextArea messageInput;
     private JComboBox<String> startMeridiem;
     private JSpinner duration, endTime, freeLesson, startTime;
     private String bidId, userId;
+    private boolean isClose; // true is this page is showing open bid
+    private GridBagConstraints c;
 
-    public ClosedBidResponse() {
+    public BidResponse() {
         String[] meridiem = {"AM", "PM"};
 
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        c = new GridBagConstraints();
         c.weightx = 1;
         c.insets = new Insets(5, 5, 0, 5);
 
@@ -203,9 +205,6 @@ public class ClosedBidResponse extends  JPanel implements ObserverOutputInterfac
         c.gridwidth = 4;
         this.add(submitButton, c);
 
-        // create a new bid
-        // add the bid into additionalInfo of current bid
-
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -240,7 +239,13 @@ public class ClosedBidResponse extends  JPanel implements ObserverOutputInterfac
         jsonObj.put("bidId", this.bidId);
         jsonObj.put("posterId", this.userId);
         jsonObj.put("datePosted", now);
-        jsonObj.put("content", (messageInput.getText().equals("")) ? "string" : messageInput.getText()); // if messageInput empty return string else get messageInput
+
+        // check for open or close bid for the content field
+        if (isClose) {
+            jsonObj.put("content", (messageInput.getText().equals("")) ? "string" : messageInput.getText()); // if messageInput empty return string else get messageInput
+        } else {
+            jsonObj.put("content", "");
+        }
         jsonObj.put("additionalInfo", additionalInfo);
 
         return jsonObj;
@@ -258,8 +263,36 @@ public class ClosedBidResponse extends  JPanel implements ObserverOutputInterfac
         this.userId = jsonObject.getString("userId");
 
         HttpResponse<String> response = ApiRequest.get("/bid/" + this.bidId);
-        String subjectName = new JSONObject(response.body()).getJSONObject("subject").getString("name");
+        JSONObject bid = new JSONObject(response.body());
+        String subjectName = bid.getJSONObject("subject").getString("name");
         activityTitle.setText(subjectName);
+
+        if (bid.getString("type").equals("close")) { // if is close bid show message field
+            this.isClose = true;
+
+            // messages
+            messageField = new JLabel("Message: ");
+            c.gridx = 0;
+            c.gridy = 8;
+            c.gridwidth = 1;
+            this.add(messageField, c);
+
+            messageInput = new JTextArea(5, 20);
+            messageInput.setLineWrap(true);
+            messageInput.setWrapStyleWord(true);
+            c.gridx = 1;
+            c.gridy = 8;
+            c.gridwidth = 3;
+            c.gridheight = 2;
+            c.weighty = 0;
+            this.add(messageInput, c);
+
+        } else {
+            this.isClose = false;
+            this.remove(messageInput);
+            this.remove(messageField);
+        }
+
 
         JSONObject btnData = new JSONObject();
         btnData.put("bidId", this.bidId);

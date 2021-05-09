@@ -1,5 +1,6 @@
-package listeners;
+package links;
 
+import abstractions.Publisher;
 import services.ApiRequest;
 import abstractions.ObserverInputInterface;
 import org.json.JSONObject;
@@ -10,13 +11,13 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 /**
- * Sends a message (aka response) and leads back to the FindBidDetails page.
+ * Sends a message (aka response) but instead of leading to another page, refreshes itself with the newest message.
  */
-public class MessageListener implements ActionListener {
+public class SendMessageLink extends Publisher implements ActionListener {
 
     private ObserverInputInterface inputPage;
 
-    public MessageListener(ObserverInputInterface inputPage) {
+    public SendMessageLink(ObserverInputInterface inputPage) {
         this.inputPage = inputPage;
         inputPage.addActionListener(this);
     }
@@ -24,8 +25,12 @@ public class MessageListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        JSONObject data = inputPage.retrieveInputs();
-        HttpResponse<String> response = ApiRequest.post("/message", data.toString());
+        JSONObject message = inputPage.retrieveInputs();
+        HttpResponse<String> response = ApiRequest.post("/message", message.toString());
+        JSONObject data = new JSONObject();
+        data.put("messageId", message.getString("bidId"));
+        data.put("userId", message.getString("posterId"));
+        notifySubscribers(data.toString());
 
         if (response.statusCode() == 201){
             JOptionPane.showMessageDialog(new JFrame(), "Message Send", "Success", JOptionPane.INFORMATION_MESSAGE);

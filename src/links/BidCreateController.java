@@ -15,11 +15,11 @@ import java.net.http.HttpResponse;
 /**
  * Creates a bid for the student while checking for invalid competency levels and leads back to the DashboardPage.
  */
-public class BidCreateLink extends Publisher implements ActionListener {
+public class BidCreateController extends Publisher implements ActionListener {
 
     private ObserverInputInterface inputPage;
 
-    public BidCreateLink(ObserverInputInterface inputPage) {
+    public BidCreateController(ObserverInputInterface inputPage) {
         super();
         this.inputPage = inputPage;
         inputPage.addActionListener(this);
@@ -33,12 +33,15 @@ public class BidCreateLink extends Publisher implements ActionListener {
         JSONObject user = new JSONObject(response.body());
         JSONArray competencies = new JSONArray(user.getJSONArray("competencies"));
 
-        checkCompetency(competencies, bidDetails);
-        notifySubscribers(initiatorId);
-        ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
+        // if new bid is created notify dashboard and go back to dashboard
+        if (checkCompetency(competencies, bidDetails)) {
+            notifySubscribers(initiatorId);
+            ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
+        }
+
     }
 
-    private void checkCompetency(JSONArray competencies, JSONObject bidDetails) {// compares bid minimum competency level with the student's competency level to check if it is two levels above
+    private boolean checkCompetency(JSONArray competencies, JSONObject bidDetails) {// compares bid minimum competency level with the student's competency level to check if it is two levels above
         for (int i = 0; i < competencies.length(); i++) {
             JSONObject competency =  (JSONObject) competencies.get(i);
 
@@ -49,12 +52,14 @@ public class BidCreateLink extends Publisher implements ActionListener {
                 if (competency.getInt("level") + 2 > (bidDetails.getJSONObject("additionalInfo").getInt("minCompetency"))) {
                     JOptionPane.showMessageDialog(new JFrame(), "The minimum competency level must be at least 2 levels higher than your subject level. Please try again.",
                             "Invalid Minimum Competency Level", JOptionPane.ERROR_MESSAGE);
+
                 } else {
                     createBid(bidDetails);
-                    return;
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     private void createBid(JSONObject bidDetails) {

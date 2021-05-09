@@ -177,7 +177,7 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
         response = ApiRequest.get("/user/" + this.userId + "?fields=competencies&fields=competencies.subject");
         user = new JSONObject(response.body());
 
-        if (user.get("isTutor").equals(true)){
+        if (user.getBoolean("isTutor")){
 
             // add every bid that is qualified to be teached by this user to bids
             for (int i = returnedBids.length() - 1; i > -1; i--){

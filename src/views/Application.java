@@ -10,7 +10,6 @@ import views.main_pages.*;
 import views.student_bids.SeeBidDetails;
 import views.student_bids.SeeTutorResponse;
 import links.*;
-import listeners.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,11 +36,10 @@ public class Application extends JFrame{
         FindBidDetails findBidDetails = new FindBidDetails();
         SeeAllBids seeAllBids = new SeeAllBids();
         SeeBidDetails seeBidDetails = new SeeBidDetails();
-        OpenBidResponse openBidResponse = new OpenBidResponse();
-        ClosedBidResponse closedBidResponse = new ClosedBidResponse();
         FindTutorResponse findTutorResponse = new FindTutorResponse();
         MessagesPage messagesPage = new MessagesPage();
         SeeTutorResponse seeTutorResponse = new SeeTutorResponse();
+        BidResponse bidResponse = new BidResponse();
 
         // adding all the views into the rootPanel so that they can be accessed via the cardLayout
         rootPanel.add(loginPage, ViewManagerService.LOGIN_PAGE);
@@ -53,8 +51,7 @@ public class Application extends JFrame{
         rootPanel.add(findBidDetails, ViewManagerService.FIND_BID_DETAILS);
         rootPanel.add(seeAllBids, ViewManagerService.SEE_ALL_BIDS);
         rootPanel.add(seeBidDetails, ViewManagerService.SEE_BID_DETAILS);
-        rootPanel.add(openBidResponse, ViewManagerService.OPEN_BID_RESPONSE);
-        rootPanel.add(closedBidResponse, ViewManagerService.CLOSED_BID_RESPONSE);
+        rootPanel.add(bidResponse, ViewManagerService.BID_RESPONSE);
         rootPanel.add(findTutorResponse, ViewManagerService.FIND_TUTOR_RESPONSE);
         rootPanel.add(messagesPage, ViewManagerService.MESSAGES_PAGE);
         rootPanel.add(seeTutorResponse, ViewManagerService.SEE_TUTOR_RESPONSE);
@@ -62,19 +59,18 @@ public class Application extends JFrame{
 
         // SERVICES
 
+        // initialises the service that expires bids after a certain time interval
         ExpireBidService expireBidService = new ExpireBidService();
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
         expireBidService.setDuration(30, 7);
         expireBidService.expireOpenBidService();
         expireBidService.expireCloseBidService();
 
+        // configures the service that allows the switching of pages within the card layout
         ViewManagerService.setRootPanel(rootPanel);
 
 
         // LISTENERS - process button presses and just go to the next page
-
-        // listener for submit message button
-        MessageListener messageListener = new MessageListener(messagesPage);
 
 
         // LINKS - process buttons and updates the next page before it loads it
@@ -87,19 +83,23 @@ public class Application extends JFrame{
         SeeTutorResponseLink seeTutorResponseLink = new SeeTutorResponseLink(seeBidDetails);
         seeTutorResponseLink.subscribe(seeTutorResponse);
 
-        // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
-        BidCreateLink bidCreateLink = new BidCreateLink(createBid);
-        bidCreateLink.subscribe(dashboardPage);
-
         // link to redirect student to reply to a tutor message
         SeeMessageLink seeMessageLink = new SeeMessageLink(seeTutorResponse);
         seeMessageLink.subscribe(messagesPage);
 
+        // listener for submit message button to send a message
+        SendMessageLink sendMessageLink = new SendMessageLink(messagesPage);
+        sendMessageLink.subscribe(messagesPage);
+
         // bid to update data between findbidpage, message and response page
-        BidResponseLink bidResponseLink = new BidResponseLink(findBidDetails, openBidResponse, closedBidResponse, messagesPage);
+        BidResponseLink bidResponseLink = new BidResponseLink(findBidDetails, bidResponse, messagesPage);
 
 
         // CONTROLLERS - notifies multiple subscribers of new information and proceeds to the next page
+
+        // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
+        BidCreateController bidCreateController = new BidCreateController(createBid);
+        bidCreateController.subscribe(dashboardPage);
 
         // link seeAllBids and seeBidDetails page
         SeeBidDetailsController seeBidDetailsController = new SeeBidDetailsController(seeAllBids);
