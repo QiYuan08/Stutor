@@ -21,10 +21,10 @@ import java.util.ArrayList;
 public class SeeBidDetails extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private String bidId, userId;
-    private JLabel title, subjectLabel, name, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
+    private JLabel title, subjectLabel, nameLabel, rate, competency, duration, startTime, day, preferredSession, bidderLabel;
     private JButton closeBtn = new JButton("Buy Out");
     private JButton replyBtn = new JButton("Bid");
-    private JButton backBtn, viewBidBtn;
+    private JButton backButton, viewBidBtn;
     private JPanel detailPane;
     private JScrollPane scrollPane;
     private ArrayList<JButton> buttonArr;
@@ -33,18 +33,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
     public SeeBidDetails(){
         this.setLayout(new GridBagLayout());
         mainConst = new GridBagConstraints();
-    }
-
-    /**
-     * Create the content to display the detail of the bid after user enter this page
-     * @param bid the bid to display
-     */
-    void createContent(JSONObject bid){
-
-        JSONObject initiator = bid.getJSONObject("initiator");
-        JSONObject subject = bid.getJSONObject("subject");
-        JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
-        JSONArray messages = bid.getJSONArray("messages");
 
         detailPane = new JPanel();
         detailPane.setBorder(new EmptyBorder(15, 15,15,15));
@@ -55,7 +43,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         c.weighty = 0.2;
         c.insets = new Insets(2, 2, 2, 2);
         c.fill = GridBagConstraints.HORIZONTAL;
-        // inner panel for detail
+        // innner panel for detail
         c.weightx = 0.5;
         c.weighty = 0.5;
 
@@ -63,116 +51,131 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalAlignment(JLabel.TOP);
         title.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-        c.gridy = detailPane.getComponentCount();
+        c.gridy = 0;
         c.gridwidth = 3;
         c.gridx = 1;
         c.anchor = GridBagConstraints.PAGE_START;
-        detailPane.add(title, c);
+        this.add(title, c);
 
-        backBtn = new JButton("Back");
+        backButton = new JButton("Back");
         c.gridy = 0;
         c.weightx = 0.0;
         c.gridwidth = 1;
         c.gridx = 0;
         c.anchor = GridBagConstraints.PAGE_START;
-        detailPane.add(backBtn, c);
+        this.add(backButton, c);
 
-        backBtn.addActionListener(new ActionListener() {
+        backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         });
 
-        subjectLabel = new JLabel("Subject: " + subject.get("name"));
+        subjectLabel = new JLabel("Subject: ");
         c.weightx = 0.5;
         c.gridx = 0;
         c.gridwidth = 3;
-        c.gridy = detailPane.getComponentCount();
+        c.gridy = 1;
         c.anchor = GridBagConstraints.PAGE_START;
-        detailPane.add(subjectLabel, c);
+        this.add(subjectLabel, c);
 
-        name = new JLabel("Name: " + initiator.get("givenName") +" " + initiator.get("familyName"));
+        nameLabel = new JLabel("Name: ");
         c.gridx = 0;
         c.gridwidth = 3;
-        c.gridy = detailPane.getComponentCount();
+        c.gridy = 2;
         c.anchor = GridBagConstraints.PAGE_START;
-        detailPane.add(name, c);
+        this.add(nameLabel, c);
 
-        // if rate is provided in the bid
-        if (additionalInfo.has("rate")){
-            rate = new JLabel("Rate: " + additionalInfo.get("rate"));
-        } else {
-            rate = new JLabel("Rate not provided");
-        }
-        c.gridy = detailPane.getComponentCount();
-        detailPane.add(rate, c);
+        rate = new JLabel("Rate: Not Provided");
+        c.gridy = 3;
+        this.add(rate, c);
 
-        // if competency is provided in the bid
-        if (additionalInfo.has("minCompetency")){
-            competency = new JLabel("Minimum competency: " + additionalInfo.get("minCompetency"));
-        } else {
-            competency = new JLabel("Competency not provided");
-        }
-        c.gridy = detailPane.getComponentCount();
-        detailPane.add(competency, c);
+        competency = new JLabel("Minimum competency: Not Provided");
+        c.gridy = 4;
+        this.add(competency, c);
 
-        // if day is provided in the bid
-        if (additionalInfo.has("day")){
-            day = new JLabel("Preferred Day(s): " + additionalInfo.get("day"));
-        } else {
-            day = new JLabel("Preferred day(s) not provided");
-        }
-        c.gridy = detailPane.getComponentCount();
-        detailPane.add(day, c);
+        day = new JLabel("Preferred Day(s): Not Provided");
+        c.gridy = 5;
+        this.add(day, c);
 
-        // if preferred session is provided in the bid
-        if (additionalInfo.has("preferredSession")){
-            preferredSession = new JLabel("Preferred no of sessions: " + additionalInfo.get("preferredSession") + " sessions per week");
-        } else {
-            preferredSession = new JLabel("Preferred sessions not provided");
-        }
-        c.gridy = detailPane.getComponentCount();
-        detailPane.add(preferredSession, c);
+        preferredSession = new JLabel("Preferred no of sessions: Not Provided");
+        c.gridy = 6;
+        this.add(preferredSession, c);
 
-        // if duration is provided in the bid
-        if (additionalInfo.has("duration")){
-            duration = new JLabel("Duration: " + additionalInfo.get("duration") + " hours per lesson");
-        } else {
-            duration = new JLabel("Duration not provided");
-        }
-        c.gridy = detailPane.getComponentCount();
-        detailPane.add(duration, c);
+        duration = new JLabel("Duration: Not Provided");
+        c.gridy = 7;
+        this.add(duration, c);
 
-        // if start time is provided in the bid
-        if (additionalInfo.has("startTime")){
-            startTime = new JLabel("Start Time: " + additionalInfo.get("startTime"));
-        } else {
-            startTime = new JLabel("Start Time not provided");
-        }
-        c.gridy = detailPane.getComponentCount();
-        detailPane.add(startTime, c);
+        startTime = new JLabel("Start Time: Not Provided");
+        c.gridy = 8;
+        this.add(startTime, c);
 
-        // add scrollPane into mainPanel
-        mainConst.weighty = 1;
-        mainConst.weightx = 1;
-        mainConst.gridheight = 8;
-        mainConst.gridx = 0;
+        // wrap detailPane with a scrollPane
+        scrollPane = new JScrollPane(detailPane);
+
+        // add scrollPane into this
+        c.weighty = 1;
+        c.weightx = 1;
+        c.gridheight = 10;
+        c.gridx = 0;
+        c.gridy = 9;
         c.gridwidth = 10;
-        mainConst.gridy = 0;
-        mainConst.fill = GridBagConstraints.BOTH;
-//        this.add(detailPane, mainConst);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        this.add(scrollPane, c);
 
+    }
+
+    /**
+     * Create the content to display the detail of the bid after user enter this page
+     * @param bid the bid to display
+     */
+    void createContent(JSONObject bid){
+
+        detailPane.removeAll();
+        detailPane.revalidate();
+        detailPane.repaint();
+
+        JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
+        JSONArray messages = bid.getJSONArray("messages");
+
+        showTutors(messages);
+
+        if (!additionalInfo.isEmpty()) {
+
+            // if rate is provided in the bid
+            rate.setText("Rate: " + additionalInfo.getString("rate"));
+
+            // if competency is provided in the bid
+            competency.setText("Minimum competency: " + additionalInfo.getInt("minCompetency"));
+
+            // if day is provided in the bid
+            day.setText("Preferred Day(s): " + additionalInfo.getString("day"));
+
+            // if preferred session is provided in the bid
+            preferredSession.setText("Preferred no of sessions: " + additionalInfo.getInt("preferredSession") + " sessions per week");
+
+            // if duration is provided in the bid
+            duration.setText("Duration: " + additionalInfo.getInt("duration") + " hours per lesson");
+
+            // if start time is provided in the bid
+            startTime.setText("Start Time: " + additionalInfo.getString("startTime"));
+        }
+
+    }
+
+    private void showTutors(JSONArray messages) {
         buttonArr = new ArrayList<>();
         // create a Panel to show each message replied by tutor
         if (messages.length() > 0){
 
+            GridBagConstraints c = new GridBagConstraints();
             bidderLabel = new JLabel("Bidders");
             bidderLabel.setHorizontalAlignment(JLabel.CENTER);
             bidderLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
             detailPane.add(bidderLabel, c);
 
-            for (int i=0; i < messages.length(); i++){
+            for (int i = 0; i < messages.length(); i++){
                 JSONObject message = messages.getJSONObject(i);
 
                 if (!(message.getJSONObject("additionalInfo").isEmpty())){ // show only non 'message' message
@@ -233,22 +236,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
 
             }
         }
-        // wrap detailPane with a scrollPane
-        scrollPane = new JScrollPane(detailPane);
-
-        // add scrollPane into this
-        mainConst.weighty = 1;
-        mainConst.weightx = 1;
-        mainConst.gridheight = 20;
-        mainConst.gridx = 0;
-        mainConst.gridy = 0;
-        c.gridwidth = 10;
-        mainConst.fill = GridBagConstraints.HORIZONTAL;
-        this.setOpaque(false);
-        this.add(scrollPane, mainConst);
-
     }
-
 
 
     /**
@@ -264,10 +252,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
 
         // if retrieve success
         if (response.statusCode() == 200){
-
-            this.removeAll();
-            this.repaint();
-            this.revalidate();
             createContent(new JSONObject(response.body()));
 
         } else {

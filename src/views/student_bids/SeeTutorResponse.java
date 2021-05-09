@@ -21,23 +21,16 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
     private JButton backBtn;
     private  JButton messageBtn = new JButton("Message");
     private JButton confirmBtn = new JButton("Confirm Bid");
+    private GridBagConstraints mainConst;
+    private JPanel detailPane;
 
     public SeeTutorResponse() {
-        this.setBorder(new EmptyBorder(15, 15,15,15));
         this.setLayout(new GridBagLayout());
-        this.setBackground(new Color(255, 252, 252));
-    }
+        mainConst = new GridBagConstraints();
 
-    /**
-     * Create the content to display the detail of the message after user enter this page
-     * @param message the message to display
-     */
-    void createContent(JSONObject message){
-
-        JSONObject initiator = message.getJSONObject("poster");
-        JSONObject additionalInfo = message.getJSONObject("additionalInfo");
-        this.bidId = message.getString("bidId");
-
+        detailPane = new JPanel();
+        detailPane.setBorder(new EmptyBorder(15, 15,15,15));
+        detailPane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
         c.weighty = 0.2;
@@ -51,104 +44,59 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setVerticalAlignment(JLabel.TOP);
         title.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-        c.gridy = 0;
+        c.gridy = detailPane.getComponentCount();
         c.gridwidth = 3;
         c.gridx = 1;
         c.anchor = GridBagConstraints.PAGE_START;
-        this.add(title, c);
+        detailPane.add(title, c);
 
-        name = new JLabel("Name: " + initiator.get("givenName") +" " + initiator.get("familyName"));
+        name = new JLabel("Name: ");
         c.gridx = 0;
         c.gridwidth = 3;
-        c.gridy = 1;
+        c.gridy = detailPane.getComponentCount();
         c.anchor = GridBagConstraints.PAGE_START;
-        this.add(name, c);
+        detailPane.add(name, c);
 
-        // if rate is provided in the message
-        if (additionalInfo.has("rate")){
-            rate = new JLabel("Rate: " + additionalInfo.get("rate"));
-        } else {
-            rate = new JLabel("Rate not provided");
-        }
-        c.gridy = 2;
-        this.add(rate, c);
+        rate = new JLabel("Rate not provided");
+        c.gridy = detailPane.getComponentCount();
+        detailPane.add(rate, c);
 
-        // if competency is provided in the message
-        if (additionalInfo.has("minCompetency")){
-            competency = new JLabel("Minimum competency: " + additionalInfo.get("minCompetency"));
-        } else {
-            competency = new JLabel("Competency not provided");
-        }
-        c.gridy = 3;
-        this.add(competency, c);
+        competency = new JLabel("Competency not provided");
+        c.gridy = detailPane.getComponentCount();
+        detailPane.add(competency, c);
 
-        // if day is provided in the message
-        if (additionalInfo.has("day")){
-            day = new JLabel("Preferred Day(s): " + additionalInfo.get("day"));
-        } else {
-            day = new JLabel("Day not provided");
-        }
-        c.gridy = 4;
-        this.add(day, c);
+        day = new JLabel("Day not provided");
+        c.gridy = detailPane.getComponentCount();
+        detailPane.add(day, c);
 
-        // if preferred session is provided in the message
-        if (additionalInfo.has("preferredSession")){
-            preferredSession = new JLabel("Preferred no of sessions: " + additionalInfo.get("preferredSession") + " sessions per week");
-        } else {
-            preferredSession = new JLabel("Preferred sessions not provided");
-        }
-        c.gridy = 5;
-        this.add(preferredSession, c);
+        preferredSession = new JLabel("Preferred sessions not provided");
+        c.gridy = detailPane.getComponentCount();
+        detailPane.add(preferredSession, c);
 
-        // if duration is provided in the message
-        if (additionalInfo.has("duration")){
-            duration = new JLabel("Duration: " + additionalInfo.get("duration") + " hours per lesson");
-        } else {
-            duration = new JLabel("Duration not provided");
-        }
-        c.gridy = 6;
-        this.add(duration, c);
+        duration = new JLabel("Duration not provided");
+        c.gridy = detailPane.getComponentCount();
+        detailPane.add(duration, c);
 
-        // if start time is provided in the message
-        if (additionalInfo.has("startTime")){
-            startTime = new JLabel("Start Time: " + additionalInfo.get("startTime"));
-        } else {
-            startTime = new JLabel("Start Time not provided");
-        }
-        c.gridy = 7;
-        this.add(startTime, c);
+        startTime = new JLabel("Start Time not provided");
+        c.gridy = detailPane.getComponentCount();
+        detailPane.add(startTime, c);
 
-        HttpResponse<String> response = ApiRequest.get("/bid/" + message.getString("bidId"));
-        JSONObject bid = new JSONObject(response.body());
+        mainConst.weighty = 0.2;
+        mainConst.weightx = 0.2;
+        mainConst.gridheight = 20;
+        mainConst.gridx = 0;
+        mainConst.gridy = 0;
+        this.add(detailPane, mainConst);
 
-        c.gridheight = 1;
-        c.gridx = 2;
-        c.gridy = 8;
-        c.gridwidth = 1;
-
-        if (bid.isNull("dateClosedDown")) {
-            if (bid.getString("type").equals("open")){  // if its open message
-                confirmBtn.setName(this.bidId);
-                this.add(confirmBtn, c);
-
-            } else if (bid.getString("type").equals("close")) {
-                confirmBtn.setName(this.bidId);
-                this.add(confirmBtn, c);
-                JSONObject data = new JSONObject().put("userId", this.userId).put("bidId", this.bidId);
-                messageBtn.setName(data.toString());
-                c.gridx = 1;
-                this.add(messageBtn, c);
-
-            }
-
-        }
-
+        // add back button into this
         backBtn = new JButton("Back");
-        c.gridy = 0;
-        c.gridx = 0;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        this.add(backBtn, c);
+        mainConst.weighty = 0.2;
+        mainConst.weightx = 0.2;
+        mainConst.gridheight = 1;
+        mainConst.fill = GridBagConstraints.HORIZONTAL;
+        mainConst.gridx = 0;
+        mainConst.gridy = 30;
+        this.add(backBtn, mainConst);
 
         backBtn.addActionListener(new ActionListener() {
             @Override
@@ -156,6 +104,44 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
                 ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         });
+    }
+
+    /**
+     * Create the content to display the detail of the message after user enter this page
+     * @param message the message to display
+     */
+    void createContent(JSONObject message){
+
+        JSONObject initiator = message.getJSONObject("poster");
+        JSONObject additionalInfo = message.getJSONObject("additionalInfo");
+        this.bidId = message.getString("bidId");
+
+        HttpResponse<String> response = ApiRequest.get("/bid/" + message.getString("bidId"));
+        JSONObject bid = new JSONObject(response.body());
+
+        mainConst.gridheight = 1;
+        mainConst.gridx = 2;
+        mainConst.gridy = 32;
+        mainConst.fill = GridBagConstraints.HORIZONTAL;
+        mainConst.weightx= 0.5;
+        mainConst.gridwidth = 1;
+
+        // if bid still open
+        if (bid.isNull("dateClosedDown")) {
+            if (bid.getString("type").equals("open")){  // if its open message
+                confirmBtn.setName(this.bidId);
+                this.add(confirmBtn, mainConst);
+
+            } else if (bid.getString("type").equals("close")) {
+                confirmBtn.setName(this.bidId);
+                this.add(confirmBtn, mainConst);
+                JSONObject data = new JSONObject().put("userId", this.userId).put("bidId", this.bidId);
+                messageBtn.setName(data.toString());
+                mainConst.gridy = 33;
+                this.add(messageBtn, mainConst);
+
+            }
+        }
 
     }
 
@@ -175,9 +161,6 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
         // if retrieve success
         if (response.statusCode() == 200){
 
-            this.removeAll();
-            this.repaint();
-            this.revalidate();
             createContent(new JSONObject(response.body()));
 
         } else {

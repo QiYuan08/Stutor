@@ -198,7 +198,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         this.add(messageInput, c);
 
         //submitBtn
-        submitButton = new JButton("Submit Close Bid");
+        submitButton = new JButton("Submit Bid");
         c.gridx = 0;
         c.weightx = 1;
         c.gridy = 11;
@@ -244,7 +244,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         if (isClose) {
             jsonObj.put("content", (messageInput.getText().equals("")) ? "string" : messageInput.getText()); // if messageInput empty return string else get messageInput
         } else {
-            jsonObj.put("content", "");
+            jsonObj.put("content", " ");
         }
         jsonObj.put("additionalInfo", additionalInfo);
 
@@ -266,6 +266,9 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         JSONObject bid = new JSONObject(response.body());
         String subjectName = bid.getJSONObject("subject").getString("name");
         activityTitle.setText(subjectName);
+
+        this.remove(messageInput);
+        this.remove(messageField);
 
         if (bid.getString("type").equals("close")) { // if is close bid show message field
             this.isClose = true;

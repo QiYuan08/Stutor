@@ -154,63 +154,14 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
      */
     void createContent(JSONObject bid){
 
+        detailPane.removeAll();
+        detailPane.revalidate();
+        detailPane.repaint();
+
         JSONObject initiator = bid.getJSONObject("initiator");
         JSONObject subject = bid.getJSONObject("subject");
         JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
         JSONArray messages = bid.getJSONArray("messages");
-//
-//        detailPane = new JPanel();
-//        detailPane.setBorder(new EmptyBorder(15, 15,15,15));
-//        detailPane.setLayout(new GridBagLayout());
-//        detailPane.setBackground(new Color(255, 252, 252));
-//        GridBagConstraints c = new GridBagConstraints();
-//        c.weightx = 1;
-//        c.weighty = 0.2;
-//        c.insets = new Insets(2, 2, 2, 2);
-//        c.fill = GridBagConstraints.HORIZONTAL;
-//        // innner panel for detail
-//        c.weightx = 0.5;
-//        c.weighty = 0.5;
-//
-//        title = new JLabel("Bid Details");
-//        title.setHorizontalAlignment(JLabel.CENTER);
-//        title.setVerticalAlignment(JLabel.TOP);
-//        title.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-//        c.gridy = detailPane.getComponentCount();
-//        c.gridwidth = 3;
-//        c.gridx = 1;
-//        c.anchor = GridBagConstraints.PAGE_START;
-//        detailPane.add(title, c);
-//
-//        backButton = new JButton("Back");
-//        c.gridy = 0;
-//        c.weightx = 0.0;
-//        c.gridwidth = 1;
-//        c.gridx = 0;
-//        c.anchor = GridBagConstraints.PAGE_START;
-//        detailPane.add(backButton, c);
-//
-//        backButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-//            }
-//        });
-//
-//        subjectLabel = new JLabel("Subject: " + subject.get("name"));
-//        c.weightx = 0.5;
-//        c.gridx = 0;
-//        c.gridwidth = 3;
-//        c.gridy = detailPane.getComponentCount();
-//        c.anchor = GridBagConstraints.PAGE_START;
-//        detailPane.add(subjectLabel, c);
-//
-//        name = new JLabel("Name: " + initiator.get("givenName") +" " + initiator.get("familyName"));
-//        c.gridx = 0;
-//        c.gridwidth = 3;
-//        c.gridy = detailPane.getComponentCount();
-//        c.anchor = GridBagConstraints.PAGE_START;
-//        detailPane.add(name, c);
 
         subjectLabel.setText("Subject: " + subject.getString("name"));
         nameLabel.setText("Name: " + initiator.getString("givenName") +" " + initiator.getString("familyName"));
@@ -241,99 +192,10 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         this.remove(monitorBidButton);
 
         // if bid type is open
-        if (bid.getString("type").equals("open")){
+        if (bid.getString("type").equals("open")) {
             showTutors(messages);
             buyoutButton.setName(this.bidId);
-//            c.weighty = 1;
-//            c.weightx = 1;
-//            c.gridheight = 2;
-//            c.gridx = 0;
-//            c.gridy = 22;
-//            c.gridwidth = 1;
-//            c.fill = GridBagConstraints.HORIZONTAL;
-//            this.add(buyoutButton, c);
-//
-//            buttonArr = new ArrayList<>();
-//
-//            // create a Panel to show each message replied by tutor
-//            if (messages.length() > 0){
-//
-//                bidderLabel = new JLabel("Bidders");
-//                bidderLabel.setHorizontalAlignment(JLabel.CENTER);
-//                bidderLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-//                detailPane.add(bidderLabel, c);
-//
-//                for (int i=0; i < messages.length(); i++){
-//                    JSONObject message = messages.getJSONObject(i);
-//
-//                    // create the panel for each bid item
-//                    JPanel bidPanel = new JPanel();
-//                    GridBagConstraints bidPanelConstraint = new GridBagConstraints();
-//                    bidPanelConstraint.fill = GridBagConstraints.HORIZONTAL;
-//                    bidPanelConstraint.weightx = 1;
-//                    bidPanelConstraint.insets = new Insets(1,2,1,2);
-//                    bidPanel.setLayout(new GridBagLayout());
-//                    bidPanel.setBackground(Color.lightGray);
-//                    bidPanel.setMinimumSize(new Dimension(100, 120));
-//                    bidPanel.setMaximumSize(new Dimension(100, 120));
-//
-//                    // add a description jlabel
-//                    bidPanelConstraint.gridx = 0;
-//                    bidPanelConstraint.gridy = 0;
-//                    bidPanelConstraint.gridwidth = 5;
-//                    bidPanelConstraint.anchor = GridBagConstraints.WEST;
-//                    JLabel bidLabel = new JLabel();
-//                    JSONObject bidder = message.getJSONObject("poster");
-//                    bidLabel.setText(bidder.get("givenName") + " " + bidder.get("familyName"));
-//                    bidPanel.add(bidLabel, bidPanelConstraint);
-//
-//                    // type jlabel
-//                    JLabel rate = new JLabel();
-//                    rate.setText("Rate: " + message.getJSONObject("additionalInfo").get("rate") + " dollars per hour");
-//                    bidPanelConstraint.gridy = 1;
-//                    bidPanel.add(rate, bidPanelConstraint);
-//
-//                    // add view detail button
-//                    bidPanelConstraint.gridy = 0;
-//                    bidPanelConstraint.gridx = 6;
-//                    bidPanelConstraint.gridwidth = 1;
-//                    bidPanelConstraint.gridheight = 2;
-//                    bidPanelConstraint.weightx = 0.2;
-//                    viewBidButton = new JButton("View Bid");
-//
-//                    viewBidButton.addActionListener(new ActionListener() {
-//                        @Override
-//                        public void actionPerformed(ActionEvent e) {
-//                            ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
-//                        }
-//                    });
-//
-//                    // set button name to bidId and userId for ClosedBidResponse class to close Bid
-//                    JSONObject btnData = new JSONObject();
-//                    btnData.put("bidId", message.get("id"));
-//                    btnData.put("userId", this.userId);
-//                    viewBidButton.setName(btnData.toString());
-//                    buttonArr.add(viewBidButton); // add the button into button array
-//                    bidPanel.add(viewBidButton, bidPanelConstraint);
-//
-//                    c.gridy = detailPane.getComponentCount();
-//                    detailPane.add(bidPanel, c);
-//                }
-//            }
         }
-//        // wrap detailPane with a scrollPane
-//        scrollPane = new JScrollPane(detailPane);
-//
-//        // add scrollPane into this
-//        mainConst.weighty = 1;
-//        mainConst.weightx = 1;
-//        mainConst.gridheight = 20;
-//        mainConst.gridx = 0;
-//        mainConst.gridy = 0;
-//        c.gridwidth = 10;
-//        mainConst.fill = GridBagConstraints.HORIZONTAL;
-//        this.setOpaque(false);
-//        this.add(scrollPane, mainConst);
 
         // add closeBid Button
         // if its a a open bid add buy out button
@@ -355,15 +217,6 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         }
         String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
         respondButton.setName(data);
-//        mainConst.weighty = 1;
-//        mainConst.weightx = 1;
-//        mainConst.gridheight = 2;
-//        mainConst.gridx = 0;
-//        mainConst.gridy = 21;
-//        mainConst.gridwidth = 1;
-////        mainConst.anchor = GridBagConstraints.LAST_LINE_START;
-//        mainConst.fill = GridBagConstraints.HORIZONTAL;
-//        this.add(respondButton, mainConst);
     }
 
     private void showTutors(JSONArray messages) {

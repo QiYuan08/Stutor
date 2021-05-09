@@ -40,7 +40,7 @@ public class BidResponseLink implements ActionListener {
         JSONObject bid = new JSONObject(response.body());
 
         // if submitting open bid, create a message to update bid
-        if (thisBtn.getText().equals("Submit Open Bid")) {
+        if (thisBtn.getText().equals("Submit Bid")) {
 
             JSONObject inputData = bidResponse.retrieveInputs();
             response = ApiRequest.post("/message", inputData.toString());

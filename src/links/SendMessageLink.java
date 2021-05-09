@@ -28,7 +28,7 @@ public class SendMessageLink extends Publisher implements ActionListener {
         JSONObject message = inputPage.retrieveInputs();
         HttpResponse<String> response = ApiRequest.post("/message", message.toString());
         JSONObject data = new JSONObject();
-        data.put("messageId", message.getString("bidId"));
+        data.put("bidId", message.getString("bidId"));
         data.put("userId", message.getString("posterId"));
         notifySubscribers(data.toString());
 
