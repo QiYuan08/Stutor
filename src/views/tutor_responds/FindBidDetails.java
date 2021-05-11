@@ -24,18 +24,12 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     private JPanel detailPane;
     private JScrollPane scrollPane;
     private ArrayList<JButton> buttonArr;
-    private GridBagConstraints mainConst;
 
     public FindBidDetails() {
         this.setLayout(new GridBagLayout());
-        mainConst = new GridBagConstraints();
-
-
-        detailPane = new JPanel();
-        detailPane.setBorder(new EmptyBorder(15, 15,15,15));
-        detailPane.setLayout(new GridBagLayout());
-        detailPane.setBackground(new Color(255, 252, 252));
+        this.setBorder(new EmptyBorder(15, 15,15,15));
         GridBagConstraints c = new GridBagConstraints();
+
         c.weightx = 1;
         c.weighty = 0.2;
         c.insets = new Insets(2, 2, 2, 2);
@@ -51,7 +45,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridy = 0;
         c.gridwidth = 3;
         c.gridx = 1;
-        c.anchor = GridBagConstraints.PAGE_START;
+        c.fill = GridBagConstraints.CENTER;
         this.add(title, c);
 
         backButton = new JButton("Back");
@@ -60,6 +54,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridwidth = 1;
         c.gridx = 0;
         c.anchor = GridBagConstraints.PAGE_START;
+        c.fill = GridBagConstraints.NONE;
         this.add(backButton, c);
 
         backButton.addActionListener(new ActionListener() {
@@ -72,16 +67,15 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         subjectLabel = new JLabel("Subject: ");
         c.weightx = 0.5;
         c.gridx = 0;
-        c.gridwidth = 3;
+        c.gridwidth = 4;
         c.gridy = 1;
-        c.anchor = GridBagConstraints.PAGE_START;
+        c.fill = GridBagConstraints.HORIZONTAL;
         this.add(subjectLabel, c);
 
         nameLabel = new JLabel("Name: ");
         c.gridx = 0;
-        c.gridwidth = 3;
+        c.gridwidth = 4;
         c.gridy = 2;
-        c.anchor = GridBagConstraints.PAGE_START;
         this.add(nameLabel, c);
 
         rate = new JLabel("Rate: Not Provided");
@@ -108,6 +102,11 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridy = 8;
         this.add(startTime, c);
 
+        detailPane = new JPanel();
+        detailPane.setBorder(new EmptyBorder(15, 15,15,15));
+        detailPane.setLayout(new GridBagLayout());
+        detailPane.setBackground(new Color(255, 252, 252));
+
         // wrap detailPane with a scrollPane
         scrollPane = new JScrollPane(detailPane);
 
@@ -117,7 +116,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridheight = 10;
         c.gridx = 0;
         c.gridy = 9;
-        c.gridwidth = 10;
+        c.gridwidth = 4;
         c.fill = GridBagConstraints.HORIZONTAL;
         this.setOpaque(false);
         this.add(scrollPane, c);
@@ -128,8 +127,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 21;
-        c.gridwidth = 1;
-//        mainConst.anchor = GridBagConstraints.LAST_LINE_START;
+        c.gridwidth = 4;
         c.fill = GridBagConstraints.HORIZONTAL;
         this.add(respondButton, c);
 
@@ -139,7 +137,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 22;
-        c.gridwidth = 1;
+        c.gridwidth = 4;
         c.fill = GridBagConstraints.HORIZONTAL;
         this.add(buyoutButton, c);
 
@@ -149,14 +147,32 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     }
 
     /**
+     * Get the bidId from Find Bid page one user click on view bid to retrieve data from db
+     * @param data any data that is crucial to the pages for them to request the information that they need from the database
+     */
+    @Override
+    public void update(String data) {
+
+        this.bidId = new JSONObject(data).getString("bidId");
+        this.userId = new JSONObject(data).getString("userId");
+        HttpResponse<String> response = ApiRequest.get("/bid/"+ this.bidId + "?fields=messages");
+
+        // if retrieve success
+        if (response.statusCode() == 200){
+            // set the default value of reply button to respond
+            respondButton.setText("Respond");
+            updateContent(new JSONObject(response.body()));
+        } else {
+            String msg = "Error: " + new JSONObject(response.body()).get("message");
+            JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
      * Create the content to display the detail of the bid after user enter this page
      * @param bid the bid to display
      */
-    void createContent(JSONObject bid){
-
-        detailPane.removeAll();
-        detailPane.revalidate();
-        detailPane.repaint();
+    void updateContent(JSONObject bid){
 
         JSONObject initiator = bid.getJSONObject("initiator");
         JSONObject subject = bid.getJSONObject("subject");
@@ -169,57 +185,56 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         GridBagConstraints c = new GridBagConstraints();
 
         if (!additionalInfo.isEmpty()) {
-
-            // if rate is provided in the bid
             rate.setText("Rate: " + additionalInfo.getString("rate"));
-
-            // if competency is provided in the bid
             competency.setText("Minimum competency: " + additionalInfo.getInt("minCompetency"));
-
-            // if day is provided in the bid
             day.setText("Preferred Day(s): " + additionalInfo.getString("day"));
-
-            // if preferred session is provided in the bid
             preferredSession.setText("Preferred no of sessions: " + additionalInfo.getInt("preferredSession") + " sessions per week");
-
-            // if duration is provided in the bid
             duration.setText("Duration: " + additionalInfo.getInt("duration") + " hours per lesson");
-
-            // if start time is provided in the bid
             startTime.setText("Start Time: " + additionalInfo.getString("startTime"));
         }
 
         this.remove(monitorBidButton);
-
+        this.remove(scrollPane);
         // if bid type is open
         if (bid.getString("type").equals("open")) {
             showTutors(messages);
             buyoutButton.setName(this.bidId);
+
+            c.weighty = 1;
+            c.weightx = 1;
+            c.gridheight = 1;
+            c.gridx = 0;
+            c.gridy = 23;
+            c.gridwidth = 4;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            this.add(monitorBidButton, c);
+
+            c.weighty = 1;
+            c.weightx = 1;
+            c.gridheight = 10;
+            c.gridx = 0;
+            c.gridy = 9;
+            c.gridwidth = 4;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            this.add(scrollPane, c);
         }
 
         // add closeBid Button
         // if its a a open bid add buy out button
 
         // add replyBid Button
-        if (bid.get("type").equals("close")){ // check if tutor reply to this bid before for close bid
-            c.weighty = 1;
-            c.weightx = 1;
-            c.gridheight = 1;
-            c.gridx = 0;
-            c.gridy = 22;
-            c.gridwidth = 1;
-            c.fill = GridBagConstraints.HORIZONTAL;
-            this.add(monitorBidButton);
-            if (hasReplied(messages)) {
-                respondButton.setText("Message");
-            }
-//            this.repaint();
+        if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid
+            respondButton.setText("Message");
         }
         String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
         respondButton.setName(data);
     }
 
     private void showTutors(JSONArray messages) {
+        detailPane.removeAll();
+        detailPane.revalidate();
+        detailPane.repaint();
+
         buttonArr = new ArrayList<>();
         // create a Panel to show each message replied by tutor
         if (messages.length() > 0){
@@ -247,7 +262,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 // add a description jlabel
                 bidPanelConstraint.gridx = 0;
                 bidPanelConstraint.gridy = 0;
-                bidPanelConstraint.gridwidth = 5;
+                bidPanelConstraint.gridwidth = 3;
                 bidPanelConstraint.anchor = GridBagConstraints.WEST;
                 JLabel bidLabel = new JLabel();
                 JSONObject bidder = message.getJSONObject("poster");
@@ -305,34 +320,6 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             }
             return false;
         }
-    }
-
-    /**
-     * Get the bidId from Find Bid page one user click on view bid to retrieve data from db
-     * @param data any data that is crucial to the pages for them to request the information that they need from the database
-     */
-    @Override
-    public void update(String data) {
-
-        this.bidId = new JSONObject(data).getString("bidId");
-        this.userId = new JSONObject(data).getString("userId");
-        HttpResponse<String> response = ApiRequest.get("/bid/"+ this.bidId + "?fields=messages");
-
-        // if retrieve success
-        if (response.statusCode() == 200){
-//            this.removeAll();
-//            this.repaint();
-//            this.revalidate();
-
-            // set the default value of reply button to respond
-            respondButton.setText("Respond");
-            createContent(new JSONObject(response.body()));
-
-        } else {
-            String msg = "Error: " + new JSONObject(response.body()).get("message");
-            JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
-        }
-
     }
 
     /**
