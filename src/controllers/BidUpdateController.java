@@ -31,10 +31,16 @@ public class BidUpdateController extends Publisher implements ActionListener, Ob
             ViewManagerService.loadPage(ViewManagerService.SEE_ALL_BIDS);
         } else if (thisBtn.getText().equals("Find Bids")){
             ViewManagerService.loadPage(ViewManagerService.FIND_ALL_BIDS);
+        } else if (thisBtn.getText().equals("View Contract")){
+            ViewManagerService.loadPage(ViewManagerService.VIEW_CONTRACT_PAGE);
         }
 
     }
 
+    /**
+     *
+     * @param data userId from loginController
+     */
     @Override
     public void update(String data) {
         notifySubscribers(data);

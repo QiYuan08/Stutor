@@ -21,6 +21,8 @@ public class ViewManagerService {
     public static final String FIND_TUTOR_RESPONSE = "FindTutorResponse";
     public static final String BID_RESPONSE = "BidResponse";
 
+    public static final String VIEW_CONTRACT_PAGE = "ViewContractPage";
+
     private static JPanel rootPanel;
 
     public static void setRootPanel(JPanel rootPanel) {

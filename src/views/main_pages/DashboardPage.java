@@ -20,7 +20,7 @@ import java.time.ZonedDateTime;
 public class DashboardPage extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private JLabel activityTitle, tutorialsTaken, tutorialsTaught;
-    private JButton viewProfileButton, seeBidsButton, createBidButton, findBidsButton;
+    private JButton viewProfileButton, seeBidsButton, createBidButton, findBidsButton, viewContractButton;
     private JScrollPane tutorialsTakenList, tutorialsTaughtList;
     private String userId;
 
@@ -78,6 +78,9 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
 
         findBidsButton = new JButton("Find Bids");
         c.gridx = 2;
+        c.gridheight = 1;
+        c.weightx = 0.3;
+        c.weighty = 0.5;
         c.gridy = 12;
         this.add(findBidsButton, c);
 
@@ -85,6 +88,11 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
         c.gridy = 13;
         c.gridwidth = 1;
         this.add(viewProfileButton, c);
+
+        viewContractButton = new JButton("View Contract");
+        c.gridy = 14;
+        c.gridwidth = 1;
+        this.add(viewContractButton, c);
 
         createBidButton.addActionListener(new ActionListener() {
             @Override
@@ -142,6 +150,15 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                         c.gridwidth = 1;
                         c.gridheight = 1;
                         this.add(createBidButton, c);
+
+                        // change the placement of viewContract button where there is create bid button
+                        this.remove(viewContractButton);
+                        viewContractButton = new JButton("View Contract");
+                        c.gridy = 13;
+                        c.gridx = 1;
+                        c.gridwidth = 1;
+                        c.gridheight = 1;
+                        this.add(viewContractButton, c);
                     }
 
                     c.gridy = 6;
@@ -233,5 +250,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
     public void addLinkListener(ActionListener actionListener) {
         this.findBidsButton.addActionListener(actionListener);
         this.seeBidsButton.addActionListener(actionListener);
+        this.viewContractButton.addActionListener(actionListener);
     }
 }

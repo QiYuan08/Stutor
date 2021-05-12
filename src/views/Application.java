@@ -3,12 +3,9 @@ package views;
 import controllers.*;
 import services.ExpireBidService;
 import services.ViewManagerService;
-import views.student_bids.CreateBid;
-import views.student_bids.SeeAllBids;
+import views.student_bids.*;
 import views.tutor_responds.*;
 import views.main_pages.*;
-import views.student_bids.SeeBidDetails;
-import views.student_bids.SeeTutorResponse;
 import links.*;
 
 import javax.swing.*;
@@ -40,6 +37,7 @@ public class Application extends JFrame{
         MessagesPage messagesPage = new MessagesPage();
         SeeTutorResponse seeTutorResponse = new SeeTutorResponse();
         BidResponse bidResponse = new BidResponse();
+        ViewContract viewContract = new ViewContract();
 
         // adding all the views into the rootPanel so that they can be accessed via the cardLayout
         rootPanel.add(loginPage, ViewManagerService.LOGIN_PAGE);
@@ -55,6 +53,9 @@ public class Application extends JFrame{
         rootPanel.add(findTutorResponse, ViewManagerService.FIND_TUTOR_RESPONSE);
         rootPanel.add(messagesPage, ViewManagerService.MESSAGES_PAGE);
         rootPanel.add(seeTutorResponse, ViewManagerService.SEE_TUTOR_RESPONSE);
+
+//        viewContract.update("3e541287-2ea2-4dad-b729-761d8f36059f");
+        rootPanel.add(viewContract, ViewManagerService.VIEW_CONTRACT_PAGE);
 
 
         // SERVICES
