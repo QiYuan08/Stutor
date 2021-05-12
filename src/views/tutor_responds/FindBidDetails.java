@@ -1,5 +1,6 @@
 package views.tutor_responds;
 
+import controllers.MonitorBidController;
 import services.ApiRequest;
 import services.ViewManagerService;
 import abstractions.ListenerLinkInterface;
@@ -23,7 +24,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     private JButton buyoutButton, respondButton, monitorBidButton, backButton, viewBidButton;
     private JPanel detailPane;
     private JScrollPane scrollPane;
-    private ArrayList<JButton> buttonArr;
+//    private ArrayList<JButton> buttonArr;
 
     public FindBidDetails() {
         this.setLayout(new GridBagLayout());
@@ -144,6 +145,8 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         monitorBidButton = new JButton("Monitor Bid");
         c.gridy = 23;
         this.add(monitorBidButton, c);
+
+        monitorBidButton.addActionListener(new MonitorBidController(this));
     }
 
     /**
@@ -235,7 +238,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         detailPane.revalidate();
         detailPane.repaint();
 
-        buttonArr = new ArrayList<>();
+//        buttonArr = new ArrayList<>();
         // create a Panel to show each message replied by tutor
         if (messages.length() > 0){
             GridBagConstraints c = new GridBagConstraints();
@@ -295,8 +298,8 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 JSONObject btnData = new JSONObject();
                 btnData.put("bidId", message.get("id"));
                 btnData.put("userId", this.userId);
-                viewBidButton.setName(btnData.toString());
-                buttonArr.add(viewBidButton); // add the button into button array
+//                viewBidButton.setName(btnData.toString());
+//                buttonArr.add(viewBidButton); // add the button into button array
 
                 c.gridy = detailPane.getComponentCount();
                 detailPane.add(bidPanel, c);
@@ -330,13 +333,13 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         this.respondButton.addActionListener(listener);
     }
 
-    public  void addViewBidListener(ActionListener listener) { ///////// to remove
-        if (buttonArr != null){ // check when the page first load during apps startup
-            for (JButton btn: buttonArr){
-                btn.addActionListener(listener);
-            }
-        }
-    }
+//    public  void addViewBidListener(ActionListener listener) { ///////// to remove
+//        if (buttonArr != null){ // check when the page first load during apps startup
+//            for (JButton btn: buttonArr){
+//                btn.addActionListener(listener);
+//            }
+//        }
+//    }
 
     /**
      * called by BidClosingController, which is activate by buyoutBtn
@@ -348,6 +351,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         bidInfo.put("messageId", "");
         bidInfo.put("tutorId", "");
         bidInfo.put("hasExpired", false);
+        bidInfo.put("userId", userId);
         return bidInfo;
     }
 
