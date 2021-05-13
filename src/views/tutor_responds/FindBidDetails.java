@@ -15,7 +15,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 
 public class FindBidDetails extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
 
@@ -164,7 +163,9 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         if (response.statusCode() == 200){
             // set the default value of reply button to respond
             respondButton.setText("Respond");
-            updateContent(new JSONObject(response.body()));
+            JSONObject bid = new JSONObject(response.body());
+            updateBidDetails(bid);
+            updateBidFunctions(bid);
         } else {
             String msg = "Error: " + new JSONObject(response.body()).get("message");
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
@@ -175,18 +176,13 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
      * Create the content to display the detail of the bid after user enter this page
      * @param bid the bid to display
      */
-    void updateContent(JSONObject bid){
-
+    private void updateBidDetails(JSONObject bid){
         JSONObject initiator = bid.getJSONObject("initiator");
         JSONObject subject = bid.getJSONObject("subject");
         JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
-        JSONArray messages = bid.getJSONArray("messages");
 
         subjectLabel.setText("Subject: " + subject.getString("name"));
         nameLabel.setText("Name: " + initiator.getString("givenName") +" " + initiator.getString("familyName"));
-
-        GridBagConstraints c = new GridBagConstraints();
-
         if (!additionalInfo.isEmpty()) {
             rate.setText("Rate: " + additionalInfo.getString("rate"));
             competency.setText("Minimum competency: " + additionalInfo.getInt("minCompetency"));
@@ -195,6 +191,12 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             duration.setText("Duration: " + additionalInfo.getInt("duration") + " hours per lesson");
             startTime.setText("Start Time: " + additionalInfo.getString("startTime"));
         }
+    }
+
+    private void updateBidFunctions(JSONObject bid) {
+        JSONArray messages = bid.getJSONArray("messages");
+        String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
+        respondButton.setName(data);
 
         this.remove(monitorBidButton);
         this.remove(scrollPane);
@@ -203,6 +205,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             showTutors(messages);
             buyoutButton.setName(this.bidId);
 
+            GridBagConstraints c = new GridBagConstraints();
             c.weighty = 1;
             c.weightx = 1;
             c.gridheight = 1;
@@ -210,27 +213,36 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             c.gridy = 23;
             c.gridwidth = 4;
             c.fill = GridBagConstraints.HORIZONTAL;
+            if (isMonitored(bidId)) {
+                monitorBidButton.setText("Remove From Monitoring");
+            }
             this.add(monitorBidButton, c);
 
-            c.weighty = 1;
-            c.weightx = 1;
             c.gridheight = 10;
-            c.gridx = 0;
             c.gridy = 9;
-            c.gridwidth = 4;
             c.fill = GridBagConstraints.HORIZONTAL;
             this.add(scrollPane, c);
         }
-
-        // add closeBid Button
-        // if its a a open bid add buy out button
-
         // add replyBid Button
-        if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid
+        else if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid
             respondButton.setText("Message");
         }
-        String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
-        respondButton.setName(data);
+
+    }
+
+    private boolean isMonitored(String bidId) {
+        HttpResponse<String> userResponse = ApiRequest.get("/user/" + userId);
+        JSONObject additionalInfo = new JSONObject(userResponse.body()).getJSONObject("additionalInfo");
+        if (additionalInfo.has("monitoredBids")) {
+            JSONArray monitoredBids = additionalInfo.getJSONArray("monitoredBids");
+            for (int i = 0; i < monitoredBids.length(); i++) {
+                JSONObject bid = (JSONObject) monitoredBids.get(i);
+                if (bid.getString("bidId").equals(bidId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void showTutors(JSONArray messages) {
@@ -298,7 +310,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 JSONObject btnData = new JSONObject();
                 btnData.put("bidId", message.get("id"));
                 btnData.put("userId", this.userId);
-//                viewBidButton.setName(btnData.toString());
+//                viewBidButton.setName(btnData.toString()); TODO: do we still need this line?
 //                buttonArr.add(viewBidButton); // add the button into button array
 
                 c.gridy = detailPane.getComponentCount();
