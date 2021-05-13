@@ -22,6 +22,7 @@ public class ViewManagerService {
     public static final String BID_RESPONSE = "BidResponse";
 
     public static final String VIEW_CONTRACT_PAGE = "ViewContractPage";
+    public static final String MONITORED_BIDS = "MonitoredBids";
 
     private static JPanel rootPanel;
 

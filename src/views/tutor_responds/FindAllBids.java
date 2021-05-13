@@ -186,7 +186,7 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
 
                 // if the bid still open
                 if (bid.isNull("dateClosedDown")) {
-                    // for some bids that doesn't have min competency
+                    // for some bids that doesn't have min competency TODO: don't all bids have competency?
                     if (!bid.getJSONObject("additionalInfo").has("minCompetency")) {
                         bids.put(bid);
 

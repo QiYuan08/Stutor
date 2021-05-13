@@ -38,6 +38,7 @@ public class Application extends JFrame{
         SeeTutorResponse seeTutorResponse = new SeeTutorResponse();
         BidResponse bidResponse = new BidResponse();
         ViewContract viewContract = new ViewContract();
+        MonitoredBids monitoredBids = new MonitoredBids();
 
         // adding all the views into the rootPanel so that they can be accessed via the cardLayout
         rootPanel.add(loginPage, ViewManagerService.LOGIN_PAGE);
@@ -56,6 +57,8 @@ public class Application extends JFrame{
 
 //        viewContract.update("3e541287-2ea2-4dad-b729-761d8f36059f");
         rootPanel.add(viewContract, ViewManagerService.VIEW_CONTRACT_PAGE);
+//        monitoredBids.update("4ad8f1ed-4883-4c44-a9ab-a50bdee96ff9");
+        rootPanel.add(monitoredBids, ViewManagerService.MONITORED_BIDS);
 
 
         // SERVICES
@@ -63,7 +66,7 @@ public class Application extends JFrame{
         // initialises the service that expires bids after a certain time interval
         ExpireBidService expireBidService = new ExpireBidService();
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
-        expireBidService.setDuration(30, 7);
+        expireBidService.setDuration(720, 7);
         expireBidService.expireOpenBidService();
         expireBidService.expireCloseBidService();
 

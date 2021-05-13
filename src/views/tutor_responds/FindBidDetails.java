@@ -214,9 +214,8 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             c.gridy = 23;
             c.gridwidth = 4;
             c.fill = GridBagConstraints.HORIZONTAL;
-            if (isMonitored(bidId)) {
-                monitorBidButton.setText("Remove From Monitoring");
-            }
+            if (isMonitored(bidId)) {monitorBidButton.setText("Remove From Monitoring");}
+            else {monitorBidButton.setText("Monitor Bid");}
             this.add(monitorBidButton, c);
 
             c.gridheight = 10;
@@ -238,7 +237,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             JSONArray monitoredBids = additionalInfo.getJSONArray("monitoredBids");
             for (int i = 0; i < monitoredBids.length(); i++) {
                 JSONObject bid = (JSONObject) monitoredBids.get(i);
-                if (bid.getString("bidId").equals(bidId)) {
+                if (bid.getString("id").equals(bidId)) {
                     return true;
                 }
             }
