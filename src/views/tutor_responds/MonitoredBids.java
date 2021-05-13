@@ -1,5 +1,6 @@
 package views.tutor_responds;
 
+import abstractions.ListenerLinkInterface;
 import abstractions.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,13 +13,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 
-public class MonitoredBids extends JPanel implements ObserverOutputInterface {
+public class MonitoredBids extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private JScrollPane scrollPane;
     private JLabel activityTitle;
     private JButton backButton;
     private String userId;
+    private ArrayList<JButton> buttonArr;
 
     public MonitoredBids() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -68,6 +71,7 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface {
         JSONObject user = new JSONObject(userResponse.body());
 
         if (user.getBoolean("isTutor") && user.getJSONObject("additionalInfo").has("monitoredBids")) {
+            buttonArr = new ArrayList<>();
             JSONArray monitoredBids = user.getJSONObject("additionalInfo").getJSONArray("monitoredBids");
             JPanel monitoredBidsPanel = new JPanel();
             monitoredBidsPanel.setLayout(new GridBagLayout());
@@ -108,6 +112,8 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface {
                 btnData.put("userId", userId);
                 viewBidButton.setName(btnData.toString());
 
+                buttonArr.add(viewBidButton);
+
                 c.gridx = 0;
                 c.gridy = monitoredBidsPanel.getComponentCount();
                 c.gridwidth = 4;
@@ -115,6 +121,15 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface {
                 monitoredBidsPanel.add(bidPanel, c);
             }
             scrollPane.setViewportView(monitoredBidsPanel);
+        }
+    }
+
+    @Override
+    public void addLinkListener(ActionListener actionListener) {
+        if (buttonArr != null) {
+            for (JButton button: buttonArr) {
+                button.addActionListener(actionListener);
+            }
         }
     }
 }

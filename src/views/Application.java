@@ -115,6 +115,10 @@ public class Application extends JFrame{
         findBidDetailsController.subscribe(findBidDetails);
         findBidDetailsController.subscribe(findTutorResponseLink);
 
+        FindBidDetailsController monitorBidsController = new FindBidDetailsController(monitoredBids);
+        monitorBidsController.subscribe(findBidDetails);
+        monitorBidsController.subscribe(findTutorResponseLink);
+
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
         BidClosingController bidClosingController = new BidClosingController();
         findBidDetails.addActionListener(bidClosingController);
@@ -133,7 +137,8 @@ public class Application extends JFrame{
         bidUpdateController.subscribe(findBidDetailsController);
         bidUpdateController.subscribe(seeAllBids);
         bidUpdateController.subscribe(seeBidDetailsController);
-        bidUpdateController.subscribe(monitoredBids);
+        bidUpdateController.subscribe(monitoredBids); // the page need to be updated first with the bid buttons before adding the listeners
+        bidUpdateController.subscribe(monitorBidsController);
 
         // passing the userId to view classes and services that require it
         LoginController loginController = new LoginController(loginPage);
