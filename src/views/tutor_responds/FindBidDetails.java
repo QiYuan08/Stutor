@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 
 public class FindBidDetails extends JPanel implements ObserverOutputInterface, ObserverInputInterface, ListenerLinkInterface {
 
@@ -23,7 +24,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     private JButton buyoutButton, respondButton, monitorBidButton, backButton, viewBidButton;
     private JPanel detailPane;
     private JScrollPane scrollPane;
-//    private ArrayList<JButton> buttonArr;
+    private ArrayList<JButton> buttonArr;
 
     public FindBidDetails() {
         this.setLayout(new GridBagLayout());
@@ -250,7 +251,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         detailPane.revalidate();
         detailPane.repaint();
 
-//        buttonArr = new ArrayList<>();
+        buttonArr = new ArrayList<>();
         // create a Panel to show each message replied by tutor
         if (messages.length() > 0){
             GridBagConstraints c = new GridBagConstraints();
@@ -310,8 +311,8 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 JSONObject btnData = new JSONObject();
                 btnData.put("bidId", message.get("id"));
                 btnData.put("userId", this.userId);
-//                viewBidButton.setName(btnData.toString()); TODO: do we still need this line?
-//                buttonArr.add(viewBidButton); // add the button into button array
+                viewBidButton.setName(btnData.toString()); // TODO: do we still need this line?
+                buttonArr.add(viewBidButton); // add the button into button array
 
                 c.gridy = detailPane.getComponentCount();
                 detailPane.add(bidPanel, c);
@@ -345,13 +346,13 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         this.respondButton.addActionListener(listener);
     }
 
-//    public  void addViewBidListener(ActionListener listener) { ///////// to remove
-//        if (buttonArr != null){ // check when the page first load during apps startup
-//            for (JButton btn: buttonArr){
-//                btn.addActionListener(listener);
-//            }
-//        }
-//    }
+    public  void addViewBidListener(ActionListener listener) { ///////// to remove
+        if (buttonArr != null){ // check when the page first load during apps startup
+            for (JButton btn: buttonArr){
+                btn.addActionListener(listener);
+            }
+        }
+    }
 
     /**
      * called by BidClosingController, which is activate by buyoutBtn

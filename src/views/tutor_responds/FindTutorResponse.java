@@ -96,7 +96,7 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
+                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
             }
         });
     }
@@ -112,8 +112,10 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
 
         // if rate is provided in the bid
 
+        name.setText("Name: " + initiator.getString("givenName") + " " + initiator.getString("familyName"));
+
         rate.setText("Rate: " + additionalInfo.get("rate"));
-//        competency.setText("Minimum competency: " + additionalInfo.get("minCompetency"));
+        competency.setText("Tutor competency: " + additionalInfo.get("minCompetency"));
         day.setText("Preferred Day(s): " + additionalInfo.get("day"));
         preferredSession.setText("Preferred no of sessions: " + additionalInfo.get("preferredSession") + " sessions per week");
         duration.setText("Duration: " + additionalInfo.get("duration") + " hours per lesson");

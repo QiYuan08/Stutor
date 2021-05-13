@@ -2,6 +2,7 @@ package views.tutor_responds;
 
 import abstractions.ObserverInputInterface;
 import abstractions.ObserverOutputInterface;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import services.ApiRequest;
 import services.ViewManagerService;
@@ -234,6 +235,16 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         additionalInfo.put("preferredSession", Integer.valueOf(sessionInput.getText()));
         additionalInfo.put("rate", rate);
         additionalInfo.put("freeLesson", freeLesson.getValue());
+        JSONArray competencies = new JSONObject(ApiRequest.get("/user/" + userId + "?fields=competencies.subject").body())
+                .getJSONArray("competencies");
+        String subjectId = new JSONObject(ApiRequest.get("/bid/" + bidId).body()).getJSONObject("subject").getString("id");
+        for (int i = 0; i < competencies.length(); i++) {
+            JSONObject competency = (JSONObject) competencies.get(i);
+            if (competency.getJSONObject("subject").getString("id").equals(subjectId)) {
+                additionalInfo.put("minCompetency", competency.getInt("level"));
+                break;
+            }
+        }
 
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("bidId", this.bidId);
