@@ -31,8 +31,10 @@ public class BidUpdateController extends Publisher implements ActionListener, Ob
             ViewManagerService.loadPage(ViewManagerService.SEE_ALL_BIDS);
         } else if (thisBtn.getText().equals("Find Bids")){
             ViewManagerService.loadPage(ViewManagerService.FIND_ALL_BIDS);
-        } else if (thisBtn.getText().equals("View Contract")){
+        } else if (thisBtn.getText().equals("View Contracts")){
             ViewManagerService.loadPage(ViewManagerService.VIEW_CONTRACT_PAGE);
+        } else if (thisBtn.getText().equals("Monitored Bids")) {
+            ViewManagerService.loadPage(ViewManagerService.MONITORED_BIDS);
         }
 
     }

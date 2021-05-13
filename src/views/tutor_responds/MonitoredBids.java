@@ -63,7 +63,7 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface {
 
     @Override
     public void update(String data) {
-        this.userId = data;
+        if (data != null) {this.userId = data;}
         HttpResponse<String> userResponse = ApiRequest.get("/user/" + userId);
         JSONObject user = new JSONObject(userResponse.body());
 

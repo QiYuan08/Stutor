@@ -123,6 +123,7 @@ public class Application extends JFrame{
         bidClosingController.subscribe(findAllBids);
         bidClosingController.subscribe(seeAllBids);
         bidClosingController.subscribe(dashboardPage);
+        // TODO: subscribe view contracts here
 
         // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
@@ -132,6 +133,7 @@ public class Application extends JFrame{
         bidUpdateController.subscribe(findBidDetailsController);
         bidUpdateController.subscribe(seeAllBids);
         bidUpdateController.subscribe(seeBidDetailsController);
+        bidUpdateController.subscribe(monitoredBids);
 
         // passing the userId to view classes and services that require it
         LoginController loginController = new LoginController(loginPage);
@@ -140,6 +142,7 @@ public class Application extends JFrame{
         loginController.subscribe(createBid);
         loginController.subscribe(seeAllBids);
         loginController.subscribe(findAllBids);
+        loginController.subscribe(monitoredBids);
         loginController.subscribe(createBid);
         loginController.subscribe(bidClosingController); // uses the userId to update views when a bid closes
 
