@@ -1,5 +1,6 @@
 package views.student_bids;
 
+import abstractions.ListenerLinkInterface;
 import abstractions.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,12 +16,11 @@ import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 // TODO: refactor time function into a class
 // TODO: refactor createPanel function into a class for findallbid, seeallbid, viewcontract
-public class ViewContract extends JPanel implements ObserverOutputInterface {
+public class ViewContract extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private JPanel contentPanel;
     private JScrollPane scrollPane;
@@ -28,13 +28,12 @@ public class ViewContract extends JPanel implements ObserverOutputInterface {
     private GridBagConstraints c;
     private JButton viewBidBtn, backBtn;
     private ArrayList<JButton> buttonArr;
-    private String userId;
+    public String userId;
 
     public  ViewContract() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridBagLayout());
         this.setBackground(new Color(245, 245, 220));
-        contentPanel = new JPanel();
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(1,3,1,3); //spacing between each bids
@@ -61,11 +60,8 @@ public class ViewContract extends JPanel implements ObserverOutputInterface {
         c.anchor = GridBagConstraints.NORTH;
         this.add(activityTitle, c);
 
-        contentPanel.setLayout(new GridBagLayout());
-
         // wrap contentPanel inside a scrollpane
-        scrollPane = new JScrollPane(contentPanel);
-        contentPanel.setBackground(Color.lightGray);
+        scrollPane = new JScrollPane();
         c.gridy = 2;
         c.weightx = 1;
         c.weighty = 1;
@@ -88,6 +84,8 @@ public class ViewContract extends JPanel implements ObserverOutputInterface {
      * @param contracts JSONArray of all the contract from the API
      */
     private void createContractPanels(JSONArray contracts){
+
+        //repaint
 
         buttonArr = new ArrayList<>(); // array to store all button for each bidPanel
 
@@ -178,7 +176,13 @@ public class ViewContract extends JPanel implements ObserverOutputInterface {
 
         HttpResponse<String> response = ApiRequest.get("/contract");
         JSONArray contracts = filterContracts(new JSONArray(response.body()));
+
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new GridBagLayout());
+        contentPanel.setBackground(Color.lightGray);
+
         createContractPanels(contracts);
+        scrollPane.setViewportView(contentPanel);
 
     }
 
@@ -207,5 +211,14 @@ public class ViewContract extends JPanel implements ObserverOutputInterface {
         }
 
         return  returnArr;
+    }
+
+    @Override
+    public void addLinkListener(ActionListener actionListener) {
+        if(buttonArr != null) {
+            for (JButton btn: buttonArr) {
+                btn.addActionListener(actionListener);
+            }
+        }
     }
 }

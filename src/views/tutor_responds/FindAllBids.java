@@ -165,7 +165,8 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
      */
     @Override
     public void update(String data) {
-        if (this.userId == null) {this.userId = data;}
+
+        this.userId = data;
         JSONObject user;
         bids = new JSONArray();
 

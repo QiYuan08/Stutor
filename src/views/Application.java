@@ -38,6 +38,7 @@ public class Application extends JFrame{
         SeeTutorResponse seeTutorResponse = new SeeTutorResponse();
         BidResponse bidResponse = new BidResponse();
         ViewContract viewContract = new ViewContract();
+        ViewContractDetail viewContractDetail = new ViewContractDetail();
 
         // adding all the views into the rootPanel so that they can be accessed via the cardLayout
         rootPanel.add(loginPage, ViewManagerService.LOGIN_PAGE);
@@ -53,9 +54,8 @@ public class Application extends JFrame{
         rootPanel.add(findTutorResponse, ViewManagerService.FIND_TUTOR_RESPONSE);
         rootPanel.add(messagesPage, ViewManagerService.MESSAGES_PAGE);
         rootPanel.add(seeTutorResponse, ViewManagerService.SEE_TUTOR_RESPONSE);
-
-//        viewContract.update("3e541287-2ea2-4dad-b729-761d8f36059f");
         rootPanel.add(viewContract, ViewManagerService.VIEW_CONTRACT_PAGE);
+        rootPanel.add(viewContractDetail, ViewManagerService.VIEW_CONTRACT_DETAIL);
 
 
         // SERVICES
@@ -95,7 +95,6 @@ public class Application extends JFrame{
         // bid to update data between findbidpage, message and response page
         BidResponseLink bidResponseLink = new BidResponseLink(findBidDetails, bidResponse, messagesPage);
 
-
         // CONTROLLERS - notifies multiple subscribers of new information and proceeds to the next page
 
         // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
@@ -111,6 +110,9 @@ public class Application extends JFrame{
         FindBidDetailsController findBidDetailsController = new FindBidDetailsController(findAllBids);
         findBidDetailsController.subscribe(findBidDetails);
         findBidDetailsController.subscribe(findTutorResponseLink);
+
+        ViewContractDetailController viewContractDetailController = new ViewContractDetailController(viewContract);
+        viewContractDetailController.subscribe(viewContractDetail);
 
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
         BidClosingController bidClosingController = new BidClosingController();
@@ -129,16 +131,16 @@ public class Application extends JFrame{
         bidUpdateController.subscribe(findBidDetailsController);
         bidUpdateController.subscribe(seeAllBids);
         bidUpdateController.subscribe(seeBidDetailsController);
+        bidUpdateController.subscribe(viewContract);
+        bidUpdateController.subscribe(viewContractDetailController);
 
         // passing the userId to view classes and services that require it
         LoginController loginController = new LoginController(loginPage);
         loginController.subscribe(profilePage);
         loginController.subscribe(dashboardPage);
         loginController.subscribe(createBid);
-        loginController.subscribe(seeAllBids);
-        loginController.subscribe(findAllBids);
-        loginController.subscribe(createBid);
         loginController.subscribe(bidClosingController); // uses the userId to update views when a bid closes
+        loginController.subscribe(bidUpdateController);
 
         this.add(rootPanel);
         this.setVisible(true);

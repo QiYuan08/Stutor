@@ -311,7 +311,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 JSONObject btnData = new JSONObject();
                 btnData.put("bidId", message.get("id"));
                 btnData.put("userId", this.userId);
-                viewBidButton.setName(btnData.toString()); // TODO: do we still need this line?
+                viewBidButton.setName(btnData.toString());
                 buttonArr.add(viewBidButton); // add the button into button array
 
                 c.gridy = detailPane.getComponentCount();

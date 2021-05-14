@@ -168,9 +168,7 @@ public class SeeAllBids extends JPanel implements ObserverOutputInterface, Liste
      */
     @Override
     public void update(String data) {
-        if (this.userId == null) {
-            this.userId = data;
-        }
+        this.userId = data;
 
         // get all bid
         HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids");

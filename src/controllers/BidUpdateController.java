@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 public class BidUpdateController extends Publisher implements ActionListener, ObserverOutputInterface {
 
     private ListenerLinkInterface inputPage;
+    private String userId;
 
     public BidUpdateController(ListenerLinkInterface inputPage) {
         super();
@@ -24,7 +25,7 @@ public class BidUpdateController extends Publisher implements ActionListener, Ob
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        notifySubscribers(null);
+        notifySubscribers(this.userId);
 
         JButton thisBtn = (JButton) e.getSource();
         if (thisBtn.getText().equals("See Your Bids")){
@@ -43,6 +44,7 @@ public class BidUpdateController extends Publisher implements ActionListener, Ob
      */
     @Override
     public void update(String data) {
+        this.userId = data;
         notifySubscribers(data);
     }
 }

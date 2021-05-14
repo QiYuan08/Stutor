@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 public class FindTutorResponse extends JPanel implements ObserverOutputInterface {
-    private String bidId, userId;
+    private String messageId, userId;
     private JLabel title, name, rate, competency, duration, startTime, day, preferredSession;
     private JButton backBtn;
     private JPanel detailPane;
@@ -130,9 +130,9 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
     @Override
     public void update(String data) {
 
-        this.bidId = new JSONObject(data).getString("bidId");
+        this.messageId = new JSONObject(data).getString("bidId");
         this.userId = new JSONObject(data).getString("userId");
-        HttpResponse<String> response = ApiRequest.get("/message/"+ this.bidId + "?fields=messages");
+        HttpResponse<String> response = ApiRequest.get("/message/"+ this.messageId + "?fields=messages");
 
         // if retrieve success
         if (response.statusCode() == 200){
