@@ -167,6 +167,8 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
     public void update(String data) {
 
         this.userId = data;
+//        if (this.userId == null) {this.userId = data;}
+//        if (data != null) {userId = data;}
         JSONObject user;
         bids = new JSONArray();
 
@@ -187,7 +189,7 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
 
                 // if the bid still open
                 if (bid.isNull("dateClosedDown")) {
-                    // for some bids that doesn't have min competency
+                    // for some bids that doesn't have min competency TODO: don't all bids have competency?
                     if (!bid.getJSONObject("additionalInfo").has("minCompetency")) {
                         bids.put(bid);
 

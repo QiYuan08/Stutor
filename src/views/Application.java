@@ -39,6 +39,7 @@ public class Application extends JFrame{
         BidResponse bidResponse = new BidResponse();
         ViewContract viewContract = new ViewContract();
         ViewContractDetail viewContractDetail = new ViewContractDetail();
+        MonitoredBids monitoredBids = new MonitoredBids();
 
         // adding all the views into the rootPanel so that they can be accessed via the cardLayout
         rootPanel.add(loginPage, ViewManagerService.LOGIN_PAGE);
@@ -56,6 +57,8 @@ public class Application extends JFrame{
         rootPanel.add(seeTutorResponse, ViewManagerService.SEE_TUTOR_RESPONSE);
         rootPanel.add(viewContract, ViewManagerService.VIEW_CONTRACT_PAGE);
         rootPanel.add(viewContractDetail, ViewManagerService.VIEW_CONTRACT_DETAIL);
+//        monitoredBids.update("4ad8f1ed-4883-4c44-a9ab-a50bdee96ff9");
+        rootPanel.add(monitoredBids, ViewManagerService.MONITORED_BIDS);
 
 
         // SERVICES
@@ -63,7 +66,7 @@ public class Application extends JFrame{
         // initialises the service that expires bids after a certain time interval
         ExpireBidService expireBidService = new ExpireBidService();
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
-        expireBidService.setDuration(30, 7);
+        expireBidService.setDuration(720, 7);
         expireBidService.expireOpenBidService();
         expireBidService.expireCloseBidService();
 
@@ -95,6 +98,7 @@ public class Application extends JFrame{
         // bid to update data between findbidpage, message and response page
         BidResponseLink bidResponseLink = new BidResponseLink(findBidDetails, bidResponse, messagesPage);
 
+
         // CONTROLLERS - notifies multiple subscribers of new information and proceeds to the next page
 
         // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
@@ -114,6 +118,10 @@ public class Application extends JFrame{
         ViewContractDetailController viewContractDetailController = new ViewContractDetailController(viewContract);
         viewContractDetailController.subscribe(viewContractDetail);
 
+        FindBidDetailsController monitorBidsController = new FindBidDetailsController(monitoredBids);
+        monitorBidsController.subscribe(findBidDetails);
+        monitorBidsController.subscribe(findTutorResponseLink);
+
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
         BidClosingController bidClosingController = new BidClosingController();
         findBidDetails.addActionListener(bidClosingController);
@@ -122,6 +130,7 @@ public class Application extends JFrame{
         bidClosingController.subscribe(findAllBids);
         bidClosingController.subscribe(seeAllBids);
         bidClosingController.subscribe(dashboardPage);
+        // TODO: subscribe view contracts here
 
         // dashboardController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
@@ -131,6 +140,8 @@ public class Application extends JFrame{
         bidUpdateController.subscribe(findBidDetailsController);
         bidUpdateController.subscribe(seeAllBids);
         bidUpdateController.subscribe(seeBidDetailsController);
+        bidUpdateController.subscribe(monitoredBids); // the page need to be updated first with the bid buttons before adding the listeners
+        bidUpdateController.subscribe(monitorBidsController);
         bidUpdateController.subscribe(viewContract);
         bidUpdateController.subscribe(viewContractDetailController);
 
@@ -141,6 +152,7 @@ public class Application extends JFrame{
         loginController.subscribe(createBid);
         loginController.subscribe(bidClosingController); // uses the userId to update views when a bid closes
         loginController.subscribe(bidUpdateController);
+        loginController.subscribe(monitoredBids);
 
         this.add(rootPanel);
         this.setVisible(true);
