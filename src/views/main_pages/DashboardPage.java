@@ -139,7 +139,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                     this.remove(tutorialsTakenList);
                     this.remove(tutorialsTaken);
                     this.remove(seeBidsButton);
-                    this.remove(viewContractButton);
+
                 } else {
                     c.gridy = 1;
                     c.gridwidth = 3;
@@ -160,14 +160,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                         this.add(createBidButton, c);
 
                     }
-                    // change the placement of viewContract button where there is create bid button TODO: i think no need so complicated la
-//                        this.remove(viewContractButton);
-//                    viewContractButton = new JButton("View Contract");
-//                    c.gridy = 13;
-//                    c.gridx = 1;
-//                    c.gridwidth = 1;
-//                    c.gridheight = 1;
-//                    this.add(viewContractButton, c);
 
                     c.gridy = 6;
                     c.gridx = 2;
@@ -175,11 +167,6 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                     c.gridheight = 1;
                     this.add(seeBidsButton, c);
 
-                    viewContractButton = new JButton("View Contracts");
-                    c.gridy = 13;
-                    c.gridx = 1;
-                    c.gridwidth = 2;
-                    this.add(viewContractButton, c);
                 }
 
                 if (!user.getBoolean("isTutor")) {
@@ -209,6 +196,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                     c.gridx = 1;
                     c.gridy = 12;
                     this.add(monitoredBidsButton, c);
+
                 }
 
                 JPanel tutorialsTakenPanel = new JPanel();

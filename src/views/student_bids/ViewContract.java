@@ -13,12 +13,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 // TODO: refactor time function into a class
+// TODO: view all latest 5 contract not closed contract
 // TODO: refactor createPanel function into a class for findallbid, seeallbid, viewcontract
 public class ViewContract extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
@@ -29,6 +28,7 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
     private JButton viewBidBtn, backBtn;
     private ArrayList<JButton> buttonArr;
     public String userId;
+    private boolean isTutor;
 
     public  ViewContract() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
@@ -85,11 +85,10 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
      */
     private void createContractPanels(JSONArray contracts){
 
-        //repaint
-
         buttonArr = new ArrayList<>(); // array to store all button for each bidPanel
 
         // create a jPanel for each bids available
+        System.out.println(contracts.length());
         if (contracts.length() > 0) {
             for (int i=0; i < contracts.length(); i++){
 
@@ -116,16 +115,27 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
                 contractPanel.add(bidLabel, contractPanelConstraint);
 
                 // type jlabel
-                JLabel tutorLabel = new JLabel();
-                tutorLabel.setText( "Tutor: " + contract.getJSONObject("firstParty").get("givenName") + " " + contract.getJSONObject("firstParty").get("familyName"));
-                contractPanelConstraint.gridy = 1;
-                contractPanel.add(tutorLabel, contractPanelConstraint);
+                JLabel peopleLabel = new JLabel();
+                if (isTutor) {
+                    peopleLabel.setText( "Initiator: " + contract.getJSONObject("secondParty").get("givenName") + " " + contract.getJSONObject("secondParty").get("familyName"));
 
-                // initiator jlabel
-                JLabel expireLabel = new JLabel();
-                expireLabel.setText("Expired On: " + contract.getString("expiryDate"));
+                } else {
+                    peopleLabel.setText( "Tutor: " + contract.getJSONObject("firstParty").get("givenName") + " " + contract.getJSONObject("firstParty").get("familyName"));
+
+                }
+                contractPanelConstraint.gridy = 1;
+                contractPanel.add(peopleLabel, contractPanelConstraint);
+
+                JLabel additionalLabel = new JLabel();
+                // for tutor to view all renewed contract by student that is pending signing
+                if (contract.isNull("dateSigned")) {
+                    additionalLabel.setText("Rate: " + contract.getJSONObject("lessonInfo").getString("rate"));
+                } else { // for student to view latest 5 signed contract
+                    additionalLabel.setText("Signed On: " + contract.getString("dateSigned"));
+                }
+
                 contractPanelConstraint.gridy = 2;
-                contractPanel.add(expireLabel, contractPanelConstraint);
+                contractPanel.add(additionalLabel, contractPanelConstraint);
 
                 // add view detail button
                 contractPanelConstraint.gridy = 0;
@@ -187,30 +197,77 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
     }
 
     /**
-     * Function to filter contract to the latest 5 contract expired/terminated by user
+     * Function to - filter contract to the latest 5 contract signed for student
+     *             - filter renewed contract for tutor that hasn't been signed
      * @param contracts JSONArray containing all the contract
      * @return JSONArray of the latest 5 contract
      */
     private JSONArray filterContracts(JSONArray contracts){
 
-        JSONArray returnArr = new JSONArray();
-        // get the latest expired 5 bids
-        for (int i=0; i < contracts.length(); i++) {
-            JSONObject contract = contracts.getJSONObject(i);
-            Instant bidStart = Instant.parse(contract.getString("expiryDate"));
-            Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
-            Instant now = ts.toInstant();
+        // check if user is tutor or student to filter the contract differently
+        HttpResponse<String> response = ApiRequest.get("/user/" + this.userId);
+        JSONObject user = new JSONObject(response.body());
+        isTutor = user.getBoolean("isTutor");
 
-            // if bid haven't expired
-            if (!contract.isNull("terminationDate") || now.compareTo(bidStart) > 0) {
-                // check if this contract belongs to this student
-                if (contract.getJSONObject("secondParty").getString("id").equals(this.userId)) {
+        JSONArray returnArr = new JSONArray();
+
+        // if tutor show all contract renewed by student that hasn't been signed by tutor
+        if (isTutor){
+            JSONArray activeContract = new JSONArray(user.getJSONObject("additionalInfo").optJSONArray("activeContract"));
+
+            for(int i=0; i < activeContract.length(); i++) {
+                JSONObject contract = new JSONObject(ApiRequest.get("/contract/" + activeContract.get(i)).body());
+                returnArr.put(contract);
+            }
+
+
+        } else { // if student show latest 5 contract signed
+
+            // get all the bid signed by the user
+            for (int i=0; i < contracts.length(); i++){
+                JSONObject contract = contracts.getJSONObject(i);
+                if (contract.getJSONObject("secondParty").getString("id").equals(this.userId) && (!contract.isNull("dateSigned"))){
                     returnArr.put(contracts.get(i));
                 }
+
+            }
+
+            // if less that 5 contract
+            if (returnArr.length() <= 5){
+                return  returnArr;
+            }
+
+            // if more than 5 filter the latest bid signed by user
+            returnArr = InsertionSort(contracts);
+            while (returnArr.length() > 5){
+                returnArr.remove(0);
             }
         }
 
+
         return  returnArr;
+    }
+
+    /**
+     * Using insertion sort to sort contracts by date
+     * @param contracts The arrayList of contract
+     */
+    private JSONArray InsertionSort(JSONArray contracts) {
+
+        for (int i = 1; i < contracts.length(); ++i) {
+            JSONObject key = contracts.getJSONObject(i);
+            Instant currDate = Instant.parse(key.getString("dateSigned"));
+            int j = i - 1;
+
+            // while date[] > currDate, move the date to left
+            while (j >= 0 &&  currDate.compareTo(Instant.parse(contracts.getJSONObject(j).getString("dateSigned"))) > 0) {
+                contracts.put(j+1, contracts.get(j));
+                j = j - 1;
+            }
+            contracts.put(j + 1, key);
+        }
+
+        return contracts;
     }
 
     @Override

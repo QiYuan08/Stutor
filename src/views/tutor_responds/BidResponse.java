@@ -19,12 +19,12 @@ import java.time.ZonedDateTime;
 
 public class BidResponse extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
-    private JLabel activityTitle, lessonField, dayField,sessionLabel,startTimeField, sessionField, durationLabel, rateLabel, endTimeField, rateField, freeLessonField, messageField;
+    private JLabel activityTitle, lessonField, dayField,sessionLabel, expiryField, startTimeField, sessionField, durationLabel, rateLabel, endTimeField, rateField, freeLessonField, messageField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
     private JButton submitButton, backBtn;
     private JTextArea messageInput;
     private JComboBox<String> startMeridiem;
-    private JSpinner duration, endTime, freeLesson, startTime;
+    private JSpinner duration, endTime, freeLesson, startTime, expireSpinner;
     private String bidId, userId;
     private boolean isClose; // true is this page is showing open bid
     private GridBagConstraints c;
@@ -181,10 +181,24 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         c.gridwidth = 2;
         this.add(freeLesson, c);
 
+        // contract Length
+        expiryField = new JLabel("utilities.Contract Length");
+        c.gridy = 8;
+        c.gridx = 0;
+        c.gridwidth = 1;
+        this.add(expiryField, c);
+
+        Integer[] contractLength = {3,6,12,24,36,48,96};
+        expireSpinner = new JSpinner(new SpinnerListModel(contractLength));
+        c.gridy = 8;
+        c.gridx = 1;
+        c.gridwidth = 2;
+        this.add(expireSpinner, c);
+
         // messages
         messageField = new JLabel("Message: ");
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 9;
         c.gridwidth = 1;
         this.add(messageField, c);
 
@@ -192,7 +206,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         messageInput.setLineWrap(true);
         messageInput.setWrapStyleWord(true);
         c.gridx = 1;
-        c.gridy = 8;
+        c.gridy = 9;
         c.gridwidth = 3;
         c.gridheight = 2;
         c.weighty = 0;
@@ -202,7 +216,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         submitButton = new JButton("Submit Bid");
         c.gridx = 0;
         c.weightx = 1;
-        c.gridy = 11;
+        c.gridy = 12;
         c.gridwidth = 4;
         this.add(submitButton, c);
 
@@ -225,11 +239,13 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         String day = dayInput.getText();
         String time = startTime.getValue().toString() + startMeridiem.getSelectedItem().toString();
         String rate = rateInput.getText();
+        String contractLength = expireSpinner.getValue().toString();
 
         // creating the json body to pass to response bid listener
         JSONObject additionalInfo = new JSONObject();
-        additionalInfo.put("noOfoLesson", noOfLesson);
+        additionalInfo.put("noOfLesson", noOfLesson);
         additionalInfo.put("day", day);
+        additionalInfo.put("contractLength", contractLength);
         additionalInfo.put("startTime", time);
         additionalInfo.put("duration", duration.getValue().toString());
         additionalInfo.put("preferredSession", Integer.valueOf(sessionInput.getText()));
@@ -307,10 +323,14 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
             this.remove(messageField);
         }
 
+        // set the contract duration given by student as default in expireSpinner
+        expireSpinner.setValue(Integer.valueOf(bid.getJSONObject("additionalInfo").getString("contractLength")));
 
+
+        // set the name of this button as bidId and userId for quering with db
         JSONObject btnData = new JSONObject();
         btnData.put("bidId", this.bidId);
         btnData.put("userId", this.userId);
-        submitButton.setName(btnData.toString()); // set the name of this button as bidId and userId for quering with db
+        submitButton.setName(btnData.toString());
     }
 }

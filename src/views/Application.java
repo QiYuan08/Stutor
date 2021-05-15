@@ -56,9 +56,9 @@ public class Application extends JFrame{
         rootPanel.add(messagesPage, ViewManagerService.MESSAGES_PAGE);
         rootPanel.add(seeTutorResponse, ViewManagerService.SEE_TUTOR_RESPONSE);
         rootPanel.add(viewContract, ViewManagerService.VIEW_CONTRACT_PAGE);
-        rootPanel.add(viewContractDetail, ViewManagerService.VIEW_CONTRACT_DETAIL);
-//        monitoredBids.update("4ad8f1ed-4883-4c44-a9ab-a50bdee96ff9");
+        //        monitoredBids.update("4ad8f1ed-4883-4c44-a9ab-a50bdee96ff9");
         rootPanel.add(monitoredBids, ViewManagerService.MONITORED_BIDS);
+        rootPanel.add(viewContractDetail, ViewManagerService.VIEW_CONTRACT_DETAIL);
 
 
         // SERVICES

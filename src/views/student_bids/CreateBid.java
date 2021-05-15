@@ -21,12 +21,12 @@ import java.util.HashMap;
 
 public class CreateBid extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
-    private JLabel activityTitle, subjectField, qualificationField, lessonField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
+    private JLabel activityTitle, subjectField, qualificationField, lessonField, expireField, dayField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
     private JButton submitButton;
     private JButton backBtn;
     private JComboBox<String> startMeridiem, typeCombo, subjectCombo, competencyCombo;
-    private JSpinner startTime, duration;
+    private JSpinner startTime, duration, expireSpinner;
     private HashMap<String, String> subjectMapping;
     private String userId;
 
@@ -223,10 +223,26 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         c.gridheight = 1;
         this.add(rateLabel, c);
 
+        // expiry date
+        expireField = new JLabel("utilities.Contract length: ");
+        c.gridx = 0;
+        c.gridy = 9;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        this.add(expireField, c);
+
+        Integer[] contractLength = {3,6,12,24,36,48,96};
+        expireSpinner = new JSpinner(new SpinnerListModel(contractLength));
+        expireSpinner.setValue(Integer.valueOf(6));
+        c.gridx = 1;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        this.add(expireSpinner, c);
+
         // checkbox to input bid type
         typeField = new JLabel("Bid Type");
         c.gridx = 0;
-        c.gridy = 9;
+        c.gridy = 10;
         this.add(typeField, c);
 
         typeCombo = new JComboBox<>(new String[]{"open", "close"});
@@ -237,7 +253,7 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         //submitBtn
         c.weightx = 0.1;
         c.gridx = 0;
-        c.gridy = 10;
+        c.gridy = 11;
         c.gridwidth = 4;
         this.add(submitButton, c);
 
@@ -255,6 +271,7 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         String day = dayInput.getText();
         String time = startTime.getValue().toString() + startMeridiem.getSelectedItem().toString();
         String rate = rateInput.getText();
+        String contractLength = expireSpinner.getValue().toString();
         Integer competency = Integer.valueOf(competencyCombo.getSelectedItem().toString());
         String subjectId = subjectMapping.get(subjectCombo.getSelectedItem());
 
@@ -270,6 +287,7 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         additionalInfo.put("duration", duration.getValue().toString());
         additionalInfo.put("preferredSession", Integer.valueOf(sessionInput.getText()));
         additionalInfo.put("rate", rate);
+        additionalInfo.put("contractLength", contractLength);
 
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("subjectId", subjectId);

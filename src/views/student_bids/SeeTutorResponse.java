@@ -95,7 +95,8 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
         mainConst.gridheight = 1;
         mainConst.fill = GridBagConstraints.HORIZONTAL;
         mainConst.gridx = 0;
-        mainConst.gridy = 30;
+        mainConst.gridy = 32;
+        mainConst.gridwidth = 1;
         this.add(backBtn, mainConst);
 
         backBtn.addActionListener(new ActionListener() {

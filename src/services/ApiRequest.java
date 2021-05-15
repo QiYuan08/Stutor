@@ -62,4 +62,22 @@ public class ApiRequest {
         return response;
     }
 
+    public static HttpResponse<String> put(String url, String jsonObj){
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(ROOT_URL + url))
+                .setHeader("Authorization", API_KEY)
+                .header("Content-Type", "application/json")
+                .method("PUT", HttpRequest.BodyPublishers.ofString(jsonObj))
+                .build();
+
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
 }

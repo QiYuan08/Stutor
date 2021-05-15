@@ -64,13 +64,8 @@ public class BidResponseLink implements ActionListener {
 
                 // if bid button in find bids detail page is clicked check if open or close bid then go to appropriate page
                 // go to either openBidResponse or closedBidResponse
-                if (bid.get("type").equals("open")) {
-                    bidResponse.update(thisBtn.getName());
-                    ViewManagerService.loadPage(ViewManagerService.BID_RESPONSE);
-                } else {
-                    bidResponse.update(thisBtn.getName());
-                    ViewManagerService.loadPage(ViewManagerService.BID_RESPONSE);
-                }
+                bidResponse.update(thisBtn.getName());
+                ViewManagerService.loadPage(ViewManagerService.BID_RESPONSE);
             }
         }
     }
