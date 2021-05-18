@@ -122,6 +122,7 @@ public class Application extends JFrame{
         monitorBidsController.subscribe(findBidDetails);
         monitorBidsController.subscribe(findTutorResponseLink);
 
+        // TODO: contract not updated when tutor buy out bid
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
         BidClosingController bidClosingController = new BidClosingController();
         findBidDetails.addActionListener(bidClosingController);

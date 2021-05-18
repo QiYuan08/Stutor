@@ -1,5 +1,6 @@
 package controllers;
 
+import org.json.JSONArray;
 import services.ApiRequest;
 import abstractions.Publisher;
 import services.ViewManagerService;
@@ -125,11 +126,49 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
 
         if (contractResponse.statusCode() == 201) {
             contract = new JSONObject(contractResponse.body());
+            patchUser(contract.getJSONObject("secondParty").getString("id"), contract.getString("id"), true);
             signContract(contract);
         } else {
             String msg = "Contract not posted: Error " + contractResponse.statusCode();
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    /**
+     * Method to add pending contract into tutor/student additionalInfo to sign later on
+     * @param userId id of the tutor
+     */
+    private void patchUser(String userId, String contractId, boolean isStudent){
+        JSONObject user = new JSONObject(ApiRequest.get("/user/" + userId).body());
+        JSONObject additionalInfo = user.getJSONObject("additionalInfo");
+
+        // if user has previously pending contract
+        if (additionalInfo.has("activeContract")){
+
+            JSONArray activeContract = additionalInfo.getJSONArray("activeContract");
+
+            if (isStudent) {
+                if (activeContract.length() == 5){ // only save latest 5 signed contract
+                    activeContract.remove(0); // remove the oldest contract
+                    activeContract.put(contractId); // add latest contract
+                }
+            } else { //tutor save as many unsigned contract
+                activeContract.put(contractId);
+
+            }
+            // update additionalInfo with new active Contract
+            additionalInfo.remove("activeContract");
+            additionalInfo.put("activeContract", activeContract);
+
+        } else {
+            JSONArray activeContract = new JSONArray();
+            activeContract.put(contractId);
+
+            // update additionalInfo with new active Contract
+            additionalInfo.put("activeContract", activeContract);
+        }
+        ApiRequest.put("/user/" + userId, user.toString());
+
     }
 
     @Override

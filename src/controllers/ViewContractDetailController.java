@@ -9,6 +9,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * button listener class for each individual view detail button in  viewContract page
+ * and notfiy view contract detail page to update the view
+ */
 public class ViewContractDetailController extends Publisher implements ActionListener, ObserverOutputInterface {
 
     private ListenerLinkInterface inputPage;

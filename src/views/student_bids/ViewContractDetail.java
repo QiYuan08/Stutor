@@ -265,7 +265,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         JSONObject jsonObj = new JSONObject();
 
         if (isTutor) {
-            jsonObj.put("tutorId", this.userId);
+            jsonObj.put("isTutor", true);
             jsonObj.put("contractId", this.contractId);
 
         } else {
@@ -279,24 +279,30 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
             Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
             Instant now = ts.toInstant();
 
+            JSONObject lessonInfo = new JSONObject();
+            lessonInfo.put("minCompetency", competency);
+            lessonInfo.put("noOfLesson", noOfLesson);
+            lessonInfo.put("day", day);
+            lessonInfo.put("startTime", time);
+            lessonInfo.put("duration", duration.getValue().toString());
+            lessonInfo.put("preferredSession", Integer.valueOf(sessionInput.getText()));
+            lessonInfo.put("rate", rate);
+            lessonInfo.put("contractLength", expireSpinner.getValue());
+            lessonInfo.put("freeLesson", freeLessonInput.getText());
+
             JSONObject additionalInfo = new JSONObject();
-            additionalInfo.put("minCompetency", competency);
-            additionalInfo.put("noOfLesson", noOfLesson);
-            additionalInfo.put("day", day);
-            additionalInfo.put("startTime", time);
-            additionalInfo.put("duration", duration.getValue().toString());
-            additionalInfo.put("preferredSession", Integer.valueOf(sessionInput.getText()));
-            additionalInfo.put("rate", rate);
-            additionalInfo.put("contractLength", expireSpinner.getValue());
-            additionalInfo.put("freeLesson", freeLessonInput.getText());
             additionalInfo.put("tutorSigned", false);
-            additionalInfo.put("studentSigned", true);
+            additionalInfo.put("studentSigned", false);
 
             jsonObj.put("firstPartyId", tutorMapping.get(tutorCombo.getSelectedItem()));
             jsonObj.put("secondPartyId", this.userId);
             jsonObj.put("subjectId", this.subjectId);
             jsonObj.put("dateCreated", now);
+            jsonObj.put("lessonInfo", lessonInfo);
             jsonObj.put("additionalInfo", additionalInfo);
+            jsonObj.put("isTutor", false);
+            jsonObj.put("contractId", this.contractId);
+
         }
 
         return jsonObj;
@@ -338,7 +344,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         startMeridiem.setSelectedItem(time.substring(time.length()-2)); // get the meridiem
         startTime.setValue(Integer.valueOf(time.substring(0, time.length()-2))); // get the time
 
-        // check if the studen is tutor or or student
+        // check if the student is tutor or or student
         JSONObject user = new JSONObject(ApiRequest.get("/user/" + this.userId).body());
         isTutor =  user.getBoolean("isTutor") ? true : false;
 
@@ -346,8 +352,17 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
             submitButton.setText("Sign Contract");
             disableEdit();
         } else {
-            submitButton.setText("Submit Contract");
-            enableEdit();
+            // if this is a signed contract which means for renewal
+            if (contract.isNull("dateSigned")) {
+                submitButton.setText("Sign Contract");
+                disableEdit();
+
+            } else { // else for student to sign renewed cotract
+                submitButton.setText("Submit Contract");
+                enableEdit();
+
+            }
+
         }
     }
 

@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
-import java.time.Instant;
 import java.util.ArrayList;
 
 // TODO: refactor time function into a class
@@ -21,9 +20,9 @@ import java.util.ArrayList;
 // TODO: refactor createPanel function into a class for findallbid, seeallbid, viewcontract
 public class ViewContract extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
-    private JPanel contentPanel;
-    private JScrollPane scrollPane;
-    private JLabel activityTitle;
+    private JPanel contentPanel, unsignedContractPanel;
+    private JScrollPane contentScrollPane, unsignedScrollPane;
+    private JLabel activityTitle, unsignedContractLabel;
     private GridBagConstraints c;
     private JButton viewBidBtn, backBtn;
     private ArrayList<JButton> buttonArr;
@@ -47,11 +46,11 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
         c.anchor = GridBagConstraints.PAGE_START;
         this.add(backBtn, c);
 
-        activityTitle = new JLabel("Student Contracts");
+        activityTitle = new JLabel("Contracts");
         activityTitle.setHorizontalAlignment(JLabel.CENTER);
         activityTitle.setVerticalAlignment(JLabel.TOP);
         activityTitle.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-        c.gridx = 2;
+        c.gridx = 1;
         c.gridy = 0;
         c.gridheight = 1;
         c.weightx = 1;
@@ -61,15 +60,29 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
         this.add(activityTitle, c);
 
         // wrap contentPanel inside a scrollpane
-        scrollPane = new JScrollPane();
+        contentScrollPane = new JScrollPane();
         c.gridy = 2;
         c.weightx = 1;
         c.weighty = 1;
         c.gridwidth = 7;
-        c.gridheight = 30;
+        c.gridheight = 20;
         c.gridx = 0;
         c.anchor = GridBagConstraints.CENTER;
-        this.add(scrollPane, c);
+        this.add(contentScrollPane, c);
+
+        // wrap unsignedContract panel inside a scrollpane
+        unsignedScrollPane = new JScrollPane();
+        c.gridy = 2;
+        c.gridy = 24;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.gridwidth = 7;
+        c.gridheight = 20;
+        c.gridx = 0;
+        c.anchor = GridBagConstraints.CENTER;
+        this.add(unsignedScrollPane, c);
+
+        unsignedContractLabel = new JLabel();
 
         backBtn.addActionListener(new ActionListener() {
             @Override
@@ -80,15 +93,98 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
     }
 
     /**
+     *
+     * @param data receive userId from dashboard page (bidUpdateController)
+     */
+    @Override
+    public void update(String data) {
+        this.userId = data;
+
+        this.remove(unsignedScrollPane);
+        this.remove(unsignedContractLabel);
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new GridBagLayout());
+        contentPanel.setBackground(Color.lightGray);
+
+        HttpResponse<String> response = ApiRequest.get("/contract");
+        JSONArray contracts = filterContracts(new JSONArray(response.body()));
+
+        createPanels(contracts, contentPanel);
+        contentScrollPane.setViewportView(contentPanel);
+
+        // show unsigned renewed contract for student
+        if (!isTutor) {
+            contracts = filterUnsignedContract(new JSONArray(response.body()));
+            if (contracts.length() > 0) {
+
+                c.gridy = 2;
+                c.gridy = 24;
+                c.weightx = 1;
+                c.weighty = 1;
+                c.gridwidth = 7;
+                c.gridheight = 20;
+                c.gridx = 0;
+                c.anchor = GridBagConstraints.CENTER;
+                this.add(unsignedScrollPane, c);
+
+                unsignedContractPanel = new JPanel();
+                unsignedContractPanel.setLayout(new GridBagLayout());
+                unsignedContractPanel.setBackground(Color.lightGray);
+                unsignedContractLabel = new JLabel("Unsigned Contract");
+                unsignedContractLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
+                c.gridx = 3;
+                c.gridy = 23;
+                c.gridheight = 1;
+                c.weightx = 1;
+                c.weighty = 1;
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.gridwidth = 7;
+                this.add(unsignedContractLabel, c);
+
+                createPanels(contracts, unsignedContractPanel);
+                unsignedScrollPane.setViewportView(unsignedContractPanel);
+            }
+        }
+
+    }
+
+    /**
+     * Method to filter for unsigned renewed contract for student
+     * @param  contracts jsonarray of all the contract from db
+     * @return JSONArray jsonarray of unsigned contract
+     */
+    private JSONArray filterUnsignedContract(JSONArray contracts){
+
+        HttpResponse<String> response = ApiRequest.get("/user/" + this.userId);
+        JSONObject user = new JSONObject(response.body());
+
+        JSONArray returnArr = new JSONArray();
+        // get all the bid signed by the user
+        for (int i=0; i < contracts.length(); i++) {
+            JSONObject contract = contracts.getJSONObject(i);
+            // check for unsigned contract for the student
+            if (contract.getJSONObject("secondParty").getString("id").equals(this.userId) && (contract.isNull("dateSigned"))) {
+                if (contract.getJSONObject("additionalInfo").has("studentSigned")) { // check if the student signed his part in this contract
+                    if (!contract.getJSONObject("additionalInfo").getBoolean("studentSigned"))
+                    returnArr.put(contracts.get(i));
+
+                }
+            }
+        }
+
+
+        return returnArr;
+    }
+
+    /**
      * Function to create all the previous contract when update functions are called
      * @param contracts JSONArray of all the contract from the API
      */
-    private void createContractPanels(JSONArray contracts){
+    private void createPanels(JSONArray contracts, JPanel thisPanel){
 
         buttonArr = new ArrayList<>(); // array to store all button for each bidPanel
 
         // create a jPanel for each bids available
-        System.out.println(contracts.length());
         if (contracts.length() > 0) {
             for (int i=0; i < contracts.length(); i++){
 
@@ -143,7 +239,7 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
                 contractPanelConstraint.gridwidth = 1;
                 contractPanelConstraint.gridheight = 2;
                 contractPanelConstraint.weightx = 0.2;
-                viewBidBtn = new JButton("View Bid");
+                viewBidBtn = new JButton("View Contract");
 
                 // set button name to bidId and userId for ClosedBidResponse class to close Bid
                 JSONObject btnData = new JSONObject();
@@ -154,10 +250,10 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
                 contractPanel.add(viewBidBtn, contractPanelConstraint);
 
                 c.gridx = 0;
-                c.gridy = contentPanel.getComponentCount() - 1;
+                c.gridy = thisPanel.getComponentCount() - 1;
                 c.gridwidth = 4;
                 c.gridheight = 1;
-                contentPanel.add(contractPanel, c);
+                thisPanel.add(contractPanel, c);
             }
 
         } else { // if not relevant bid found
@@ -170,30 +266,10 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
             c.gridx = 1;
             c.gridwidth = 4;
             c.gridheight = 1;
-            c.gridy = contentPanel.getComponentCount();
+            c.gridy = thisPanel.getComponentCount();
             c.anchor = GridBagConstraints.CENTER;
-            contentPanel.add(contractPanel);
+            thisPanel.add(contractPanel);
         }
-    }
-
-    /**
-     *
-     * @param data receive userId from dashboard page
-     */
-    @Override
-    public void update(String data) {
-        this.userId = data;
-
-        HttpResponse<String> response = ApiRequest.get("/contract");
-        JSONArray contracts = filterContracts(new JSONArray(response.body()));
-
-        contentPanel = new JPanel();
-        contentPanel.setLayout(new GridBagLayout());
-        contentPanel.setBackground(Color.lightGray);
-
-        createContractPanels(contracts);
-        scrollPane.setViewportView(contentPanel);
-
     }
 
     /**
@@ -202,7 +278,7 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
      * @param contracts JSONArray containing all the contract
      * @return JSONArray of the latest 5 contract
      */
-    private JSONArray filterContracts(JSONArray contracts){
+    private JSONArray filterContracts(JSONArray contracts) {
 
         // check if user is tutor or student to filter the contract differently
         HttpResponse<String> response = ApiRequest.get("/user/" + this.userId);
@@ -212,62 +288,15 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
         JSONArray returnArr = new JSONArray();
 
         // if tutor show all contract renewed by student that hasn't been signed by tutor
-        if (isTutor){
-            JSONArray activeContract = new JSONArray(user.getJSONObject("additionalInfo").optJSONArray("activeContract"));
+        JSONArray activeContract = new JSONArray(user.getJSONObject("additionalInfo").optJSONArray("activeContract"));
 
-            for(int i=0; i < activeContract.length(); i++) {
-                JSONObject contract = new JSONObject(ApiRequest.get("/contract/" + activeContract.get(i)).body());
-                returnArr.put(contract);
-            }
+        for (int i = 0; i < activeContract.length(); i++) {
+            JSONObject contract = new JSONObject(ApiRequest.get("/contract/" + activeContract.get(i)).body());
+            returnArr.put(contract);
 
-
-        } else { // if student show latest 5 contract signed
-
-            // get all the bid signed by the user
-            for (int i=0; i < contracts.length(); i++){
-                JSONObject contract = contracts.getJSONObject(i);
-                if (contract.getJSONObject("secondParty").getString("id").equals(this.userId) && (!contract.isNull("dateSigned"))){
-                    returnArr.put(contracts.get(i));
-                }
-
-            }
-
-            // if less that 5 contract
-            if (returnArr.length() <= 5){
-                return  returnArr;
-            }
-
-            // if more than 5 filter the latest bid signed by user
-            returnArr = InsertionSort(contracts);
-            while (returnArr.length() > 5){
-                returnArr.remove(0);
-            }
         }
+        return returnArr;
 
-
-        return  returnArr;
-    }
-
-    /**
-     * Using insertion sort to sort contracts by date
-     * @param contracts The arrayList of contract
-     */
-    private JSONArray InsertionSort(JSONArray contracts) {
-
-        for (int i = 1; i < contracts.length(); ++i) {
-            JSONObject key = contracts.getJSONObject(i);
-            Instant currDate = Instant.parse(key.getString("dateSigned"));
-            int j = i - 1;
-
-            // while date[] > currDate, move the date to left
-            while (j >= 0 &&  currDate.compareTo(Instant.parse(contracts.getJSONObject(j).getString("dateSigned"))) > 0) {
-                contracts.put(j+1, contracts.get(j));
-                j = j - 1;
-            }
-            contracts.put(j + 1, key);
-        }
-
-        return contracts;
     }
 
     @Override
