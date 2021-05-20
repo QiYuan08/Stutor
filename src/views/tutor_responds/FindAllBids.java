@@ -29,7 +29,11 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
     public FindAllBids() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridLayout(1,1, 2, 2));
-        contentPanel = new JPanel();
+
+        // wrap contentPanel inside a scrollpane
+        scrollPane = new JScrollPane();
+        this.add(scrollPane, c);
+
     }
 
     /***
@@ -64,10 +68,6 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
         c.gridwidth = 3;
         c.anchor = GridBagConstraints.NORTH;
         contentPanel.add(activityTitle, c);
-
-        // wrap contentPanel inside a scrollpane
-        scrollPane = new JScrollPane(contentPanel);
-        this.add(scrollPane, c);
 
         c.insets = new Insets(1,3,1,3); //spacing between each bids
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -148,8 +148,10 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
             c.gridy = contentPanel.getComponentCount();
             c.gridwidth = 4;
             c.gridheight = 1;
-            contentPanel.add(bidPanel);
+            contentPanel.add(bidPanel, c);
         }
+
+        scrollPane.setViewportView(contentPanel);
 
         backBtn.addActionListener(new ActionListener() {
             @Override
@@ -217,13 +219,7 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
         }
 
         // remake the jpanel
-        this.removeAll();
-        this.repaint();
-        this.revalidate();
-
-        contentPanel.removeAll();
-        contentPanel.repaint();
-        contentPanel.revalidate();
+        contentPanel = new JPanel();
         createContent();
     }
 

@@ -103,13 +103,8 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridy = 8;
         this.add(startTime, c);
 
-        detailPane = new JPanel();
-        detailPane.setBorder(new EmptyBorder(15, 15,15,15));
-        detailPane.setLayout(new GridBagLayout());
-        detailPane.setBackground(new Color(255, 252, 252));
-
         // wrap detailPane with a scrollPane
-        scrollPane = new JScrollPane(detailPane);
+        scrollPane = new JScrollPane();
 
         // add scrollPane into this
         c.weighty = 1;
@@ -156,8 +151,16 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     @Override
     public void update(String data) {
 
-        this.bidId = new JSONObject(data).getString("bidId");
-        this.userId = new JSONObject(data).getString("userId");
+        if (data.charAt(0) == '{') {
+            this.bidId = new JSONObject(data).getString("bidId");
+            this.userId = new JSONObject(data).getString("userId");
+
+        }
+
+        if (this.bidId == null) {
+            return;
+        }
+
         HttpResponse<String> response = ApiRequest.get("/bid/"+ this.bidId + "?fields=messages");
 
         // if retrieve success
@@ -248,9 +251,11 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     }
 
     private void showTutors(JSONArray messages) {
-        detailPane.removeAll();
-        detailPane.revalidate();
-        detailPane.repaint();
+
+        detailPane = new JPanel();
+        detailPane.setBorder(new EmptyBorder(15, 15,15,15));
+        detailPane.setLayout(new GridBagLayout());
+        detailPane.setBackground(new Color(255, 252, 252));
 
         buttonArr = new ArrayList<>();
         // create a Panel to show each message replied by tutor

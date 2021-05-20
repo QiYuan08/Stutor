@@ -34,10 +34,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         this.setLayout(new GridBagLayout());
         mainConst = new GridBagConstraints();
 
-        detailPane = new JPanel();
-        detailPane.setBorder(new EmptyBorder(15, 15,15,15));
-        detailPane.setLayout(new GridBagLayout());
-        detailPane.setBackground(new Color(255, 252, 252));
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
         c.weighty = 0.2;
@@ -112,7 +108,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         this.add(startTime, c);
 
         // wrap detailPane with a scrollPane
-        scrollPane = new JScrollPane(detailPane);
+        scrollPane = new JScrollPane();
 
         // add scrollPane into this
         c.weighty = 1;
@@ -131,10 +127,6 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
      * @param bid the bid to display
      */
     void createContent(JSONObject bid){
-
-        detailPane.removeAll();
-        detailPane.revalidate();
-        detailPane.repaint();
 
         JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
         JSONArray messages = bid.getJSONArray("messages");
@@ -168,6 +160,12 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
     }
 
     private void showTutors(JSONArray messages) {
+
+        detailPane = new JPanel();
+        detailPane.setBorder(new EmptyBorder(15, 15,15,15));
+        detailPane.setLayout(new GridBagLayout());
+        detailPane.setBackground(new Color(255, 252, 252));
+
         buttonArr = new ArrayList<>();
         // create a Panel to show each message replied by tutor
         if (messages.length() > 0){
@@ -236,8 +234,9 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
                     c.gridy = detailPane.getComponentCount();
                     detailPane.add(bidPanel, c);
                 }
-
             }
+
+            scrollPane.setViewportView(detailPane);
         }
     }
 
@@ -248,9 +247,16 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
      */
     @Override
     public void update(String data) {
-        this.bidId = new JSONObject(data).getString("bidId");
-        this.userId = new JSONObject(data).getString("userId");
 
+        if (data.charAt(0) == '{') {
+            this.bidId = new JSONObject(data).getString("bidId");
+            this.userId = new JSONObject(data).getString("userId");
+
+        }
+
+        if (this.bidId == null) {
+            return;
+        }
          HttpResponse<String> response = ApiRequest.get("/bid/"+ this.bidId + "?fields=messages");
 
         // if retrieve success

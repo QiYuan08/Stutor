@@ -84,8 +84,6 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
         c.gridx = 0;
         this.add(unsignedScrollPane, c);
 
-
-
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

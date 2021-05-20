@@ -70,12 +70,6 @@ public class Application extends JFrame{
         expireBidService.setDuration(720, 7);
         expireBidService.expireBidService();
 
-        UpdateBidService updateBidService = new UpdateBidService();
-//        updateBidService.subscribe(monitoredBids);
-//        updateBidService.subscribe(findAllBids);
-//        updateBidService.subscribe(findBidDetails);
-//        updateBidService.subscribe(seeAllBids);
-
         // configures the service that allows the switching of pages within the card layout
         ViewManagerService.setRootPanel(rootPanel);
 
@@ -132,6 +126,15 @@ public class Application extends JFrame{
         FindBidDetailsController monitorBidsController = new FindBidDetailsController(monitoredBids);
         monitorBidsController.subscribe(findBidDetails);
         monitorBidsController.subscribe(findTutorResponseLink);
+
+        UpdateBidService updateBidService = new UpdateBidService();
+        updateBidService.subscribe(monitoredBids);
+        updateBidService.subscribe(findAllBids);
+        updateBidService.subscribe(findBidDetailsController);
+        updateBidService.subscribe(findBidDetails);
+        updateBidService.subscribe(seeAllBids);
+        updateBidService.subscribe(seeBidDetails);
+        updateBidService.subscribe(seeBidDetailsController);
 
         // TODO: contract not updated when tutor buy out bid
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids

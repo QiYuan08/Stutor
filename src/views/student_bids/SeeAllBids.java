@@ -29,7 +29,10 @@ public class SeeAllBids extends JPanel implements ObserverOutputInterface, Liste
     public SeeAllBids() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridLayout(1,1, 2, 2));
-        contentPanel = new JPanel();
+
+        // wrap contentPanel inside a scrollpane
+        scrollPane = new JScrollPane();
+        this.add(scrollPane, c);
     }
 
     /***
@@ -62,10 +65,6 @@ public class SeeAllBids extends JPanel implements ObserverOutputInterface, Liste
         c.gridy = 0;
         c.gridwidth = 2;
         contentPanel.add(activityTitle, c);
-
-        // wrap contentPanel inside a scrollpane
-        scrollPane = new JScrollPane(contentPanel);
-        this.add(scrollPane, c);
 
         c.insets = new Insets(2,3,2,3); //spacing between each bids
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -141,6 +140,8 @@ public class SeeAllBids extends JPanel implements ObserverOutputInterface, Liste
             contentPanel.add(bidPanel);
         }
 
+        scrollPane.setViewportView(contentPanel);
+
         backBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -169,19 +170,11 @@ public class SeeAllBids extends JPanel implements ObserverOutputInterface, Liste
     @Override
     public void update(String data) {
         this.userId = data;
-
         // get all bid
         HttpResponse<String> response = ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids");
         bids = new JSONArray(new JSONObject(response.body()).getJSONArray("initiatedBids"));
 
-        // remake the jpanel
-        this.removeAll();
-        this.repaint();
-        this.revalidate();
-
-        contentPanel.removeAll();
-        contentPanel.repaint();
-        contentPanel.revalidate();
+        contentPanel = new JPanel();
         createContent();
     }
 
