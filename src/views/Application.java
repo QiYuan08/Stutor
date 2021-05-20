@@ -3,6 +3,7 @@ package views;
 import controllers.*;
 import listener.RenewContractListener;
 import services.ExpireBidService;
+import services.ExpireContractListener;
 import services.UpdateBidService;
 import services.ViewManagerService;
 import views.student_bids.*;
@@ -75,6 +76,8 @@ public class Application extends JFrame{
 
 
         // LISTENERS - process button presses and just go to the next page
+
+        ExpireContractListener expireContractListener = new ExpireContractListener(viewContractDetail);
 
 
         // LINKS - process buttons and updates the next page before it loads it
@@ -170,6 +173,7 @@ public class Application extends JFrame{
         loginController.subscribe(bidUpdateController);
         loginController.subscribe(monitoredBids);
         loginController.subscribe(updateBidService);
+        loginController.subscribe(expireContractListener);
 
         this.add(rootPanel);
         this.setVisible(true);

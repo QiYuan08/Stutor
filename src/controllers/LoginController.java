@@ -30,8 +30,8 @@ public class LoginController extends Publisher implements ActionListener {
         JSONObject jsonObj = inputPage.retrieveInputs();
         HttpResponse<String> response = ApiRequest.post("/user/login", jsonObj.toString());
         if (response.statusCode() == 200) {
-            notifySubscribers(getUserId(jsonObj.getString("userName")));
             ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
+            notifySubscribers(getUserId(jsonObj.getString("userName")));
         } else if (response.statusCode() == 403) {
             JOptionPane.showMessageDialog(new JFrame(), "The username/password you have entered is invalid. Please try again.",
                     "Username/Password Invalid", JOptionPane.ERROR_MESSAGE);
