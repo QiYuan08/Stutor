@@ -201,10 +201,12 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
 
         this.remove(monitorBidButton);
         this.remove(scrollPane);
+        buyoutButton.setVisible(false);
         // if bid type is open
         if (bid.getString("type").equals("open")) {
             showTutors(messages);
             buyoutButton.setName(this.bidId);
+            buyoutButton.setVisible(true);
 
             GridBagConstraints c = new GridBagConstraints();
             c.weighty = 1;

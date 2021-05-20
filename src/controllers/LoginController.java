@@ -33,11 +33,11 @@ public class LoginController extends Publisher implements ActionListener {
             notifySubscribers(getUserId(jsonObj.getString("userName")));
             ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
         } else if (response.statusCode() == 403) {
-            JOptionPane.showMessageDialog(new JFrame(), "The username you have entered is invalid. Please try again.",
-                    "Username Invalid", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(new JFrame(), "The username/password you have entered is invalid. Please try again.",
+                    "Username/Password Invalid", JOptionPane.ERROR_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(new JFrame(), "Login failed! Error: " + response.statusCode(),
-                    "Username Invalid", JOptionPane.ERROR_MESSAGE);
+                    "Login Failed", JOptionPane.ERROR_MESSAGE);
         }
     }
 

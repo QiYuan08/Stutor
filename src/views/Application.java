@@ -1,6 +1,7 @@
 package views;
 
 import controllers.*;
+import listener.RenewContractListener;
 import services.ExpireBidService;
 import services.ViewManagerService;
 import views.student_bids.*;
@@ -100,6 +101,11 @@ public class Application extends JFrame{
 
         // CONTROLLERS - notifies multiple subscribers of new information and proceeds to the next page
 
+        // controller to update dashboardPage and viewContract when tutor/student signed a renewed contract
+        RenewContractListener renewContractListener = new RenewContractListener();
+        renewContractListener.subscribe(dashboardPage);
+        renewContractListener.subscribe(viewContract);
+
         // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
         BidCreateController bidCreateController = new BidCreateController(createBid);
         bidCreateController.subscribe(dashboardPage);
@@ -130,6 +136,7 @@ public class Application extends JFrame{
         bidClosingController.subscribe(findAllBids);
         bidClosingController.subscribe(seeAllBids);
         bidClosingController.subscribe(dashboardPage);
+        bidClosingController.subscribe(viewContract);
         // TODO: subscribe view contracts here
 
         // bidUpdateController needed for findbid and seebid pages to add event listener for all of its button

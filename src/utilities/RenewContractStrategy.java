@@ -85,19 +85,17 @@ public class RenewContractStrategy implements ContractStrategy {
             jsonObject.put("lessonInfo", contract.getJSONObject("lessonInfo"));
             jsonObject.put("additionalInfo", additionalInfo);
 
-            response = ApiRequest.patch("/contract/" + contract, jsonObject.toString());
+            response = ApiRequest.patch("/contract/" + contract.getString("id"), jsonObject.toString());
             if (response.statusCode() == 200) {
                 msg = "You signed the contract successfully";
                 JOptionPane.showMessageDialog(new JFrame(), msg, "Contract Signed Successfully", JOptionPane.INFORMATION_MESSAGE);
 
                 // remove the contract from additionalInfo for tutor after signing
                 if (isTutor){
-                    patchTutor(contract.getJSONObject("secondParty").getString("id"), contract.getString("id"));
+                    patchTutor(contract.getJSONObject("firstParty").getString("id"), contract.getString("id"));
 
                 }
             }
-
-
 
             // if both student and tutor signed, sign the the contract
             if (additionalInfo.getBoolean("studentSigned") && additionalInfo.getBoolean("tutorSigned")) {
@@ -105,7 +103,7 @@ public class RenewContractStrategy implements ContractStrategy {
                 Instant now = ts.toInstant();
                 dateSigned.put("dateSigned", now);
 
-                ApiRequest.post("/contract/" + contract + "/sign", dateSigned.toString());
+                ApiRequest.post("/contract/" + contract.getString("id") + "/sign", dateSigned.toString());
 
                 msg = "Contract signed at " + now;
                 JOptionPane.showMessageDialog(new JFrame(), msg, "Contract Signed Successfully", JOptionPane.INFORMATION_MESSAGE);

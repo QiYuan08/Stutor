@@ -32,7 +32,7 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
 
     public BidClosingController() {
         super();
-        contractUtil = new Contract();
+        this.contractUtil = new Contract();
         contractUtil.setStrategy(new CloseBidStrategy());
     }
 
@@ -47,7 +47,8 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
         }
         JSONObject jsonBid = inputPage.retrieveInputs();
         closeBid(jsonBid);
-        if (this.userId == null) {notifySubscribers(this.userId);}
+//        if (this.userId == null) {notifySubscribers(this.userId);}
+        notifySubscribers(this.userId);
     }
 
     /***
@@ -76,7 +77,7 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
                 }
                 return;
             } else {
-                bid.put("bidId", bidId);
+                bid.put("userId", this.userId);
                 bid.put("tutorId", tutorId);
                 bid.put("messageId", messageId);
                 contractUtil.postContract(bid);

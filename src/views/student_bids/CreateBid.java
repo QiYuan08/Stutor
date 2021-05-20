@@ -224,7 +224,7 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         this.add(rateLabel, c);
 
         // expiry date
-        expireField = new JLabel("utilities.Contract length: ");
+        expireField = new JLabel("Contract length: ");
         c.gridx = 0;
         c.gridy = 9;
         c.gridwidth = 1;

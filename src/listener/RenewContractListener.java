@@ -1,6 +1,7 @@
 package listener;
 
 import abstractions.ObserverInputInterface;
+import abstractions.Publisher;
 import org.json.JSONObject;
 import utilities.Contract;
 import utilities.RenewContractStrategy;
@@ -10,13 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class RenewContractListener implements ActionListener {
+public class RenewContractListener extends Publisher implements ActionListener {
 
     private ObserverInputInterface inputPage;
     private Contract contractUtil;
 
     public RenewContractListener() {
-        contractUtil = new Contract();
+        super();
+        this.contractUtil = new Contract();
         contractUtil.setStrategy(new RenewContractStrategy());
     }
 

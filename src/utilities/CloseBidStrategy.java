@@ -17,19 +17,19 @@ import java.time.temporal.ChronoUnit;
 public class CloseBidStrategy implements ContractStrategy {
 
     @Override
-    public void postContract(JSONObject contractDetail) {
-        String tutorId = contractDetail.getString("tutorId");
-        String userId = contractDetail.getString("userId");
-        String messageId = contractDetail.getString("messageId");
+    public void postContract(JSONObject bid) {
+        String tutorId = bid.getString("tutorId");
+        String userId = bid.getString("userId");
+        String messageId = bid.getString("messageId");
 
         JSONObject contract = new JSONObject();
         if (tutorId.equals("")) { // buyout action (there could be no responses for the bid when the tutor buys it out)
             contract.put("firstPartyId", userId);
-            contract.put("secondPartyId", contractDetail.getJSONObject("initiator").getString("id"));
-            contract.put("lessonInfo", contractDetail.getJSONObject("additionalInfo"));
+            contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
+            contract.put("lessonInfo", bid.getJSONObject("additionalInfo"));
         } else { // a confirm bid action from the user or ExpireBidService chooses the last tutor as the winner (has response)
             contract.put("firstPartyId", tutorId);
-            contract.put("secondPartyId", contractDetail.getJSONObject("initiator").getString("id"));
+            contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
             JSONObject message = new JSONObject(ApiRequest.get("/message/" + messageId).body());
             contract.put("lessonInfo", message.getJSONObject("additionalInfo"));
         }
@@ -37,10 +37,10 @@ public class CloseBidStrategy implements ContractStrategy {
         Instant now = ts.toInstant();
         contract.put("dateCreated", now);
         LocalDateTime time = LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.ofHours(0));
-        time = time.plus(1, ChronoUnit.YEARS); // contract expires after a year
+        time = time.plus(bid.getJSONObject("additionalInfo").getInt("contractLength"), ChronoUnit.MONTHS); // contract expires after a year
         Instant output = time.atZone(ZoneOffset.ofHours(0)).toInstant();
         Timestamp expiryDate = Timestamp.from(output);
-        contract.put("subjectId", contractDetail.getJSONObject("subject").getString("id"));
+        contract.put("subjectId", bid.getJSONObject("subject").getString("id"));
         contract.put("expiryDate", expiryDate);
         contract.put("paymentInfo", new JSONObject());
         contract.put("additionalInfo", new JSONObject());
