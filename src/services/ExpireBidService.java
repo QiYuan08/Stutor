@@ -22,9 +22,6 @@ import java.util.TimerTask;
 public class ExpireBidService implements ObserverInputInterface {
 
     private long openCounter, closedCounter; //counter of timer in minutes and days
-//    private TimerTask openBidTask, closeBidTask;
-    private Timer openTimer;
-    private Timer closeTimer;
     private Timer bidClosingTimer;
     private TimerTask bidClosingTask;
     private ActionListener actionListener;
@@ -33,8 +30,6 @@ public class ExpireBidService implements ObserverInputInterface {
     private String bidId;
 
     public ExpireBidService() {
-        openTimer = new Timer();
-        closeTimer = new Timer();
         bidClosingTimer = new Timer();
     }
 
@@ -48,7 +43,6 @@ public class ExpireBidService implements ObserverInputInterface {
 
             @Override
             public void run() {
-
                 HttpResponse<String> bidResponse = ApiRequest.get("/bid?fields=messages");
                 JSONArray bids = new JSONArray(bidResponse.body());
 
@@ -57,14 +51,13 @@ public class ExpireBidService implements ObserverInputInterface {
                     bid = bids.getJSONObject(i);
                     bidId = bid.getString("id");
                     Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
-                    currentTime = ts.toInstant();  // current Time
+                    currentTime = ts.toInstant();
 
                     expireBid();
-
                 }
             }
         };
-        bidClosingTimer.schedule(bidClosingTask, 10, 30000);
+        bidClosingTimer.schedule(bidClosingTask, 10, 20000);
     }
 
     private void expireBid() {
@@ -83,16 +76,11 @@ public class ExpireBidService implements ObserverInputInterface {
                 command = "Expire Closed Bid";
             }
 
-            // if expire time greater than now close the bid
-            if (currentTime.compareTo(expiryTime) > 0) {
+            if (currentTime.compareTo(expiryTime) > 0) { // if expire time greater than now close the bid
                 ActionEvent actionEvent = new ActionEvent(ExpireBidService.this, ActionEvent.ACTION_PERFORMED, command);
                 actionListener.actionPerformed(actionEvent);
             }
         }
-    }
-
-    private void updateBid() {
-
     }
 
     @Override

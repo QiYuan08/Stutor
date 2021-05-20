@@ -3,6 +3,7 @@ package views;
 import controllers.*;
 import listener.RenewContractListener;
 import services.ExpireBidService;
+import services.UpdateBidService;
 import services.ViewManagerService;
 import views.student_bids.*;
 import views.tutor_responds.*;
@@ -57,7 +58,6 @@ public class Application extends JFrame{
         rootPanel.add(messagesPage, ViewManagerService.MESSAGES_PAGE);
         rootPanel.add(seeTutorResponse, ViewManagerService.SEE_TUTOR_RESPONSE);
         rootPanel.add(viewContract, ViewManagerService.VIEW_CONTRACT_PAGE);
-        //        monitoredBids.update("4ad8f1ed-4883-4c44-a9ab-a50bdee96ff9");
         rootPanel.add(monitoredBids, ViewManagerService.MONITORED_BIDS);
         rootPanel.add(viewContractDetail, ViewManagerService.VIEW_CONTRACT_DETAIL);
 
@@ -69,6 +69,12 @@ public class Application extends JFrame{
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
         expireBidService.setDuration(720, 7);
         expireBidService.expireBidService();
+
+        UpdateBidService updateBidService = new UpdateBidService();
+//        updateBidService.subscribe(monitoredBids);
+//        updateBidService.subscribe(findAllBids);
+//        updateBidService.subscribe(findBidDetails);
+//        updateBidService.subscribe(seeAllBids);
 
         // configures the service that allows the switching of pages within the card layout
         ViewManagerService.setRootPanel(rootPanel);
@@ -160,6 +166,7 @@ public class Application extends JFrame{
         loginController.subscribe(bidClosingController); // uses the userId to update views when a bid closes
         loginController.subscribe(bidUpdateController);
         loginController.subscribe(monitoredBids);
+        loginController.subscribe(updateBidService);
 
         this.add(rootPanel);
         this.setVisible(true);
