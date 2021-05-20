@@ -22,7 +22,7 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 
 // TODO: change filtercontract for tutor to use additionalInfo from user endpoint
-public class ViewContractDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
+public class ViewContractDetails extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
     private JLabel activityTitle, tutorField, qualificationField, lessonField, dayField, expiryField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField, freeLessonField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput, competencyInput, freeLessonInput;
@@ -35,7 +35,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
     private String userId, contractId, subjectId;
     private Boolean isTutor;
 
-    public ViewContractDetail() {
+    public ViewContractDetails() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -87,6 +87,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
 
         competencyInput = new JTextField();
         competencyInput.setText("3");
+        competencyInput.setEnabled(false);
         c.gridx = 1;
         c.gridwidth = 4;
         this.add(competencyInput, c);
@@ -349,8 +350,13 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         isTutor =  user.getBoolean("isTutor") ? true : false;
 
         if (isTutor) {
-            submitButton.setText("Sign Contract");
             disableEdit();
+            if (contract.isNull("dateSigned")) {
+                submitButton.setText("Sign Contract");
+            } else {
+                submitButton.setVisible(false);
+                submitButton.setEnabled(false);
+            }
         } else {
             // if this is a signed contract which means for renewal
             if (contract.isNull("dateSigned")) {
@@ -371,7 +377,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
      */
     private void disableEdit(){
         tutorCombo.setEnabled(false);
-        competencyInput.setEnabled(false);
+//        competencyInput.setEnabled(false);
         lessonInput.setEditable(false);
         dayInput.setEditable(false);
         startTime.setEnabled(false);
@@ -390,7 +396,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
      */
     private void enableEdit(){
         tutorCombo.setEnabled(true);
-        competencyInput.setEnabled(true);
+//        competencyInput.setEnabled(false);
         lessonInput.setEditable(true);
         dayInput.setEditable(true);
         startTime.setEnabled(true);

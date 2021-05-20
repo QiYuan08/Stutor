@@ -27,7 +27,7 @@ public class ViewContractDetailController extends Publisher implements ActionLis
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         notifySubscribers(bidId);
-        ViewManagerService.loadPage(ViewManagerService.VIEW_CONTRACT_DETAIL);
+        ViewManagerService.loadPage(ViewManagerService.VIEW_CONTRACT_DETAILS);
     }
 
     @Override

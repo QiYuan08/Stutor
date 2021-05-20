@@ -33,7 +33,7 @@ public class ExpireContractListener implements ObserverOutputInterface {
         for (int i=0; i < contracts.length(); i++) {
             contract = (JSONObject) contracts.get(i);
 
-            if (contract.getJSONObject("firstParty").getString("id").equals(userId) && !contract.isNull("dateSigned")) {
+            if (contract.getJSONObject("firstParty").getString("id").equals(userId) && !contract.isNull("dateSigned") && !contract.isNull("terminationDate")) {
                 Instant expiryDate = Instant.parse(contract.getString("expiryDate"));
 
                 LocalDateTime time = LocalDateTime.ofInstant(expiryDate, ZoneOffset.ofHours(0)).minus(30, ChronoUnit.DAYS);
@@ -50,7 +50,7 @@ public class ExpireContractListener implements ObserverOutputInterface {
                     if (input == JOptionPane.YES_OPTION) {
                         JSONObject jsonObj = new JSONObject().put("userId", userId).put("contractId", contract.getString("id"));
                         outputPage.update(jsonObj.toString());
-                        ViewManagerService.loadPage(ViewManagerService.VIEW_CONTRACT_DETAIL);
+                        ViewManagerService.loadPage(ViewManagerService.VIEW_CONTRACT_DETAILS);
                     }
                 }
             }

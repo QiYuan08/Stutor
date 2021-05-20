@@ -19,7 +19,7 @@ import java.util.ArrayList;
 // TODO: refactor time function into a class
 // TODO: view all latest 5 contract not closed contract
 // TODO: refactor createPanel function into a class for findallbid, seeallbid, viewcontract
-public class ViewContract extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
+public class ViewContracts extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private JPanel contentPanel, unsignedContractPanel;
     private JScrollPane contentScrollPane, unsignedScrollPane;
@@ -30,7 +30,7 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
     public String userId;
     private boolean isTutor;
 
-    public  ViewContract() {
+    public ViewContracts() {
         this.setBorder(new EmptyBorder(2, 2, 2, 2));
         this.setLayout(new GridBagLayout());
         this.setBackground(new Color(245, 245, 220));

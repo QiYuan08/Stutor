@@ -40,8 +40,8 @@ public class Application extends JFrame{
         MessagesPage messagesPage = new MessagesPage();
         SeeTutorResponse seeTutorResponse = new SeeTutorResponse();
         BidResponse bidResponse = new BidResponse();
-        ViewContract viewContract = new ViewContract();
-        ViewContractDetail viewContractDetail = new ViewContractDetail();
+        ViewContracts viewContracts = new ViewContracts();
+        ViewContractDetails viewContractDetails = new ViewContractDetails();
         MonitoredBids monitoredBids = new MonitoredBids();
 
         // adding all the views into the rootPanel so that they can be accessed via the cardLayout
@@ -58,9 +58,9 @@ public class Application extends JFrame{
         rootPanel.add(findTutorResponse, ViewManagerService.FIND_TUTOR_RESPONSE);
         rootPanel.add(messagesPage, ViewManagerService.MESSAGES_PAGE);
         rootPanel.add(seeTutorResponse, ViewManagerService.SEE_TUTOR_RESPONSE);
-        rootPanel.add(viewContract, ViewManagerService.VIEW_CONTRACT_PAGE);
+        rootPanel.add(viewContracts, ViewManagerService.VIEW_CONTRACTS);
         rootPanel.add(monitoredBids, ViewManagerService.MONITORED_BIDS);
-        rootPanel.add(viewContractDetail, ViewManagerService.VIEW_CONTRACT_DETAIL);
+        rootPanel.add(viewContractDetails, ViewManagerService.VIEW_CONTRACT_DETAILS);
 
 
         // SERVICES
@@ -77,7 +77,7 @@ public class Application extends JFrame{
 
         // LISTENERS - process button presses and just go to the next page
 
-        ExpireContractListener expireContractListener = new ExpireContractListener(viewContractDetail);
+        ExpireContractListener expireContractListener = new ExpireContractListener(viewContractDetails);
 
 
         // LINKS - process buttons and updates the next page before it loads it
@@ -104,10 +104,10 @@ public class Application extends JFrame{
 
         // CONTROLLERS - notifies multiple subscribers of new information and proceeds to the next page
 
-        // controller to update dashboardPage and viewContract when tutor/student signed a renewed contract
+        // controller to update dashboardPage and viewContracts when tutor/student signed a renewed contract
         RenewContractListener renewContractListener = new RenewContractListener();
         renewContractListener.subscribe(dashboardPage);
-        renewContractListener.subscribe(viewContract);
+        renewContractListener.subscribe(viewContracts);
 
         // links CreateBid to DashboardPage for user to create a bid and limit the number of contracts/bids made
         BidCreateController bidCreateController = new BidCreateController(createBid);
@@ -123,8 +123,8 @@ public class Application extends JFrame{
         findBidDetailsController.subscribe(findBidDetails);
         findBidDetailsController.subscribe(findTutorResponseLink);
 
-        ViewContractDetailController viewContractDetailController = new ViewContractDetailController(viewContract);
-        viewContractDetailController.subscribe(viewContractDetail);
+        ViewContractDetailController viewContractDetailController = new ViewContractDetailController(viewContracts);
+        viewContractDetailController.subscribe(viewContractDetails);
 
         FindBidDetailsController monitorBidsController = new FindBidDetailsController(monitoredBids);
         monitorBidsController.subscribe(findBidDetails);
@@ -148,7 +148,7 @@ public class Application extends JFrame{
         bidClosingController.subscribe(findAllBids);
         bidClosingController.subscribe(seeAllBids);
         bidClosingController.subscribe(dashboardPage);
-        bidClosingController.subscribe(viewContract);
+        bidClosingController.subscribe(viewContracts);
         // TODO: subscribe view contracts here
 
         // bidUpdateController needed for findbid and seebid pages to add event listener for all of its button
@@ -161,7 +161,7 @@ public class Application extends JFrame{
         bidUpdateController.subscribe(seeBidDetailsController);
         bidUpdateController.subscribe(monitoredBids); // the page need to be updated first with the bid buttons before adding the listeners
         bidUpdateController.subscribe(monitorBidsController);
-        bidUpdateController.subscribe(viewContract);
+        bidUpdateController.subscribe(viewContracts);
         bidUpdateController.subscribe(viewContractDetailController);
 
         // passing the userId to view classes and services that require it
