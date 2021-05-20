@@ -92,7 +92,7 @@ public class RenewContractStrategy implements ContractStrategy {
 
                 // remove the contract from additionalInfo for tutor after signing
                 if (isTutor){
-                    patchTutor(contract.getJSONObject("secondParty").getString("id"), contract.getString("id"));
+                    patchTutor(contract.getJSONObject("firstParty").getString("id"), contract.getString("id"));
 
                 }
             }
