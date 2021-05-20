@@ -68,8 +68,6 @@ public class Application extends JFrame{
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
         expireBidService.setDuration(720, 7);
         expireBidService.expireBidService();
-//        expireBidService.expireOpenBidService();
-//        expireBidService.expireCloseBidService();
 
         // configures the service that allows the switching of pages within the card layout
         ViewManagerService.setRootPanel(rootPanel);

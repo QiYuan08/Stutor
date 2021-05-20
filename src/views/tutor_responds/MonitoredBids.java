@@ -66,13 +66,13 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface, Li
 
     @Override
     public void update(String data) {
-        if (data != null) {this.userId = data;}
+        this.userId = data;
         HttpResponse<String> userResponse = ApiRequest.get("/user/" + userId);
         JSONObject user = new JSONObject(userResponse.body());
 
         if (user.getBoolean("isTutor") && user.getJSONObject("additionalInfo").has("monitoredBids")) {
             buttonArr = new ArrayList<>();
-            JSONArray monitoredBids = user.getJSONObject("additionalInfo").getJSONArray("monitoredBids");
+            JSONArray monitoredBids = checkBidValidity(user.getJSONObject("additionalInfo"));
             JPanel monitoredBidsPanel = new JPanel();
             monitoredBidsPanel.setLayout(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
@@ -122,6 +122,23 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface, Li
             }
             scrollPane.setViewportView(monitoredBidsPanel);
         }
+    }
+
+    private JSONArray checkBidValidity(JSONObject additionalInfo) {
+        JSONArray monitoredBids = additionalInfo.getJSONArray("monitoredBids");
+        boolean modified = false;
+        for (int i = 0; i < monitoredBids.length(); i++) {
+            JSONObject bid = (JSONObject) monitoredBids.get(i);
+            if (!bid.isNull("dateClosedDown")) {
+                monitoredBids.remove(i);
+                modified = true;
+            }
+        }
+        if (modified) {
+            JSONObject userPatch = new JSONObject().put("additionalInfo", additionalInfo);
+            ApiRequest.patch("/user/" + userId, userPatch.toString());
+        }
+        return monitoredBids;
     }
 
     @Override
