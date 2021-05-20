@@ -16,6 +16,7 @@ public class RenewContractListener implements ActionListener {
     private Contract contractUtil;
 
     public RenewContractListener() {
+        contractUtil = new Contract();
         contractUtil.setStrategy(new RenewContractStrategy());
     }
 

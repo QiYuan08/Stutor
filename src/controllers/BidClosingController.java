@@ -32,6 +32,7 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
 
     public BidClosingController() {
         super();
+        contractUtil = new Contract();
         contractUtil.setStrategy(new CloseBidStrategy());
     }
 

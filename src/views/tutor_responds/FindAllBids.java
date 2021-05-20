@@ -179,6 +179,7 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
         // get the detail of the user
         response = ApiRequest.get("/user/" + this.userId + "?fields=competencies&fields=competencies.subject");
         user = new JSONObject(response.body());
+        System.out.println(user);
 
         if (user.getBoolean("isTutor")){
 
