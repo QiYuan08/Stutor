@@ -182,7 +182,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         this.add(freeLesson, c);
 
         // contract Length
-        expiryField = new JLabel("utilities.Contract Length");
+        expiryField = new JLabel("Contract Length");
         c.gridy = 8;
         c.gridx = 0;
         c.gridwidth = 1;

@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
+import java.time.Instant;
 import java.util.ArrayList;
 
 // TODO: refactor time function into a class
@@ -286,17 +287,60 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
         isTutor = user.getBoolean("isTutor");
 
         JSONArray returnArr = new JSONArray();
+        if (isTutor) {
+            // if tutor show all contract renewed by student that hasn't been signed by tutor
+            JSONArray activeContract = new JSONArray(user.getJSONObject("additionalInfo").optJSONArray("activeContract"));
 
-        // if tutor show all contract renewed by student that hasn't been signed by tutor
-        JSONArray activeContract = new JSONArray(user.getJSONObject("additionalInfo").optJSONArray("activeContract"));
+            for (int i = 0; i < activeContract.length(); i++) {
+                JSONObject contract = new JSONObject(ApiRequest.get("/contract/" + activeContract.get(i)).body());
+                returnArr.put(contract);
 
-        for (int i = 0; i < activeContract.length(); i++) {
-            JSONObject contract = new JSONObject(ApiRequest.get("/contract/" + activeContract.get(i)).body());
-            returnArr.put(contract);
+            }
+        } else {
+            // get all the bid signed by the user
+            for (int i=0; i < contracts.length(); i++){
+                JSONObject contract = contracts.getJSONObject(i);
+                if (contract.getJSONObject("secondParty").getString("id").equals(this.userId) && (!contract.isNull("dateSigned"))){
+                    returnArr.put(contracts.get(i));
+                }
 
+            }
+
+            // if less that 5 contract return
+            if (returnArr.length() <= 5){
+                return  returnArr;
+            }
+
+            // if more than 5 filter the latest bid signed by user
+            returnArr = InsertionSort(contracts);
+            while (returnArr.length() > 5){
+                returnArr.remove(0);
+            }
         }
         return returnArr;
 
+    }
+
+    /**
+     * Using insertion sort to sort contracts by date
+     * @param contracts The arrayList of contract
+     */
+    private JSONArray InsertionSort(JSONArray contracts) {
+
+        for (int i = 1; i < contracts.length(); ++i) {
+            JSONObject key = contracts.getJSONObject(i);
+            Instant currDate = Instant.parse(key.getString("dateSigned"));
+            int j = i - 1;
+
+            // while date[] > currDate, move the date to left
+            while (j >= 0 &&  currDate.compareTo(Instant.parse(contracts.getJSONObject(j).getString("dateSigned"))) > 0) {
+                contracts.put(j+1, contracts.get(j));
+                j = j - 1;
+            }
+            contracts.put(j + 1, key);
+        }
+
+        return contracts;
     }
 
     @Override

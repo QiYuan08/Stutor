@@ -32,6 +32,7 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
 
     public BidClosingController() {
         super();
+        this.contractUtil = new Contract();
         contractUtil.setStrategy(new CloseBidStrategy());
     }
 
@@ -75,7 +76,7 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
                 }
                 return;
             } else {
-                bid.put("bidId", bidId);
+                bid.put("userId", this.userId);
                 bid.put("tutorId", tutorId);
                 bid.put("messageId", messageId);
                 contractUtil.postContract(bid);
