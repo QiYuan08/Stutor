@@ -49,10 +49,10 @@ public class MonitorBidController extends Publisher implements ActionListener {
                     JSONObject bid = (JSONObject) monitoredBids.get(i);
                     if (bid.getString("id").equals(bidId)) {
                         monitoredBids.remove(i);
+                        msg = "Bid successfully removed from your monitoring list!";
                         break;
                     }
                 }
-                msg = "Bid successfully removed from your monitoring list!";
             }
 
             JSONObject patchRequest = new JSONObject().put("additionalInfo", additionalInfo);

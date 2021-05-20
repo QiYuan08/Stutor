@@ -20,7 +20,6 @@ public class UpdateBidService extends Publisher implements ObserverOutputInterfa
         bidUpdateTask = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("hi");
                 notifySubscribers(userId);
             }
         };

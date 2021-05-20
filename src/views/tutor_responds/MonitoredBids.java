@@ -9,6 +9,7 @@ import services.ViewManagerService;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicBorders;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -47,7 +48,6 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface, Li
         c.gridy = 0;
         c.gridwidth = 1;
         c.gridheight = 1;
-//        c.anchor = GridBagConstraints.PAGE_START;
         this.add(backButton, c);
 
         scrollPane = new JScrollPane();
@@ -72,13 +72,14 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface, Li
 
         if (user.getBoolean("isTutor") && user.getJSONObject("additionalInfo").has("monitoredBids")) {
             buttonArr = new ArrayList<>();
-            JSONArray monitoredBids = checkBidValidity(user.getJSONObject("additionalInfo"));
+            JSONArray monitoredBids = filterValidBids(user.getJSONObject("additionalInfo"));
             JPanel monitoredBidsPanel = new JPanel();
             monitoredBidsPanel.setLayout(new GridBagLayout());
             GridBagConstraints c = new GridBagConstraints();
             for (int i = 0; i < monitoredBids.length(); i++) {
                 JSONObject bid = (JSONObject) monitoredBids.get(i);
                 JPanel bidPanel = new JPanel();
+                bidPanel.setBorder(new BasicBorders.MenuBarBorder(Color.LIGHT_GRAY, Color.LIGHT_GRAY));
                 bidPanel.setLayout(new GridBagLayout());
                 c.fill = GridBagConstraints.HORIZONTAL;
                 c.weightx = 1;
@@ -115,7 +116,7 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface, Li
                 buttonArr.add(viewBidButton);
 
                 c.gridx = 0;
-                c.gridy = monitoredBidsPanel.getComponentCount();
+                c.gridy = monitoredBidsPanel.getComponentCount() * 3;
                 c.gridwidth = 4;
                 c.gridheight = 3;
                 monitoredBidsPanel.add(bidPanel, c);
@@ -124,12 +125,13 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface, Li
         }
     }
 
-    private JSONArray checkBidValidity(JSONObject additionalInfo) {
+    private JSONArray filterValidBids(JSONObject additionalInfo) {
         JSONArray monitoredBids = additionalInfo.getJSONArray("monitoredBids");
         boolean modified = false;
         for (int i = 0; i < monitoredBids.length(); i++) {
             JSONObject bid = (JSONObject) monitoredBids.get(i);
-            if (!bid.isNull("dateClosedDown")) {
+            JSONObject realBid = new JSONObject(ApiRequest.get("/bid/" + bid.getString("id")).body());
+            if (!realBid.isNull("dateClosedDown")) {
                 monitoredBids.remove(i);
                 modified = true;
             }
