@@ -68,8 +68,9 @@ public class Application extends JFrame{
         ExpireBidService expireBidService = new ExpireBidService();
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
         expireBidService.setDuration(720, 7);
-        expireBidService.expireOpenBidService();
-        expireBidService.expireCloseBidService();
+        expireBidService.expireBidService();
+//        expireBidService.expireOpenBidService();
+//        expireBidService.expireCloseBidService();
 
         // configures the service that allows the switching of pages within the card layout
         ViewManagerService.setRootPanel(rootPanel);
@@ -140,7 +141,7 @@ public class Application extends JFrame{
         bidClosingController.subscribe(viewContract);
         // TODO: subscribe view contracts here
 
-        // dashboardController needed for findbid and seebid pages to add event listener for all of its button
+        // bidUpdateController needed for findbid and seebid pages to add event listener for all of its button
         // this controller is called when user click on findBid Button and seeBid button in dashboard
         // from dashboard to see bid or find bid
         BidUpdateController bidUpdateController = new BidUpdateController(dashboardPage); // userId are updated from here
