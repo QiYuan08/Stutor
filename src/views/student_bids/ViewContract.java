@@ -275,7 +275,8 @@ public class ViewContract extends JPanel implements ObserverOutputInterface, Lis
      * @return JSONArray of the latest 5 contract
      */
     private JSONArray filterContracts(JSONArray contracts) {
-
+    //TODO: tutor can see latest 5 signed bid
+    //TODO: student cannot renew contract if more than 5 contract/ active bid
         // check if user is tutor or student to filter the contract differently
         HttpResponse<String> response = ApiRequest.get("/user/" + this.userId);
         JSONObject user = new JSONObject(response.body());

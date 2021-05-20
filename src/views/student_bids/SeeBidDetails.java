@@ -139,6 +139,9 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
         JSONArray messages = bid.getJSONArray("messages");
 
+        subjectLabel.setText("Subject: " + bid.getJSONObject("subject").getString("name"));
+        nameLabel.setText("Name: " + bid.getJSONObject("initiator").getString("givenName") +" " + bid.getJSONObject("initiator").getString("familyName"));
+
         showTutors(messages);
 
         if (!additionalInfo.isEmpty()) {
