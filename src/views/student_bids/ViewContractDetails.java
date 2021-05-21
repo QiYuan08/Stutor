@@ -348,7 +348,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         sessionInput.setText(String.valueOf(contractDetail.getInt("preferredSession")));
         dayInput.setText(contractDetail.getString("day"));
         competencyInput.setText(String.valueOf(contractDetail.getInt("minCompetency")));
-        expireSpinner.setValue(contractDetail.getInt("contractLength"));
+        expireSpinner.setValue(contractDetail.getInt("contractLength")); // TODO: should be getString?
 
         if (contract.isNull("freeLesson")){ // the case when tutor buy out the bid immidiately there is not free lesson
             freeLessonInput.setText("0");
@@ -362,8 +362,8 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
 
         // check if the student is tutor or or student
         JSONObject user = new JSONObject(ApiRequest.get("/user/" + this.userId).body());
-        isTutor =  user.getBoolean("isTutor") ? true : false;
-        editable = user.getJSONObject("additionalInfo").getJSONArray("activeContract").length() < 5 ? true : false;
+        isTutor = user.getBoolean("isTutor");
+        editable = user.getJSONObject("additionalInfo").getJSONArray("activeContract").length() < 5;
 
         if (editable) {
             if (isTutor) {

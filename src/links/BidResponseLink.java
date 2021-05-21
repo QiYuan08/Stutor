@@ -1,5 +1,6 @@
 package links;
 
+import org.json.JSONArray;
 import services.ApiRequest;
 import abstractions.ListenerLinkInterface;
 import services.ViewManagerService;
@@ -36,7 +37,7 @@ public class BidResponseLink implements ActionListener {
 
         // get the bid from bidId
         JSONObject data = new JSONObject(thisBtn.getName().trim());
-        HttpResponse<String> response = ApiRequest.get("/bid/" + data.get("bidId"));
+        HttpResponse<String> response = ApiRequest.get("/bid/" + data.get("bidId") + "?fields=messages");
         JSONObject bid = new JSONObject(response.body());
 
         // if submitting open bid, create a message to update bid
@@ -51,6 +52,28 @@ public class BidResponseLink implements ActionListener {
             } else { // failed API call
                 String msg = "Error: " + new JSONObject(response.body()).get("message");
                 JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else if (thisBtn.getText().equals("Revise Response")) {
+
+            JSONObject inputData = bidResponse.retrieveInputs();
+            JSONArray messages = bid.getJSONArray("messages");
+            HttpResponse<String> messagePatch = null;
+            for (int i = 0; i < messages.length(); i++) {
+                JSONObject message = messages.getJSONObject(i);
+                if (message.getJSONObject("poster").getString("id").equals(inputData.getString("posterId")) && !message.isNull("additionalInfo")) {
+                    JSONObject additionalInfo = new JSONObject().put("additionalInfo", inputData.getJSONObject("additionalInfo"));
+                    messagePatch = ApiRequest.patch("/message/" + message.getString("id"), additionalInfo.toString());
+                    break;
+                }
+            }
+            if (messagePatch != null) {
+                if (messagePatch.statusCode() == 200) { // successfully posted message
+                    JOptionPane.showMessageDialog(new JFrame(), "Success", "Response Revised Successfully", JOptionPane.INFORMATION_MESSAGE);
+                } else { // failed API call
+                    String msg = "Error: " + new JSONObject(messagePatch.body()).get("message");
+                    JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);
+                }
             }
 
         } else {

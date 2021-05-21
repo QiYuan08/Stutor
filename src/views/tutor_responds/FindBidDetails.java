@@ -166,7 +166,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         // if retrieve success
         if (response.statusCode() == 200){
             // set the default value of reply button to respond
-            respondButton.setText("Respond");
+            respondButton.setText("Revise Response"); //TODO: change response to review response and test
             JSONObject bid = new JSONObject(response.body());
             updateBidDetails(bid);
             updateBidFunctions(bid);

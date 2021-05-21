@@ -19,12 +19,12 @@ import java.time.ZonedDateTime;
 
 public class BidResponse extends JPanel implements ObserverInputInterface, ObserverOutputInterface {
 
-    private JLabel activityTitle, lessonField, dayField,sessionLabel, expiryField, startTimeField, sessionField, durationLabel, rateLabel, endTimeField, rateField, freeLessonField, messageField;
+    private JLabel activityTitle, lessonField, dayField,sessionLabel, expiryField, startTimeField, sessionField, durationLabel, rateLabel, durationField, rateField, freeLessonField, messageField;
     private JTextField lessonInput, dayInput, rateInput, sessionInput;
     private JButton submitButton, backBtn;
     private JTextArea messageInput;
     private JComboBox<String> startMeridiem;
-    private JSpinner duration, endTime, freeLesson, startTime, expireSpinner;
+    private JSpinner duration, freeLesson, startTime, expireSpinner;
     private String bidId, userId;
     private boolean isClose; // true is this page is showing open bid
     private GridBagConstraints c;
@@ -83,12 +83,12 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         this.add(dayInput, c);
 
         // Duration per session
-        endTimeField = new JLabel("Duration: ");
+        durationField = new JLabel("Duration: ");
         c.gridx = 0;
         c.gridy = 3;
         c.gridwidth = 1;
         c.gridheight = 1;
-        this.add(endTimeField, c);
+        this.add(durationField, c);
 
         c.gridx = 1;
         duration = new JSpinner(new SpinnerNumberModel(1, 1, 14, 1));
@@ -126,10 +126,6 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         c.gridheight = 1;
         c.weightx = 0.2;
         this.add(sessionLabel, c);
-
-        c.gridx = 1;
-        endTime = new JSpinner(new SpinnerNumberModel(1, 1, 12, 1));
-        this.add(endTime, c);
 
         // Start time
         startTimeField = new JLabel("Preferred Time: ");
@@ -274,7 +270,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         if (isClose) {
             jsonObj.put("content", (messageInput.getText().equals("")) ? "string" : messageInput.getText()); // if messageInput empty return string else get messageInput
         } else {
-            jsonObj.put("content", " ");
+            jsonObj.put("content", "");
         }
         jsonObj.put("additionalInfo", additionalInfo);
 
@@ -292,7 +288,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         this.bidId = jsonObject.getString("bidId");
         this.userId = jsonObject.getString("userId");
 
-        HttpResponse<String> response = ApiRequest.get("/bid/" + this.bidId);
+        HttpResponse<String> response = ApiRequest.get("/bid/" + this.bidId + "?fields=messages");
         JSONObject bid = new JSONObject(response.body());
         String subjectName = bid.getJSONObject("subject").getString("name");
         activityTitle.setText(subjectName);
@@ -326,14 +322,40 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
             this.remove(messageField);
         }
 
+        checkPrevResponse(bid);
+
         // set the contract duration given by student as default in expireSpinner
         expireSpinner.setValue(Integer.valueOf(bid.getJSONObject("additionalInfo").getString("contractLength")));
-
 
         // set the name of this button as bidId and userId for quering with db
         JSONObject btnData = new JSONObject();
         btnData.put("bidId", this.bidId);
         btnData.put("userId", this.userId);
         submitButton.setName(btnData.toString());
+    }
+
+    private void checkPrevResponse(JSONObject bid) {
+        JSONArray messages = bid.getJSONArray("messages");
+        for (int i = 0; i < messages.length(); i++) {
+            JSONObject message = messages.getJSONObject(i);
+            if (message.getJSONObject("poster").getString("id").equals(userId) && !message.isNull("additionalInfo")) {
+                submitButton.setText("Revise Response");
+                JSONObject additionalInfo = message.getJSONObject("additionalInfo");
+
+                lessonInput.setText(additionalInfo.getString("noOfLesson"));
+                dayInput.setText(additionalInfo.getString("day"));
+                duration.setValue(Integer.parseInt(additionalInfo.getString("duration")));
+                sessionInput.setText(String.valueOf(additionalInfo.getInt("preferredSession")));
+                String time = additionalInfo.getString("startTime");
+                startMeridiem.setSelectedItem(time.substring(time.length()-2)); // get the meridiem
+                startTime.setValue(Integer.valueOf(time.substring(0, time.length()-2))); // get the time
+                rateInput.setText(additionalInfo.getString("rate"));
+                freeLesson.setValue(additionalInfo.isNull("freeLesson") ? 0 : additionalInfo.getInt("freeLesson"));
+                expireSpinner.setValue(Integer.parseInt(additionalInfo.getString("contractLength")));
+
+                return;
+            }
+        }
+        submitButton.setText("Submit Bid");
     }
 }
