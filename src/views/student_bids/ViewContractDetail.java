@@ -22,8 +22,8 @@ import java.util.HashMap;
 // TODO: change filtercontract for tutor to use additionalInfo from user endpoint
 public class ViewContractDetail extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
-    private JLabel activityTitle, tutorField, qualificationField, lessonField, dayField, expiryField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField, freeLessonField;
-    private JTextField lessonInput, dayInput, rateInput, sessionInput, competencyInput, freeLessonInput;
+    private JLabel activityTitle, tutorField, qualificationField, lessonField, subjectField, dayField, expiryField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField, freeLessonField;
+    private JTextField lessonInput, dayInput, rateInput, sessionInput, competencyInput, subjectInput, freeLessonInput;
     private JButton submitButton;
     private JButton backBtn;
     private JComboBox<String> startMeridiem,tutorCombo ;
@@ -82,17 +82,33 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         qualificationField.setEnabled(false);
         this.add(qualificationField, c);
 
-
         competencyInput = new JTextField();
         competencyInput.setText("3");
         c.gridx = 1;
         c.gridwidth = 4;
         this.add(competencyInput, c);
 
+        //Subject Field
+        subjectField = new JLabel("Subject: ");
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        this.add(subjectField, c);
+
+        subjectInput = new JTextField();
+        c.gridx = 1;
+        c.gridy = 3;
+        c.gridwidth = 4;
+        c.gridheight = 1;
+        subjectInput.setEnabled(false);
+        this.add(subjectInput, c);
+
+
         // Lesson
         lessonField = new JLabel("No of Lesson: ");
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 4;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(lessonField, c);
@@ -105,7 +121,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // Preferred Day
         dayField = new JLabel("Preferred Day(s): ");
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 5;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(dayField, c);
@@ -118,7 +134,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // Start time
         startTimeField = new JLabel("Preferred Time: ");
         c.gridx = 0;
-        c.gridy = 5;
+        c.gridy = 6;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(startTimeField, c);
@@ -135,7 +151,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // Duration per session
         endTimeField = new JLabel("Duration: ");
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 7;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(endTimeField, c);
@@ -146,7 +162,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
 
         durationLabel = new JLabel(" hours per lesson");
         c.gridx = 2;
-        c.gridy = 6;
+        c.gridy = 7;
         c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 0.2;
@@ -155,7 +171,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // Session per week
         sessionField = new JLabel("Preferred No of Lesson(s): ");
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 8;
         c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 1;
@@ -163,7 +179,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
 
         sessionInput = new JTextField();
         c.gridx = 1;
-        c.gridy = 7;
+        c.gridy = 8;
         c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 1;
@@ -171,7 +187,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
 
         sessionLabel = new JLabel("sessions per week");
         c.gridx = 2;
-        c.gridy = 7;
+        c.gridy = 8;
         c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 0.2;
@@ -180,7 +196,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // Preferred Rate
         rateField = new JLabel("Rate: ");
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 9;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(rateField, c);
@@ -200,7 +216,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // free lesson
         freeLessonField = new JLabel("No of Free Lesson: ");
         c.gridx = 0;
-        c.gridy = 9;
+        c.gridy = 10;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(freeLessonField, c);
@@ -215,7 +231,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // checkbox to input bid type
         typeField = new JLabel("Bid Type");
         c.gridx = 0;
-        c.gridy = 10;
+        c.gridy = 11;
         this.add(typeField, c);
 
         typeName = new JLabel("open");
@@ -226,14 +242,14 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // contract length
         expiryField = new JLabel("Contract Duration");
         c.gridx = 0;
-        c.gridy = 11;
+        c.gridy = 12;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(expiryField, c);
 
         Integer[] contractLength = {3,6,12,24,36,48,96};
         expireSpinner = new JSpinner(new SpinnerListModel(contractLength));
-        c.gridy = 11;
+        c.gridy = 12;
         c.gridx = 1;
         c.gridwidth = 2;
         this.add(expireSpinner, c);
@@ -242,7 +258,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         submitButton = new JButton("Submit Contract");
         c.weightx = 0.1;
         c.gridx = 0;
-        c.gridy = 12;
+        c.gridy = 13;
         c.gridwidth = 4;
         this.add(submitButton, c);
 
@@ -324,6 +340,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         this.subjectId = contract.getJSONObject("subject").getString("id");
         tutorCombo.setSelectedItem(contract.getJSONObject("firstParty").getString("givenName") + " " + contract.getJSONObject("firstParty").getString("familyName"));
 
+        subjectInput.setText(contract.getJSONObject("subject").getString("name"));
         duration.setValue(Integer.valueOf(contractDetail.getString("duration")));
         lessonInput.setText(contractDetail.getString("noOfLesson")); //fix this typo
         rateInput.setText(contractDetail.getString("rate"));

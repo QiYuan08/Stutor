@@ -242,27 +242,26 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         String contractLength = expireSpinner.getValue().toString();
 
         // creating the json body to pass to response bid listener
-        JSONObject lessonInfo = new JSONObject();
-        lessonInfo.put("noOfLesson", noOfLesson);
-        lessonInfo.put("day", day);
-        lessonInfo.put("contractLength", contractLength);
-        lessonInfo.put("startTime", time);
-        lessonInfo.put("duration", duration.getValue().toString());
-        lessonInfo.put("preferredSession", Integer.valueOf(sessionInput.getText()));
-        lessonInfo.put("rate", rate);
-        lessonInfo.put("freeLesson", freeLesson.getValue());
+        JSONObject additionalInfo = new JSONObject();
+        additionalInfo.put("noOfLesson", noOfLesson);
+        additionalInfo.put("day", day);
+        additionalInfo.put("contractLength", contractLength);
+        additionalInfo.put("startTime", time);
+        additionalInfo.put("duration", duration.getValue().toString());
+        additionalInfo.put("preferredSession", Integer.valueOf(sessionInput.getText()));
+        additionalInfo.put("rate", rate);
+        additionalInfo.put("freeLesson", freeLesson.getValue());
         JSONArray competencies = new JSONObject(ApiRequest.get("/user/" + userId + "?fields=competencies.subject").body())
                 .getJSONArray("competencies");
         String subjectId = new JSONObject(ApiRequest.get("/bid/" + bidId).body()).getJSONObject("subject").getString("id");
         for (int i = 0; i < competencies.length(); i++) {
             JSONObject competency = (JSONObject) competencies.get(i);
             if (competency.getJSONObject("subject").getString("id").equals(subjectId)) {
-                lessonInfo.put("minCompetency", competency.getInt("level"));
+                additionalInfo.put("minCompetency", competency.getInt("level"));
                 break;
             }
         }
 
-        JSONObject additionalInfo = new JSONObject();
         additionalInfo.put("tutorSigned", true);
         additionalInfo.put("studentSigned", true);
 
@@ -277,7 +276,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         } else {
             jsonObj.put("content", " ");
         }
-        jsonObj.put("lessonInfo", lessonInfo);
+        jsonObj.put("additionalInfo", additionalInfo);
 
         return jsonObj;
     }

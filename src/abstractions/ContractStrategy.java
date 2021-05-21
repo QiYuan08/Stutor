@@ -31,17 +31,19 @@ public interface ContractStrategy {
         // if user has 'activeContract' field
         if (additionalInfo.has("unsignedContract")){
 
-            JSONArray activeContract = additionalInfo.getJSONArray("unsignedContract");
+            JSONArray unsignedContract = additionalInfo.getJSONArray("unsignedContract");
 
 
-            if (activeContract.length() == 5){ // only save latest 5 signed contract
-                activeContract.remove(0); // remove the oldest contract
-                activeContract.put(contractId); // add latest contract
+            if (unsignedContract.length() == 5){ // only save latest 5 signed contract
+                unsignedContract.remove(0); // remove the oldest contract
+                unsignedContract.put(contractId); // add latest contract
+            } else {
+                unsignedContract.put(contractId);
             }
 
             // update additionalInfo with new active Contract
             additionalInfo.remove("unsignedContract");
-            additionalInfo.put("unsignedContract", activeContract);
+            additionalInfo.put("unsignedContract", unsignedContract);
 
         } else {
             JSONArray activeContract = new JSONArray();

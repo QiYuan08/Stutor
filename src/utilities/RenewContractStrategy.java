@@ -18,22 +18,25 @@ public class RenewContractStrategy implements ContractStrategy {
 
     @Override
     public void postContract(JSONObject contractDetail) {
-        contractDetail.put("firstPartyId", contractDetail.getString("firstPartyId"));
-        contractDetail.put("secondPartyId", contractDetail.getString("secondPartyId"));
-        contractDetail.put("lessonInfo", contractDetail.getJSONObject("lessonInfo"));
-        contractDetail.put("additionalInfo", contractDetail.getJSONObject("additionalInfo"));
+
+        JSONObject newContract = new JSONObject();
+
+        newContract.put("firstPartyId", contractDetail.getString("firstPartyId"));
+        newContract.put("secondPartyId", contractDetail.getString("secondPartyId"));
+        newContract.put("lessonInfo", contractDetail.getJSONObject("lessonInfo"));
+        newContract.put("additionalInfo", contractDetail.getJSONObject("additionalInfo"));
 
         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
         Instant now = ts.toInstant();
-        contractDetail.put("dateCreated", now);
+        newContract.put("dateCreated", now);
         LocalDateTime time = LocalDateTime.ofInstant(ts.toInstant(), ZoneOffset.ofHours(0));
         time = time.plus(contractDetail.getJSONObject("lessonInfo").getInt("contractLength"), ChronoUnit.MONTHS); // contract expires after a year
         Instant output = time.atZone(ZoneOffset.ofHours(0)).toInstant();
         Timestamp expiryDate = Timestamp.from(output);
-        contractDetail.put("subjectId", contractDetail.getString("subjectId"));
-        contractDetail.put("expiryDate", expiryDate);
-        contractDetail.put("paymentInfo", new JSONObject());
-        HttpResponse<String> contractResponse = ApiRequest.post("/contract", contractDetail.toString());
+        newContract.put("subjectId", contractDetail.getString("subjectId"));
+        newContract.put("expiryDate", expiryDate);
+        newContract.put("paymentInfo", new JSONObject());
+        HttpResponse<String> contractResponse = ApiRequest.post("/contract", newContract.toString());
 
         if (contractResponse.statusCode() == 201) {
 

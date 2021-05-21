@@ -127,14 +127,14 @@ public class Application extends JFrame{
         monitorBidsController.subscribe(findBidDetails);
         monitorBidsController.subscribe(findTutorResponseLink);
 
-        UpdateBidService updateBidService = new UpdateBidService();
-        updateBidService.subscribe(monitoredBids);
-        updateBidService.subscribe(findAllBids);
-        updateBidService.subscribe(findBidDetailsController);
-        updateBidService.subscribe(findBidDetails);
-        updateBidService.subscribe(seeAllBids);
-        updateBidService.subscribe(seeBidDetails);
-        updateBidService.subscribe(seeBidDetailsController);
+//        UpdateBidService updateBidService = new UpdateBidService();
+//        updateBidService.subscribe(monitoredBids);
+//        updateBidService.subscribe(findAllBids);
+//        updateBidService.subscribe(findBidDetailsController);
+//        updateBidService.subscribe(findBidDetails);
+//        updateBidService.subscribe(seeAllBids);
+//        updateBidService.subscribe(seeBidDetails);
+//        updateBidService.subscribe(seeBidDetailsController);
 
         // TODO: contract not updated when tutor buy out bid
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
@@ -169,7 +169,7 @@ public class Application extends JFrame{
         loginController.subscribe(bidClosingController); // uses the userId to update views when a bid closes
         loginController.subscribe(bidUpdateController);
         loginController.subscribe(monitoredBids);
-        loginController.subscribe(updateBidService);
+//        loginController.subscribe(updateBidService);
 
         this.add(rootPanel);
         this.setVisible(true);
