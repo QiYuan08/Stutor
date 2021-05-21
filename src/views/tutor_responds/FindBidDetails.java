@@ -202,37 +202,22 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         String data = new JSONObject().put("bidId", this.bidId).put("userId", this.userId).toString();
         respondButton.setName(data);
 
-        this.remove(monitorBidButton);
-        this.remove(scrollPane);
-        buyoutButton.setVisible(false);
+        if (bid.getString("type").equals("close")) {
+            monitorBidButton.setVisible(false);
+            scrollPane.setVisible(false);
+            buyoutButton.setVisible(false);
+            if (hasReplied(messages)) {respondButton.setText("Message");}
+        }
         // if bid type is open
-        if (bid.getString("type").equals("open")) {
+        else if (bid.getString("type").equals("open")) {
+            monitorBidButton.setVisible(true);
+            scrollPane.setVisible(true);
+            buyoutButton.setVisible(true);
             showTutors(messages);
             buyoutButton.setName(this.bidId);
-            buyoutButton.setVisible(true);
-
-            GridBagConstraints c = new GridBagConstraints();
-            c.weighty = 1;
-            c.weightx = 1;
-            c.gridheight = 1;
-            c.gridx = 0;
-            c.gridy = 23;
-            c.gridwidth = 4;
-            c.fill = GridBagConstraints.HORIZONTAL;
             if (isMonitored(bidId)) {monitorBidButton.setText("Remove From Monitoring");}
             else {monitorBidButton.setText("Monitor Bid");}
-            this.add(monitorBidButton, c);
-
-            c.gridheight = 10;
-            c.gridy = 9;
-            c.fill = GridBagConstraints.HORIZONTAL;
-            this.add(scrollPane, c);
         }
-        // add replyBid Button
-        else if (bid.get("type").equals("close") && hasReplied(messages)){ // check if tutor reply to this bid before for close bid
-            respondButton.setText("Message");
-        }
-
     }
 
     private boolean isMonitored(String bidId) {
@@ -267,7 +252,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
             bidderLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
             detailPane.add(bidderLabel, c);
 
-            for (int i=0; i < messages.length(); i++){
+            for (int i=0; i < messages.length(); i++) {
                 JSONObject message = messages.getJSONObject(i);
 
                 // create the panel for each bid item
@@ -323,6 +308,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 c.gridy = detailPane.getComponentCount();
                 detailPane.add(bidPanel, c);
             }
+            scrollPane.setViewportView(detailPane);
         }
     }
 
