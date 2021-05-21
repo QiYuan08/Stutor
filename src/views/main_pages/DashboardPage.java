@@ -101,19 +101,17 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
         c.gridwidth = 2;
         this.add(viewProfileButton, c);
 
-        createBidButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.CREATE_BID);
-            }
-        });
+        createBidButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.CREATE_BID));
 
-        viewProfileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.PROFILE_PAGE);
-            }
-        });
+        viewProfileButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.PROFILE_PAGE));
+
+        monitoredBidsButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.MONITORED_BIDS));
+
+        findBidsButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.FIND_ALL_BIDS));
+
+        seeBidsButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.SEE_ALL_BIDS));
+
+        viewContractButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.VIEW_CONTRACTS));
     }
 
     @Override
@@ -125,78 +123,30 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
 
             response = ApiRequest.get("/user/" + userId + "?fields=initiatedBids");
             if (response.statusCode() == 200) {
-
                 JSONObject user = new JSONObject(response.body());
-                GridBagConstraints c = new GridBagConstraints();
-                c.weightx = 1;
-                c.weighty = 1;
-                c.fill = GridBagConstraints.BOTH;
-                c.insets = new Insets(5, 5, 0, 5);
 
-                this.remove(createBidButton);
-
+                createBidButton.setVisible(false);
                 if (!user.getBoolean("isStudent")) {
-                    this.remove(tutorialsTakenList);
-                    this.remove(tutorialsTaken);
-                    this.remove(seeBidsButton);
-
+                    tutorialsTaken.setVisible(false);
+                    tutorialsTakenList.setVisible(false);
+                    seeBidsButton.setVisible(false);
                 } else {
-                    c.gridy = 1;
-                    c.gridwidth = 3;
-                    c.gridheight = 1;
-                    this.add(tutorialsTaken, c);
-
-                    c.gridx = 0;
-                    c.gridy = 2;
-                    c.gridwidth = 3;
-                    c.gridheight = 4;
-                    this.add(this.tutorialsTakenList, c);
-
-                    if (checkContractsBidsCount(contracts, user)) {
-                        c.gridy = 6;
-                        c.gridx = 1;
-                        c.gridwidth = 1;
-                        c.gridheight = 1;
-                        this.add(createBidButton, c);
-
-                    }
-
-                    c.gridy = 6;
-                    c.gridx = 2;
-                    c.gridwidth = 1;
-                    c.gridheight = 1;
-                    this.add(seeBidsButton, c);
-
+                    tutorialsTaken.setVisible(true);
+                    tutorialsTakenList.setVisible(true);
+                    seeBidsButton.setVisible(true);
+                    if (checkContractsBidsCount(contracts, user)) {createBidButton.setVisible(true);}
                 }
 
                 if (!user.getBoolean("isTutor")) {
-                    this.remove(tutorialsTaughtList);
-                    this.remove(tutorialsTaught);
-                    this.remove(findBidsButton);
-                    this.remove(monitoredBidsButton);
+                    tutorialsTaught.setVisible(false);
+                    tutorialsTaughtList.setVisible(false);
+                    findBidsButton.setVisible(false);
+                    monitoredBidsButton.setVisible(false);
                 } else {
-                    c.gridx = 0;
-                    c.gridy = 7;
-                    c.gridwidth = 3;
-                    c.gridheight = 1;
-                    this.add(tutorialsTaught, c);
-
-                    c.gridx = 0;
-                    c.gridy = 8;
-                    c.gridwidth = 3;
-                    c.gridheight = 4;
-                    this.add(tutorialsTaughtList, c);
-
-                    c.gridx = 2;
-                    c.gridy = 12;
-                    c.gridwidth = 1;
-                    c.gridheight = 1;
-                    this.add(findBidsButton, c);
-
-                    c.gridx = 1;
-                    c.gridy = 12;
-                    this.add(monitoredBidsButton, c);
-
+                    tutorialsTaught.setVisible(true);
+                    tutorialsTaughtList.setVisible(true);
+                    findBidsButton.setVisible(true);
+                    monitoredBidsButton.setVisible(true);
                 }
 
                 JPanel tutorialsTakenPanel = new JPanel();
@@ -220,8 +170,8 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                         }
                     }
                 }
-                this.tutorialsTakenList.setViewportView(tutorialsTakenPanel);
-                this.tutorialsTaughtList.setViewportView(tutorialsTaughtPanel);
+                tutorialsTakenList.setViewportView(tutorialsTakenPanel);
+                tutorialsTaughtList.setViewportView(tutorialsTaughtPanel);
             }
         }
     }
@@ -250,10 +200,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                 counter++;
             }
         }
-        if (counter < 5) {
-            return true;
-        }
-        return false;
+        return counter < 5;
     }
 
     @Override
