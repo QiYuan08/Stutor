@@ -27,11 +27,17 @@ public class CloseBidStrategy implements ContractStrategy {
             contract.put("firstPartyId", userId);
             contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
             contract.put("lessonInfo", bid.getJSONObject("additionalInfo"));
+
+            // if buyout then create additional Info cuz bid cannot store lessonInfo and additionalInfo
+            contract.put("additionalInfo", new JSONObject().put("tutorSigned", true).put("studentSigned", true));
+
         } else { // a confirm bid action from the user or ExpireBidService chooses the last tutor as the winner (has response)
             contract.put("firstPartyId", tutorId);
             contract.put("secondPartyId", bid.getJSONObject("initiator").getString("id"));
+            contract.put("additionalInfo", bid.getJSONObject("additionalInfo"));
             JSONObject message = new JSONObject(ApiRequest.get("/message/" + messageId).body());
             contract.put("lessonInfo", message.getJSONObject("additionalInfo"));
+
         }
         Timestamp ts = Timestamp.from(ZonedDateTime.now().toInstant());
         Instant now = ts.toInstant();
@@ -43,12 +49,10 @@ public class CloseBidStrategy implements ContractStrategy {
         contract.put("subjectId", bid.getJSONObject("subject").getString("id"));
         contract.put("expiryDate", expiryDate);
         contract.put("paymentInfo", new JSONObject());
-        contract.put("additionalInfo", new JSONObject());
         HttpResponse<String> contractResponse = ApiRequest.post("/contract", contract.toString());
 
         if (contractResponse.statusCode() == 201) {
             contract = new JSONObject(contractResponse.body());
-            patchUser(contract.getJSONObject("secondParty").getString("id"), contract.getString("id"), true);
             contract.put("tutorId", tutorId);
             signContract(contract, false);
         } else {
@@ -70,6 +74,11 @@ public class CloseBidStrategy implements ContractStrategy {
         String tutorId = contractDetail.getString("tutorId");
 
         if (contractSignResponse.statusCode() == 200) {
+
+            // add the contract into additionalInfo for both student nad patient
+            patchSignedContract(contractDetail.getJSONObject("firstParty").getString("id"), contractDetail.getString("id"));
+            patchSignedContract(contractDetail.getJSONObject("secondParty").getString("id"), contractDetail.getString("id"));
+
             msg = "Bid closed successfully and contract created at " + now;
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Successfully", JOptionPane.INFORMATION_MESSAGE);
             if (tutorId.equals("")) { // what is this ah?

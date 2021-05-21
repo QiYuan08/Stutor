@@ -40,7 +40,8 @@ public class RenewContractStrategy implements ContractStrategy {
             // after contract signed add them into additionalInfo for tutor so that he can sign later
             // if not cannot get the contractId for this contract
             contractDetail = new JSONObject(contractResponse.body());
-            patchUser(contractDetail.getJSONObject("firstParty").getString("id"), contractDetail.getString("id"), false); // patch the tutor
+            patchUnsignedContract(contractDetail.getJSONObject("firstParty").getString("id"), contractDetail.getString("id")); // patch the tutor
+            patchUnsignedContract(contractDetail.getJSONObject("secondParty").getString("id"), contractDetail.getString("id")); // patch the student
             JOptionPane.showMessageDialog(new JFrame(), "Contract Posted", "Success", JOptionPane.INFORMATION_MESSAGE);
 
         } else {
@@ -90,11 +91,13 @@ public class RenewContractStrategy implements ContractStrategy {
                 msg = "You signed the contract successfully";
                 JOptionPane.showMessageDialog(new JFrame(), msg, "Contract Signed Successfully", JOptionPane.INFORMATION_MESSAGE);
 
-                // remove the contract from additionalInfo for tutor after signing
-                if (isTutor){
-                    patchTutor(contract.getJSONObject("firstParty").getString("id"), contract.getString("id"));
-
+                // remove the contract from unsignedContract after signing
+                if (isTutor) {
+                    removeSignedContract(contract.getJSONObject("firstParty").getString("id"), contract.getString("id"));
+                } else {
+                    removeSignedContract(contract.getJSONObject("secondParty").getString("id"), contract.getString("id"));
                 }
+
             }
 
             // if both student and tutor signed, sign the the contract
@@ -108,7 +111,8 @@ public class RenewContractStrategy implements ContractStrategy {
                 msg = "Contract signed at " + now;
                 JOptionPane.showMessageDialog(new JFrame(), msg, "Contract Signed Successfully", JOptionPane.INFORMATION_MESSAGE);
 
-                patchUser(contract.getJSONObject("secondParty").getString("id"), contract.getString("id"), true); // patch the student
+                patchSignedContract(contract.getJSONObject("secondParty").getString("id"), contract.getString("id")); // patch the student
+                patchSignedContract(contract.getJSONObject("firstParty").getString("id"), contract.getString("id"));
             }
 
 
@@ -122,22 +126,22 @@ public class RenewContractStrategy implements ContractStrategy {
     }
 
     /**
-     * Method to removed signed contract from additional Info for tutor
-     * @param tutorId tutorId
+     * Method to removed signed contract from 'unsignedContract' field in additional Info from user
+     * @param userId userId
      * @param contractId the contract Id
      */
-    private void patchTutor(String tutorId, String contractId) {
+    private void removeSignedContract(String userId, String contractId) {
 
-        JSONObject tutor = new JSONObject(ApiRequest.get("/user/" + tutorId).body());
+        JSONObject user = new JSONObject(ApiRequest.get("/user/" + userId).body());
 
-        // loop through active contract of tutor and removed the one that is signed
-        for (int i=0; i < tutor.getJSONObject("additionalInfo").getJSONArray("activeContract").length(); i++){
-            if (tutor.getJSONObject("additionalInfo").getJSONArray("activeContract").get(i).equals(contractId)){
-                tutor.getJSONObject("additionalInfo").getJSONArray("activeContract").remove(i);
+        // loop through active contract of user and removed the one that is signed
+        for (int i=0; i < user.getJSONObject("additionalInfo").getJSONArray("unsignedContract").length(); i++){
+            if (user.getJSONObject("additionalInfo").getJSONArray("unsignedContract").get(i).equals(contractId)){
+                user.getJSONObject("additionalInfo").getJSONArray("unsignedContract").remove(i);
                 break;
             }
         }
-        ApiRequest.put("/user/" + tutorId, tutor.toString());
+        ApiRequest.put("/user/" + userId, user.toString());
 
     }
 }

@@ -203,7 +203,7 @@ public class DashboardPage extends JPanel implements ObserverOutputInterface, Li
                 tutorialsTakenPanel.setLayout(new BoxLayout(tutorialsTakenPanel, BoxLayout.Y_AXIS));
                 JPanel tutorialsTaughtPanel = new JPanel();
                 tutorialsTaughtPanel.setLayout(new BoxLayout(tutorialsTaughtPanel, BoxLayout.Y_AXIS));
-                
+                //TODO: didnt check for terminated contract
                 for (int i = 0; i < contracts.length(); i++) {
                     JSONObject contract = (JSONObject) contracts.get(i);
                     if (!contract.isNull("dateSigned")) {

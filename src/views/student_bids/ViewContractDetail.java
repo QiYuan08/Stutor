@@ -16,8 +16,6 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 
@@ -33,7 +31,7 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
     private JSpinner startTime, duration, expireSpinner;
     private HashMap<String, String> tutorMapping;
     private String userId, contractId, subjectId;
-    private Boolean isTutor;
+    private Boolean isTutor, editable;
 
     public ViewContractDetail() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -347,23 +345,29 @@ public class ViewContractDetail extends JPanel implements ObserverOutputInterfac
         // check if the student is tutor or or student
         JSONObject user = new JSONObject(ApiRequest.get("/user/" + this.userId).body());
         isTutor =  user.getBoolean("isTutor") ? true : false;
+        editable = user.getJSONObject("additionalInfo").getJSONArray("activeContract").length() < 5 ? true : false;
 
-        if (isTutor) {
-            submitButton.setText("Sign Contract");
-            disableEdit();
-        } else {
-            // if this is a signed contract which means for renewal
-            if (contract.isNull("dateSigned")) {
+        if (editable) {
+            if (isTutor) {
                 submitButton.setText("Sign Contract");
                 disableEdit();
+            } else {
+                // if this is a signed contract which means for renewal
+                if (contract.isNull("dateSigned")) {
+                    submitButton.setText("Sign Contract");
+                    disableEdit();
 
-            } else { // else for student to sign renewed cotract
-                submitButton.setText("Submit Contract");
-                enableEdit();
+                } else { // else for student to sign renewed cotract
+                    submitButton.setText("Submit Contract");
+                    enableEdit();
 
+                }
             }
 
+        } else {
+            this.remove(submitButton);
         }
+
     }
 
     /**
