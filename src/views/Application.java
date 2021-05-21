@@ -115,34 +115,32 @@ public class Application extends JFrame{
         bidCreateController.subscribe(seeAllBids);
 
         // link seeAllBids and seeBidDetails page
-        SeeBidDetailsController seeBidDetailsController = new SeeBidDetailsController(seeAllBids);
+        LinkController seeBidDetailsController = new LinkController(seeAllBids, ViewManagerService.SEE_BID_DETAILS);
         seeBidDetailsController.subscribe(seeBidDetails);
         seeBidDetailsController.subscribe(seeTutorResponseLink);
 
         // link findbidpage and findbiddetail page
-        FindBidDetailsController findBidDetailsController = new FindBidDetailsController(findAllBids);
+        LinkController findBidDetailsController = new LinkController(findAllBids, ViewManagerService.FIND_BID_DETAILS);
         findBidDetailsController.subscribe(findBidDetails);
         findBidDetailsController.subscribe(findTutorResponseLink);
 
-        ViewContractDetailController viewContractDetailController = new ViewContractDetailController(viewContracts);
+        LinkController viewContractDetailController = new LinkController(viewContracts, ViewManagerService.VIEW_CONTRACT_DETAILS);
         viewContractDetailController.subscribe(viewContractDetails);
 
         // links from the monitored bids to the bid details
-        FindBidDetailsController monitorBidsController = new FindBidDetailsController(monitoredBids);
+        LinkController monitorBidsController = new LinkController(monitoredBids, ViewManagerService.FIND_BID_DETAILS);
         monitorBidsController.subscribe(findBidDetails);
         monitorBidsController.subscribe(findTutorResponseLink);
 
         UpdateBidService updateBidService = new UpdateBidService();
         updateBidService.subscribe(monitoredBids); // the page need to be updated first with the bid buttons before adding the listeners
         updateBidService.subscribe(monitorBidsController);
-        updateBidService.subscribe(findAllBids);
-        updateBidService.subscribe(findBidDetailsController);
-        updateBidService.subscribe(findBidDetails);
-        updateBidService.subscribe(seeAllBids);
-        updateBidService.subscribe(seeBidDetailsController);
-        updateBidService.subscribe(seeBidDetails);
         updateBidService.subscribe(viewContracts);
         updateBidService.subscribe(viewContractDetailController);
+        updateBidService.subscribe(findAllBids);
+        updateBidService.subscribe(findBidDetailsController);
+        updateBidService.subscribe(seeAllBids);
+        updateBidService.subscribe(seeBidDetailsController);
 
         // TODO: contract not updated when tutor buy out bid
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
@@ -160,14 +158,6 @@ public class Application extends JFrame{
         // this controller is called when user click on findBid Button and seeBid button in dashboard
         // from dashboard to see bid or find bid
 //        BidUpdateController bidUpdateController = new BidUpdateController(dashboardPage); // userId are updated from here
-//        bidUpdateController.subscribe(findAllBids);
-//        bidUpdateController.subscribe(findBidDetailsController);
-//        bidUpdateController.subscribe(seeAllBids);
-//        bidUpdateController.subscribe(seeBidDetailsController);
-//        bidUpdateController.subscribe(monitoredBids); // the page need to be updated first with the bid buttons before adding the listeners
-//        bidUpdateController.subscribe(monitorBidsController);
-//        bidUpdateController.subscribe(viewContracts);
-//        bidUpdateController.subscribe(viewContractDetailController);
 
         // passing the userId to view classes and services that require it
         LoginController loginController = new LoginController(loginPage);
@@ -176,8 +166,6 @@ public class Application extends JFrame{
         loginController.subscribe(profilePage);
         loginController.subscribe(createBid);
         loginController.subscribe(bidClosingController); // uses the userId to update views when a bid closes
-//        loginController.subscribe(bidUpdateController);
-//        loginController.subscribe(monitoredBids);
         loginController.subscribe(expireContractListener);
 
         this.add(rootPanel);

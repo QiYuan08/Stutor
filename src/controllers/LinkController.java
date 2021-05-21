@@ -13,13 +13,15 @@ import java.awt.event.ActionListener;
  * Links FindAllBids to FindBidDetails (tutor looks into a student bid)
  * Updates FindBidDetails and the pages that lead from it with the bidId of the bid that the user pressed
  */
-public class FindBidDetailsController extends Publisher implements ActionListener, ObserverOutputInterface {
+public class LinkController extends Publisher implements ActionListener, ObserverOutputInterface {
 
     private ListenerLinkInterface inputPage;
+    private String linkedPage;
 
-    public FindBidDetailsController(ListenerLinkInterface inputPage) {
+    public LinkController(ListenerLinkInterface inputPage, String linkedPage) {
         super();
         this.inputPage = inputPage;
+        this.linkedPage = linkedPage;
     }
 
     @Override
@@ -32,6 +34,6 @@ public class FindBidDetailsController extends Publisher implements ActionListene
         JButton thisBtn = (JButton) e.getSource();
         String bidId = thisBtn.getName();
         notifySubscribers(bidId);
-        ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
+        ViewManagerService.loadPage(linkedPage);
     }
 }

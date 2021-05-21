@@ -235,9 +235,8 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
                     detailPane.add(bidPanel, c);
                 }
             }
-
-            scrollPane.setViewportView(detailPane);
         }
+        scrollPane.setViewportView(detailPane);
     }
 
 

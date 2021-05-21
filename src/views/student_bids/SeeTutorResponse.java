@@ -120,6 +120,14 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
         HttpResponse<String> response = ApiRequest.get("/bid/" + message.getString("bidId"));
         JSONObject bid = new JSONObject(response.body());
 
+        name.setText("Name: " + initiator.getString("givenName") + " " + initiator.getString("familyName"));
+        rate.setText("Rate: " + additionalInfo.get("rate"));
+        competency.setText("Tutor competency: " + additionalInfo.get("minCompetency"));
+        day.setText("Preferred Day(s): " + additionalInfo.get("day"));
+        preferredSession.setText("Preferred no of sessions: " + additionalInfo.get("preferredSession") + " sessions per week");
+        duration.setText("Duration: " + additionalInfo.get("duration") + " hours per lesson");
+        startTime.setText("Start Time: " + additionalInfo.get("startTime"));
+
         mainConst.gridheight = 1;
         mainConst.gridx = 2;
         mainConst.gridy = 32;
