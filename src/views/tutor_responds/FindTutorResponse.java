@@ -110,8 +110,6 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
         JSONObject initiator = bid.getJSONObject("poster");
         JSONObject additionalInfo = bid.getJSONObject("additionalInfo");
 
-        // if rate is provided in the bid
-
         name.setText("Name: " + initiator.getString("givenName") + " " + initiator.getString("familyName"));
 
         rate.setText("Rate: " + additionalInfo.get("rate"));

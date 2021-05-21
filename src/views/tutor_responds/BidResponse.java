@@ -262,6 +262,9 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
             }
         }
 
+        additionalInfo.put("tutorSigned", true);
+        additionalInfo.put("studentSigned", true);
+
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("bidId", this.bidId);
         jsonObj.put("posterId", this.userId);

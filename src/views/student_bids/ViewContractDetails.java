@@ -16,16 +16,14 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 
 // TODO: change filtercontract for tutor to use additionalInfo from user endpoint
 public class ViewContractDetails extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
-    private JLabel activityTitle, tutorField, qualificationField, lessonField, dayField, expiryField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField, freeLessonField;
-    private JTextField lessonInput, dayInput, rateInput, sessionInput, competencyInput, freeLessonInput;
+    private JLabel activityTitle, tutorField, qualificationField, lessonField, subjectField, dayField, expiryField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField, freeLessonField;
+    private JTextField lessonInput, dayInput, rateInput, sessionInput, competencyInput, subjectInput, freeLessonInput;
     private JButton submitButton;
     private JButton backBtn;
     private JComboBox<String> startMeridiem,tutorCombo ;
@@ -33,7 +31,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
     private JSpinner startTime, duration, expireSpinner;
     private HashMap<String, String> tutorMapping;
     private String userId, contractId, subjectId;
-    private Boolean isTutor;
+    private Boolean isTutor, editable;
 
     public ViewContractDetails() {
         this.setBorder(new EmptyBorder(15, 15, 15, 15));
@@ -84,7 +82,6 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         qualificationField.setEnabled(false);
         this.add(qualificationField, c);
 
-
         competencyInput = new JTextField();
         competencyInput.setText("3");
         competencyInput.setEnabled(false);
@@ -92,10 +89,27 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         c.gridwidth = 4;
         this.add(competencyInput, c);
 
+        //Subject Field
+        subjectField = new JLabel("Subject: ");
+        c.gridx = 0;
+        c.gridy = 3;
+        c.gridwidth = 1;
+        c.gridheight = 1;
+        this.add(subjectField, c);
+
+        subjectInput = new JTextField();
+        c.gridx = 1;
+        c.gridy = 3;
+        c.gridwidth = 4;
+        c.gridheight = 1;
+        subjectInput.setEnabled(false);
+        this.add(subjectInput, c);
+
+
         // Lesson
         lessonField = new JLabel("No of Lesson: ");
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 4;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(lessonField, c);
@@ -108,7 +122,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // Preferred Day
         dayField = new JLabel("Preferred Day(s): ");
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 5;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(dayField, c);
@@ -121,7 +135,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // Start time
         startTimeField = new JLabel("Preferred Time: ");
         c.gridx = 0;
-        c.gridy = 5;
+        c.gridy = 6;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(startTimeField, c);
@@ -138,7 +152,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // Duration per session
         endTimeField = new JLabel("Duration: ");
         c.gridx = 0;
-        c.gridy = 6;
+        c.gridy = 7;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(endTimeField, c);
@@ -149,7 +163,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
 
         durationLabel = new JLabel(" hours per lesson");
         c.gridx = 2;
-        c.gridy = 6;
+        c.gridy = 7;
         c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 0.2;
@@ -158,7 +172,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // Session per week
         sessionField = new JLabel("Preferred No of Lesson(s): ");
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = 8;
         c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 1;
@@ -166,7 +180,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
 
         sessionInput = new JTextField();
         c.gridx = 1;
-        c.gridy = 7;
+        c.gridy = 8;
         c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 1;
@@ -174,7 +188,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
 
         sessionLabel = new JLabel("sessions per week");
         c.gridx = 2;
-        c.gridy = 7;
+        c.gridy = 8;
         c.gridwidth = 1;
         c.gridheight = 1;
         c.weightx = 0.2;
@@ -183,7 +197,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // Preferred Rate
         rateField = new JLabel("Rate: ");
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 9;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(rateField, c);
@@ -203,7 +217,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // free lesson
         freeLessonField = new JLabel("No of Free Lesson: ");
         c.gridx = 0;
-        c.gridy = 9;
+        c.gridy = 10;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(freeLessonField, c);
@@ -218,7 +232,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // checkbox to input bid type
         typeField = new JLabel("Bid Type");
         c.gridx = 0;
-        c.gridy = 10;
+        c.gridy = 11;
         this.add(typeField, c);
 
         typeName = new JLabel("open");
@@ -229,14 +243,14 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // contract length
         expiryField = new JLabel("Contract Duration");
         c.gridx = 0;
-        c.gridy = 11;
+        c.gridy = 12;
         c.gridwidth = 1;
         c.gridheight = 1;
         this.add(expiryField, c);
 
         Integer[] contractLength = {3,6,12,24,36,48,96};
         expireSpinner = new JSpinner(new SpinnerListModel(contractLength));
-        c.gridy = 11;
+        c.gridy = 12;
         c.gridx = 1;
         c.gridwidth = 2;
         this.add(expireSpinner, c);
@@ -245,7 +259,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         submitButton = new JButton("Submit Contract");
         c.weightx = 0.1;
         c.gridx = 0;
-        c.gridy = 12;
+        c.gridy = 13;
         c.gridwidth = 4;
         this.add(submitButton, c);
 
@@ -327,6 +341,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         this.subjectId = contract.getJSONObject("subject").getString("id");
         tutorCombo.setSelectedItem(contract.getJSONObject("firstParty").getString("givenName") + " " + contract.getJSONObject("firstParty").getString("familyName"));
 
+        subjectInput.setText(contract.getJSONObject("subject").getString("name"));
         duration.setValue(Integer.valueOf(contractDetail.getString("duration")));
         lessonInput.setText(contractDetail.getString("noOfLesson")); //fix this typo
         rateInput.setText(contractDetail.getString("rate"));
@@ -348,28 +363,34 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // check if the student is tutor or or student
         JSONObject user = new JSONObject(ApiRequest.get("/user/" + this.userId).body());
         isTutor =  user.getBoolean("isTutor") ? true : false;
+        editable = user.getJSONObject("additionalInfo").getJSONArray("activeContract").length() < 5 ? true : false;
 
-        if (isTutor) {
-            disableEdit();
-            if (contract.isNull("dateSigned")) {
-                submitButton.setText("Sign Contract");
-            } else {
-                submitButton.setVisible(false);
-                submitButton.setEnabled(false);
-            }
-        } else {
-            // if this is a signed contract which means for renewal
-            if (contract.isNull("dateSigned")) {
-                submitButton.setText("Sign Contract");
+        if (editable) {
+            if (isTutor) {
                 disableEdit();
+                if (contract.isNull("dateSigned")) {
+                    submitButton.setText("Sign Contract");
+                } else {
+                    submitButton.setVisible(false);
+                    submitButton.setEnabled(false);
+                }
+            } else {
+                // if this is a signed contract which means for renewal
+                if (contract.isNull("dateSigned")) {
+                    submitButton.setText("Sign Contract");
+                    disableEdit();
 
-            } else { // else for student to sign renewed cotract
-                submitButton.setText("Submit Contract");
-                enableEdit();
+                } else { // else for student to sign renewed cotract
+                    submitButton.setText("Submit Contract");
+                    enableEdit();
 
+                }
             }
 
+        } else {
+            this.remove(submitButton);
         }
+
     }
 
     /**
@@ -377,7 +398,6 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
      */
     private void disableEdit(){
         tutorCombo.setEnabled(false);
-//        competencyInput.setEnabled(false);
         lessonInput.setEditable(false);
         dayInput.setEditable(false);
         startTime.setEnabled(false);
@@ -396,7 +416,6 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
      */
     private void enableEdit(){
         tutorCombo.setEnabled(true);
-//        competencyInput.setEnabled(false);
         lessonInput.setEditable(true);
         dayInput.setEditable(true);
         startTime.setEnabled(true);

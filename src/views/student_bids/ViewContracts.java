@@ -108,68 +108,58 @@ public class ViewContracts extends JPanel implements ObserverOutputInterface, Li
         contentPanel.setLayout(new GridBagLayout());
         contentPanel.setBackground(Color.lightGray);
 
-        HttpResponse<String> response = ApiRequest.get("/contract");
-        JSONArray contracts = filterContracts(new JSONArray(response.body()));
+        HttpResponse<String> response = ApiRequest.get("/user/" + this.userId);
+        JSONArray contracts = filterContracts(new JSONObject(response.body()));
 
         createPanels(contracts, contentPanel);
         this.contentScrollPane.setViewportView(contentPanel);
 
-        // show unsigned renewed contract for student
-        if (!isTutor) {
-            contracts = filterUnsignedContract(new JSONArray(response.body()));
-            if (contracts.length() > 0) {
+        // show unsigned renewed contract
+        contracts = filterUnsignedContract(new JSONObject(response.body()));
+        if (contracts.length() > 0) {
 
-                c.gridy = 3;
-                c.weightx = 1;
-                c.weighty = 1;
-                c.gridwidth = 7;
-                c.gridx = 3;
-                this.add(unsignedContractLabel, c);
+            c.gridy = 3;
+            c.weightx = 1;
+            c.weighty = 1;
+            c.gridwidth = 7;
+            c.gridx = 3;
+            this.add(unsignedContractLabel, c);
 
-                c.gridy = 4;
-                c.weightx = 1;
-                c.weighty = 1;
-                c.gridwidth = 7;
-                c.gridx = 0;
-                this.add(unsignedScrollPane, c);
+            c.gridy = 4;
+            c.weightx = 1;
+            c.weighty = 1;
+            c.gridwidth = 7;
+            c.gridx = 0;
+            this.add(unsignedScrollPane, c);
 
-                unsignedContractPanel = new JPanel();
-                unsignedContractPanel.setLayout(new GridBagLayout());
-                unsignedContractPanel.setBackground(Color.lightGray);
+            unsignedContractPanel = new JPanel();
+            unsignedContractPanel.setLayout(new GridBagLayout());
+            unsignedContractPanel.setBackground(Color.lightGray);
 
-                createPanels(contracts, unsignedContractPanel);
-                this.unsignedScrollPane.setViewportView(unsignedContractPanel);
-            }
+            createPanels(contracts, unsignedContractPanel);
+            this.unsignedScrollPane.setViewportView(unsignedContractPanel);
         }
-
     }
 
     /**
      * Method to filter for unsigned renewed contract for student
-     * @param  contracts jsonarray of all the contract from db
+     * @param  user user's jsonobject from db
      * @return JSONArray jsonarray of unsigned contract
      */
-    private JSONArray filterUnsignedContract(JSONArray contracts){
-
-        HttpResponse<String> response = ApiRequest.get("/user/" + this.userId);
-        JSONObject user = new JSONObject(response.body());
+    private JSONArray filterUnsignedContract(JSONObject user) {
 
         JSONArray returnArr = new JSONArray();
-        // get all the bid signed by the user
-        for (int i=0; i < contracts.length(); i++) {
-            JSONObject contract = contracts.getJSONObject(i);
-            // check for unsigned contract for the student
-            if (contract.getJSONObject("secondParty").getString("id").equals(this.userId) && (contract.isNull("dateSigned"))) {
-                if (contract.getJSONObject("additionalInfo").has("studentSigned")) { // check if the student signed his part in this contract
-                    if (!contract.getJSONObject("additionalInfo").getBoolean("studentSigned"))
-                    returnArr.put(contracts.get(i));
 
-                }
-            }
+        // show all contract renewed by student that hasn't been signed by tutor
+        JSONArray unsignedContract = new JSONArray(user.getJSONObject("additionalInfo").optJSONArray("unsignedContract"));
+
+        for (int i = 0; i < unsignedContract.length(); i++) {
+            JSONObject contract = new JSONObject(ApiRequest.get("/contract/" + unsignedContract.get(i)).body());
+            returnArr.put(contract);
+
         }
-
-
         return returnArr;
+
     }
 
     /**
@@ -269,72 +259,27 @@ public class ViewContracts extends JPanel implements ObserverOutputInterface, Li
     /**
      * Function to - filter contract to the latest 5 contract signed for student
      *             - filter renewed contract for tutor that hasn't been signed
-     * @param contracts JSONArray containing all the contract
+     * @param user user's jsonobject from db
      * @return JSONArray of the latest 5 contract
      */
-    private JSONArray filterContracts(JSONArray contracts) {
+    private JSONArray filterContracts(JSONObject user) {
     //TODO: tutor can see latest 5 signed bid
     //TODO: student cannot renew contract if more than 5 contract/ active bid
-        // check if user is tutor or student to filter the contract differently
-        HttpResponse<String> response = ApiRequest.get("/user/" + this.userId);
-        JSONObject user = new JSONObject(response.body());
+
+        // check if user is tutor or student
         isTutor = user.getBoolean("isTutor");
 
         JSONArray returnArr = new JSONArray();
-        if (isTutor) {
-            // if tutor show all contract renewed by student that hasn't been signed by tutor
-            JSONArray activeContract = new JSONArray(user.getJSONObject("additionalInfo").optJSONArray("activeContract"));
+        JSONArray activeContract = new JSONArray(user.getJSONObject("additionalInfo").optJSONArray("activeContract"));
 
-            for (int i = 0; i < activeContract.length(); i++) {
-                JSONObject contract = new JSONObject(ApiRequest.get("/contract/" + activeContract.get(i)).body());
-                returnArr.put(contract);
+        for (int i = 0; i < activeContract.length(); i++) {
+            JSONObject contract = new JSONObject(ApiRequest.get("/contract/" + activeContract.get(i)).body());
+            returnArr.put(contract);
 
-            }
-        } else {
-            // get all the bid signed by the user
-            for (int i=0; i < contracts.length(); i++){
-                JSONObject contract = contracts.getJSONObject(i);
-                if (contract.getJSONObject("secondParty").getString("id").equals(this.userId) && (!contract.isNull("dateSigned"))){
-                    returnArr.put(contracts.get(i));
-                }
-
-            }
-
-            // if less that 5 contract return
-            if (returnArr.length() <= 5){
-                return  returnArr;
-            }
-
-            // if more than 5 filter the latest bid signed by user
-            returnArr = InsertionSort(contracts);
-            while (returnArr.length() > 5){
-                returnArr.remove(0);
-            }
         }
+
         return returnArr;
 
-    }
-
-    /**
-     * Using insertion sort to sort contracts by date
-     * @param contracts The arrayList of contract
-     */
-    private JSONArray InsertionSort(JSONArray contracts) {
-
-        for (int i = 1; i < contracts.length(); ++i) {
-            JSONObject key = contracts.getJSONObject(i);
-            Instant currDate = Instant.parse(key.getString("dateSigned"));
-            int j = i - 1;
-
-            // while date[] > currDate, move the date to left
-            while (j >= 0 &&  currDate.compareTo(Instant.parse(contracts.getJSONObject(j).getString("dateSigned"))) > 0) {
-                contracts.put(j+1, contracts.get(j));
-                j = j - 1;
-            }
-            contracts.put(j + 1, key);
-        }
-
-        return contracts;
     }
 
     @Override
