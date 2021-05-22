@@ -1,6 +1,7 @@
 package listener;
 
 import abstractions.ObserverInputInterface;
+import abstractions.ObserverOutputInterface;
 import abstractions.Publisher;
 import org.json.JSONObject;
 import utilities.Contract;
@@ -11,10 +12,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class RenewContractListener extends Publisher implements ActionListener {
+public class RenewContractListener extends Publisher implements ActionListener, ObserverOutputInterface {
 
     private ObserverInputInterface inputPage;
     private Contract contractUtil;
+    private String userId;
 
     public RenewContractListener() {
         super();
@@ -36,6 +38,11 @@ public class RenewContractListener extends Publisher implements ActionListener {
             contractUtil.signContract(contractId, isTutor);
         }
 
+        notifySubscribers(this.userId);
     }
 
+    @Override
+    public void update(String data) {
+        this.userId = data;
+    }
 }

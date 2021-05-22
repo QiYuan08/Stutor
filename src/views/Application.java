@@ -63,8 +63,6 @@ public class Application extends JFrame{
         rootPanel.add(monitoredBids, ViewManagerService.MONITORED_BIDS);
         rootPanel.add(viewContractDetails, ViewManagerService.VIEW_CONTRACT_DETAILS);
 
-
-
         // LISTENERS - process button presses and just go to the next page
 
         ExpireContractListener expireContractListener = new ExpireContractListener(viewContractDetails);
@@ -75,9 +73,8 @@ public class Application extends JFrame{
 
         // controller to update dashboardPage and viewContracts when tutor/student signed a renewed contract
         RenewContractListener renewContractListener = new RenewContractListener();
-//        renewContractListener.subscribe(dashboardPage); // TODO: renewContractListener doesn't actually notify subscribers?
+        renewContractListener.subscribe(dashboardPage);
 //        renewContractListener.subscribe(viewContracts);
-
 
         // LINKS - process buttons and updates the next page before it loads it
 
@@ -164,6 +161,7 @@ public class Application extends JFrame{
         loginController.subscribe(expireContractListener);
         loginController.subscribe(updateBidService);
         loginController.subscribe(expireBidService);
+        loginController.subscribe(renewContractListener);
 
         this.add(rootPanel);
         this.setVisible(true);
