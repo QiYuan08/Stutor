@@ -1,4 +1,4 @@
-package views.student_bids;
+package views.main_pages;
 
 import abstractions.ObserverInputInterface;
 import abstractions.ObserverOutputInterface;

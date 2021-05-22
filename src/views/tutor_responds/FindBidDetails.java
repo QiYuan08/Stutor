@@ -276,11 +276,9 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 bidLabel.setText(bidder.get("givenName") + " " + bidder.get("familyName"));
                 bidPanel.add(bidLabel, bidPanelConstraint);
 
-                // type jlabel
-                JLabel rate = new JLabel();
-                rate.setText("Rate: " + message.getJSONObject("additionalInfo").get("rate") + " dollars per hour");
+                JLabel competency = new JLabel("Competency: Level " + message.getJSONObject("additionalInfo").getInt("minCompetency"));
                 bidPanelConstraint.gridy = 1;
-                bidPanel.add(rate, bidPanelConstraint);
+                bidPanel.add(competency, bidPanelConstraint);
 
                 // add view detail button
                 viewBidButton = new JButton("View Bid");
