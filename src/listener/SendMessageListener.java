@@ -2,7 +2,6 @@ package listener;
 
 import abstractions.Publisher;
 import services.ApiRequest;
-import abstractions.ObserverInputInterface;
 import org.json.JSONObject;
 import views.main_pages.MessagesPage;
 

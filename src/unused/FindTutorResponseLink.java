@@ -30,7 +30,7 @@ public class FindTutorResponseLink extends Publisher implements ActionListener, 
         ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
     }
 
-    @Override //TODO: find out if the addViewBidListener method is even needed (currently works without)
+    @Override
     public void update(String data) {
         inputPage.addLinkListener(this);
     }

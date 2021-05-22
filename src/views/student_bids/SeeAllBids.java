@@ -142,12 +142,7 @@ public class SeeAllBids extends JPanel implements ObserverOutputInterface, Liste
 
         scrollPane.setViewportView(contentPanel);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
     }
 
     /**

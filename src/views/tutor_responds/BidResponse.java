@@ -216,12 +216,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         c.gridwidth = 4;
         this.add(submitButton, c);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
-            }
-        });
+        backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS));
     }
 
     @Override
@@ -327,7 +322,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         // set the contract duration given by student as default in expireSpinner
         expireSpinner.setValue(Integer.valueOf(bid.getJSONObject("additionalInfo").getString("contractLength")));
 
-        // set the name of this button as bidId and userId for quering with db
+        // set the name of this button as bidId and userId for querying with db
         JSONObject btnData = new JSONObject();
         btnData.put("bidId", this.bidId);
         btnData.put("userId", this.userId);

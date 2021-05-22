@@ -57,10 +57,7 @@ public class MonitoredBids extends JPanel implements ObserverOutputInterface, Li
         c.fill = GridBagConstraints.HORIZONTAL;
         this.add(scrollPane, c);
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);}
-        });
+        backButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
 
     }
 

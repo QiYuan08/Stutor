@@ -35,7 +35,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.weighty = 0.2;
         c.insets = new Insets(2, 2, 2, 2);
         c.fill = GridBagConstraints.HORIZONTAL;
-        // innner panel for detail
+        // inner panel for detail
         c.weightx = 0.5;
         c.weighty = 0.5;
 
@@ -58,12 +58,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.fill = GridBagConstraints.NONE;
         this.add(backButton, c);
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        backButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
 
         subjectLabel = new JLabel("Subject: ");
         c.weightx = 0.5;
@@ -166,7 +161,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         // if retrieve success
         if (response.statusCode() == 200){
             // set the default value of reply button to respond
-            respondButton.setText("Review Response"); //TODO: change response to review response and test
+            respondButton.setText("Review Response");
             JSONObject bid = new JSONObject(response.body());
             updateBidDetails(bid);
             updateBidFunctions(bid);
@@ -289,12 +284,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
                 bidPanelConstraint.weightx = 0.2;
                 bidPanel.add(viewBidButton, bidPanelConstraint);
 
-                viewBidButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
-                    }
-                });
+                viewBidButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE));
 
                 // set button name to bidId and userId for ClosedBidResponse class to close Bid
                 JSONObject btnData = new JSONObject();

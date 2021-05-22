@@ -1,6 +1,5 @@
 package utilities;
 
-import abstractions.ContractStrategy;
 import org.json.JSONObject;
 import services.ApiRequest;
 import services.ViewManagerService;

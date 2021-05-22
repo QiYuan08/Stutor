@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
@@ -153,12 +152,7 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
 
         scrollPane.setViewportView(contentPanel);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
     }
 
     /**
@@ -169,8 +163,6 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
     public void update(String data) {
 
         this.userId = data;
-//        if (this.userId == null) {this.userId = data;}
-//        if (data != null) {userId = data;}
         JSONObject user;
         bids = new JSONArray();
 
@@ -181,11 +173,10 @@ public class FindAllBids extends JPanel implements ListenerLinkInterface, Observ
         // get the detail of the user
         response = ApiRequest.get("/user/" + this.userId + "?fields=competencies&fields=competencies.subject");
         user = new JSONObject(response.body());
-//        System.out.println(user);
 
         if (user.getBoolean("isTutor")){
 
-            // add every bid that is qualified to be teached by this user to bids
+            // add every bid that is qualified to be taught by this tutor to bids
             for (int i = returnedBids.length() - 1; i > -1; i--){
 
                 JSONObject bid = returnedBids.getJSONObject(i);

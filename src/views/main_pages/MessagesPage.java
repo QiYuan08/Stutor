@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
@@ -104,18 +103,10 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
         JSONObject user = new JSONObject(ApiRequest.get("/user/" + userId).body());
         // if tutor replying to student in findtutorbiddetail class
         if (user.getBoolean("isTutor")) { // bid.getJSONObject("initiator").getBoolean("isTutor")){
-            backButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
-                }
-            });
+            backButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS));
         } else if (user.getBoolean("isStudent")){ // if student replying to student in seetutorfiddetail class
 
-            backButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAILS);
-                }
-            });
+            backButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.SEE_BID_DETAILS));
         }
 
     }

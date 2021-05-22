@@ -143,7 +143,6 @@ public class Application extends JFrame{
         bidCreateController.subscribe(dashboardPage);
         bidCreateController.subscribe(seeAllBids);
 
-        // TODO: contract not updated when tutor buy out bid
         // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
         BidClosingController bidClosingController = new BidClosingController();
         findBidDetails.addActionListener(bidClosingController);
@@ -153,7 +152,6 @@ public class Application extends JFrame{
         bidClosingController.subscribe(seeAllBids);
         bidClosingController.subscribe(dashboardPage);
         bidClosingController.subscribe(viewContracts);
-        // TODO: subscribe view contracts here
 
         // passing the userId to view classes and services that require it
         LoginController loginController = new LoginController(loginPage);

@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
-import java.time.Instant;
 import java.util.ArrayList;
 
 // TODO: refactor time function into a class
@@ -84,12 +83,7 @@ public class ViewContracts extends JPanel implements ObserverOutputInterface, Li
         c.gridx = 0;
         this.add(unsignedScrollPane, c);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
     }
 
     /**
@@ -263,7 +257,7 @@ public class ViewContracts extends JPanel implements ObserverOutputInterface, Li
      * @return JSONArray of the latest 5 contract
      */
     private JSONArray filterContracts(JSONObject user) {
-    //TODO: tutor can see latest 5 signed bid
+    //TODO: tutor can see latest 5 signed contracts
     //TODO: student cannot renew contract if more than 5 contract/ active bid
 
         // check if user is tutor or student

@@ -1,6 +1,5 @@
 package utilities;
 
-import abstractions.ContractStrategy;
 import org.json.JSONObject;
 
 // TODO: talk about contract class in design rationale (extract methods into utility class)

@@ -9,8 +9,6 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
 public class ProfilePage extends JPanel implements ObserverOutputInterface {
@@ -101,19 +99,9 @@ public class ProfilePage extends JPanel implements ObserverOutputInterface {
         c.gridwidth = 2;
         this.add(qualificationsList, c);
 
-        dashboardPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        dashboardPageButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
 
-        logOutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.LOGIN_PAGE);
-            }
-        });
+        logOutButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.LOGIN_PAGE));
     }
 
     @Override

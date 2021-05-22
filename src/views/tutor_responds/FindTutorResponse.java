@@ -32,7 +32,7 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
         c.weighty = 0.2;
         c.insets = new Insets(2, 2, 2, 2);
         c.fill = GridBagConstraints.HORIZONTAL;
-        // innner panel for detail
+        // inner panel for detail
         c.weightx = 0.5;
         c.weighty = 0.5;
 
@@ -93,12 +93,7 @@ public class FindTutorResponse extends JPanel implements ObserverOutputInterface
         mainConst.gridy = 30;
         this.add(backBtn, mainConst);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
-            }
-        });
+        backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS));
     }
 
     /**

@@ -36,7 +36,7 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
         c.weighty = 0.2;
         c.insets = new Insets(2, 2, 2, 2);
         c.fill = GridBagConstraints.HORIZONTAL;
-        // innner panel for detail
+        // inner panel for detail
         c.weightx = 0.5;
         c.weighty = 0.5;
 
@@ -99,19 +99,14 @@ public class SeeTutorResponse extends JPanel implements ObserverOutputInterface,
         mainConst.gridwidth = 1;
         this.add(backBtn, mainConst);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
     }
 
     /**
      * Create the content to display the detail of the message after user enter this page
      * @param message the message to display
      */
-    void createContent(JSONObject message){
+    private void createContent(JSONObject message){
 
         JSONObject initiator = message.getJSONObject("poster");
         JSONObject additionalInfo = message.getJSONObject("additionalInfo");

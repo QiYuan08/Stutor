@@ -257,13 +257,9 @@ public class CreateBid extends JPanel implements ObserverInputInterface, Observe
         c.gridwidth = 4;
         this.add(submitButton, c);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
     }
+
     @Override
     public JSONObject retrieveInputs() {
 

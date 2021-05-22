@@ -19,7 +19,6 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 
-// TODO: change filtercontract for tutor to use additionalInfo from user endpoint
 public class ViewContractDetails extends JPanel implements ObserverOutputInterface, ObserverInputInterface {
 
     private JLabel activityTitle, tutorField, qualificationField, lessonField, subjectField, dayField, expiryField, startTimeField, endTimeField, rateField, sessionLabel, typeField, durationLabel, rateLabel, sessionField, freeLessonField;
@@ -263,12 +262,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         c.gridwidth = 4;
         this.add(submitButton, c);
 
-        backBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
 
         submitButton.addActionListener(new RenewContractListener());
 
@@ -350,7 +344,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         competencyInput.setText(String.valueOf(contractDetail.getInt("minCompetency")));
         expireSpinner.setValue(contractDetail.getInt("contractLength"));
 
-        if (contract.isNull("freeLesson")){ // the case when tutor buy out the bid immidiately there is not free lesson
+        if (contract.isNull("freeLesson")){ // the case when tutor buy out the bid immediately there is not free lesson
             freeLessonInput.setText("0");
         } else {
             freeLessonInput.setText(String.valueOf(contractDetail.getInt("freeLesson")));
@@ -362,7 +356,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
 
         // check if the student is tutor or or student
         JSONObject user = new JSONObject(ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids").body());
-        isTutor =  user.getBoolean("isTutor") ? true : false;
+        isTutor = user.getBoolean("isTutor");
         editable = checkContractsBidsCount(user);
 
         if (editable) {
@@ -380,7 +374,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
                     submitButton.setText("Sign Contract");
                     disableEdit();
 
-                } else { // else for student to sign renewed cotract
+                } else { // else for student to sign renewed contract
                     submitButton.setText("Submit Contract");
                     enableEdit();
 

@@ -1,5 +1,6 @@
 package views.main_pages;
 
+import org.json.JSONObject;
 import services.ApiRequest;
 import services.ViewManagerService;
 
@@ -109,10 +110,10 @@ public class RegistrationPage extends JPanel {
                 String fName = fnameInput.getText();
                 boolean isStudent = studentCheckBox.isSelected();
                 boolean isTutor = tutorCheckBox.isSelected();
-                String jsonObj = "{ \"givenName\": \"" + gName + "\", \"familyName\": \"" + fName +
-                        "\", \"userName\": \"" + username + "\", \"password\": \"" + password +
-                        "\", \"isStudent\": " + isStudent + ", \"isTutor\": " + isTutor + "}";
-                response = ApiRequest.post("/user", jsonObj);
+                JSONObject jsonObject = new JSONObject().put("givenName", gName).put("familyName", fName)
+                        .put("userName", username).put("password", password)
+                        .put("isStudent", isStudent).put("isTutor", isTutor);
+                response = ApiRequest.post("/user", jsonObject.toString());
                 if (response.statusCode() == 201) {
                     ViewManagerService.loadPage(ViewManagerService.LOGIN_PAGE);
                 } else if (response.statusCode() == 409) {
@@ -121,12 +122,6 @@ public class RegistrationPage extends JPanel {
                 }
             }
         });
-
-        loadLoginPage.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.LOGIN_PAGE);
-            }
-        });
+        loadLoginPage.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.LOGIN_PAGE));
     }
 }

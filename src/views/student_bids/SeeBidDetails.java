@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         c.weighty = 0.2;
         c.insets = new Insets(2, 2, 2, 2);
         c.fill = GridBagConstraints.HORIZONTAL;
-        // innner panel for detail
+        // inner panel for detail
         c.weightx = 0.5;
         c.weighty = 0.5;
 
@@ -61,12 +60,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
         c.anchor = GridBagConstraints.PAGE_START;
         this.add(backButton, c);
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
-            }
-        });
+        backButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
 
         subjectLabel = new JLabel("Subject: ");
         c.weightx = 0.5;
@@ -213,13 +207,7 @@ public class SeeBidDetails extends JPanel implements ObserverOutputInterface, Li
                     bidPanelConstraint.weightx = 0.2;
                     viewBidBtn = new JButton("View Bid");
 
-                    viewBidBtn.addActionListener(new ActionListener() {
-                        // TODO: try without see bids listener
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_RESPONSE);
-                        }
-                    });
+                    viewBidBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_RESPONSE));
 
                     // set button name to bidId and userId for ClosedBidResponse class to close Bid
                     JSONObject btnData = new JSONObject();

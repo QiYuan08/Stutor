@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginPage extends JPanel implements ObserverInputInterface {
@@ -72,14 +71,10 @@ public class LoginPage extends JPanel implements ObserverInputInterface {
         this.add(registerPageButton, c);
 
 
-        registerPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ViewManagerService.loadPage(ViewManagerService.REGISTRATION_PAGE);
-            }
-        });
+        registerPageButton.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.REGISTRATION_PAGE));
     }
 
+    @Override
     public JSONObject retrieveInputs() {
         String username = usernameInput.getText();
         String password = passwordInput.getText();
@@ -88,6 +83,7 @@ public class LoginPage extends JPanel implements ObserverInputInterface {
         return jsonObj;
     }
 
+    @Override
     public void addActionListener(ActionListener actionListener) {
         loginUserButton.addActionListener(actionListener);
     }
