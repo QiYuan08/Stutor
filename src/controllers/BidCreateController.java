@@ -1,4 +1,4 @@
-package links;
+package controllers;
 
 import abstractions.Publisher;
 import services.ApiRequest;

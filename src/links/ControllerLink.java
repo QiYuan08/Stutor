@@ -1,4 +1,4 @@
-package controllers;
+package links;
 
 import abstractions.Publisher;
 import services.ViewManagerService;
@@ -13,12 +13,12 @@ import java.awt.event.ActionListener;
  * Links FindAllBids to FindBidDetails (tutor looks into a student bid)
  * Updates FindBidDetails and the pages that lead from it with the bidId of the bid that the user pressed
  */
-public class LinkController extends Publisher implements ActionListener, ObserverOutputInterface {
+public class ControllerLink extends Publisher implements ActionListener, ObserverOutputInterface {
 
     private ListenerLinkInterface inputPage;
     private String linkedPage;
 
-    public LinkController(ListenerLinkInterface inputPage, String linkedPage) {
+    public ControllerLink(ListenerLinkInterface inputPage, String linkedPage) {
         super();
         this.inputPage = inputPage;
         this.linkedPage = linkedPage;

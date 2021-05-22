@@ -1,4 +1,4 @@
-package links;
+package listener;
 
 import abstractions.Publisher;
 import services.ApiRequest;
@@ -14,11 +14,11 @@ import java.net.http.HttpResponse;
 /**
  * Sends a message (aka response) but instead of leading to another page, refreshes itself with the newest message.
  */
-public class SendMessageLink extends Publisher implements ActionListener {
+public class SendMessageListener extends Publisher implements ActionListener {
 
     private MessagesPage messagesPage;
 
-    public SendMessageLink(MessagesPage messagesPage) {
+    public SendMessageListener(MessagesPage messagesPage) {
         this.messagesPage = messagesPage;
         messagesPage.addActionListener(this);
     }
