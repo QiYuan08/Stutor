@@ -14,7 +14,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class CloseBidStrategy implements ContractStrategy {
+public class SignBidContractStrategy implements ContractStrategy {
 
     @Override
     public void postContract(JSONObject bid) {

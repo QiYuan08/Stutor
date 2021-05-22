@@ -270,7 +270,7 @@ public class BidResponse extends JPanel implements ObserverInputInterface, Obser
         if (isClose) {
             jsonObj.put("content", (messageInput.getText().equals("")) ? "string" : messageInput.getText()); // if messageInput empty return string else get messageInput
         } else {
-            jsonObj.put("content", "");
+            jsonObj.put("content", " ");
         }
         jsonObj.put("additionalInfo", additionalInfo);
 

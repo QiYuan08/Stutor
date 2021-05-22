@@ -16,7 +16,7 @@ public class FindTutorResponseLink extends Publisher implements ActionListener, 
 
     private FindBidDetails inputPage;
 
-    public FindTutorResponseLink(FindBidDetails inputPage) {
+    public FindTutorResponseLink(FindBidDetails inputPage) { // to change to listenerlinkinterface
         super();
         this.inputPage = inputPage;
     }

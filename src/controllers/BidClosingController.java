@@ -1,14 +1,11 @@
 package controllers;
 
-import abstractions.ContractStrategy;
-import org.json.JSONArray;
 import services.ApiRequest;
 import abstractions.Publisher;
-import services.ViewManagerService;
 import abstractions.ObserverInputInterface;
 import abstractions.ObserverOutputInterface;
 import org.json.JSONObject;
-import utilities.CloseBidStrategy;
+import utilities.SignBidContractStrategy;
 import utilities.Contract;
 
 import javax.swing.*;
@@ -17,10 +14,7 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 
 /**
  * Notifies view components when a bid is closed, making them update themselves to show the correct bids and tutorials (contracts)
@@ -33,7 +27,7 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
     public BidClosingController() {
         super();
         this.contractUtil = new Contract();
-        contractUtil.setStrategy(new CloseBidStrategy());
+        contractUtil.setStrategy(new SignBidContractStrategy());
     }
 
     @Override

@@ -7,6 +7,7 @@ import services.ViewManagerService;
 import views.tutor_responds.BidResponse;
 import views.main_pages.MessagesPage;
 import org.json.JSONObject;
+import views.tutor_responds.FindBidDetails;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,14 +20,14 @@ import java.net.http.HttpResponse;
  */
 public class BidResponseLink implements ActionListener {
 
-    private ListenerLinkInterface inputPage;
+    private ListenerLinkInterface findBidDetails;
     private MessagesPage messagesPage;
     private BidResponse bidResponse;
 
-    public BidResponseLink(ListenerLinkInterface inputPage, BidResponse bidResponse, MessagesPage messagesPage) {
-        this.inputPage = inputPage;
+    public BidResponseLink(FindBidDetails findBidDetails, BidResponse bidResponse, MessagesPage messagesPage) {
+        this.findBidDetails = findBidDetails;
         this.bidResponse = bidResponse;
-        inputPage.addLinkListener(this);
+        findBidDetails.addLinkListener(this);
         bidResponse.addActionListener(this);
         this.messagesPage = messagesPage;
     }

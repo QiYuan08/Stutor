@@ -3,7 +3,7 @@ package views;
 import controllers.*;
 import listener.RenewContractListener;
 import services.ExpireBidService;
-import services.ExpireContractListener;
+import listener.ExpireContractListener;
 import services.UpdateBidService;
 import services.ViewManagerService;
 import views.student_bids.*;
@@ -68,8 +68,7 @@ public class Application extends JFrame{
         // initialises the service that expires bids after a certain time interval
         ExpireBidService expireBidService = new ExpireBidService();
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
-        expireBidService.setDuration(720, 7);
-        expireBidService.expireBidService();
+        expireBidService.setDuration(720, 7); // only activate when user has logged in
 
         // configures the service that allows the switching of pages within the card layout
         ViewManagerService.setRootPanel(rootPanel);
@@ -157,11 +156,14 @@ public class Application extends JFrame{
         // passing the userId to view classes and services that require it
         LoginController loginController = new LoginController(loginPage);
         loginController.subscribe(dashboardPage);
-        loginController.subscribe(updateBidService);
         loginController.subscribe(profilePage);
-        loginController.subscribe(createBid);
+        loginController.subscribe(findAllBids);
+        loginController.subscribe(seeAllBids);
+        loginController.subscribe(createBid); // uses userId to check constraints before creating bid
         loginController.subscribe(bidClosingController); // uses the userId to update views when a bid closes
         loginController.subscribe(expireContractListener);
+        loginController.subscribe(updateBidService);
+        loginController.subscribe(expireBidService);
 
         this.add(rootPanel);
         this.setVisible(true);

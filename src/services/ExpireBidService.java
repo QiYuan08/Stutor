@@ -1,6 +1,7 @@
 package services;
 
 import abstractions.ObserverInputInterface;
+import abstractions.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,7 +20,7 @@ import java.util.TimerTask;
 /**
  * Utility class to automatically close bids
  */
-public class ExpireBidService implements ObserverInputInterface {
+public class ExpireBidService implements ObserverInputInterface, ObserverOutputInterface {
 
     private long openCounter, closedCounter; //counter of timer in minutes and days
     private Timer bidClosingTimer;
@@ -76,7 +77,7 @@ public class ExpireBidService implements ObserverInputInterface {
                 command = "Expire Closed Bid";
             }
 
-            if (currentTime.compareTo(expiryTime) > 0) { // if expire time greater than now close the bid
+            if (currentTime.compareTo(expiryTime) > 0) { // if the currentTime is after expiryTime, close bid
                 ActionEvent actionEvent = new ActionEvent(ExpireBidService.this, ActionEvent.ACTION_PERFORMED, command);
                 actionListener.actionPerformed(actionEvent);
             }
@@ -110,4 +111,6 @@ public class ExpireBidService implements ObserverInputInterface {
         this.actionListener = actionListener;
     }
 
+    @Override
+    public void update(String data) {expireBidService();}
 }

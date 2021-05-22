@@ -1,8 +1,10 @@
-package services;
+package listener;
 
 import abstractions.ObserverOutputInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import services.ApiRequest;
+import services.ViewManagerService;
 
 import javax.swing.*;
 import java.net.http.HttpResponse;
