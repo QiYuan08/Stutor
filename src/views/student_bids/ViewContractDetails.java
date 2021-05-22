@@ -361,9 +361,9 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         startTime.setValue(Integer.valueOf(time.substring(0, time.length()-2))); // get the time
 
         // check if the student is tutor or or student
-        JSONObject user = new JSONObject(ApiRequest.get("/user/" + this.userId).body());
+        JSONObject user = new JSONObject(ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids").body());
         isTutor =  user.getBoolean("isTutor") ? true : false;
-        editable = user.getJSONObject("additionalInfo").getJSONArray("activeContract").length() < 5 ? true : false;
+        editable = checkContractsBidsCount(user);
 
         if (editable) {
             if (isTutor) {
@@ -391,6 +391,23 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
             this.remove(submitButton);
         }
 
+    }
+
+    /**
+     * checks if the student has 5 or more active contracts and bids, and disallows them from creating more bids
+     */
+    private boolean checkContractsBidsCount(JSONObject user) {
+
+        int counter = user.getJSONObject("additionalInfo").getJSONArray("activeContract").length();
+        JSONArray bids = user.getJSONArray("initiatedBids");
+        for (int i = 0; i < bids.length(); i++) {
+            JSONObject bid = (JSONObject) bids.get(i);
+            if (bid.isNull("dateClosedDown")) {
+                counter++;
+            }
+        }
+        System.out.println(counter);
+        return counter < 5;
     }
 
     /**
