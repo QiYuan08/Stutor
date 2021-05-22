@@ -166,7 +166,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         // if retrieve success
         if (response.statusCode() == 200){
             // set the default value of reply button to respond
-            respondButton.setText("Respond"); //TODO: change response to review response and test
+            respondButton.setText("Review Response"); //TODO: change response to review response and test
             JSONObject bid = new JSONObject(response.body());
             updateBidDetails(bid);
             updateBidFunctions(bid);
@@ -335,15 +335,15 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
      */
     @Override
     public void addLinkListener(ActionListener listener) {
-        this.respondButton.addActionListener(listener);
-    }
-
-    public  void addViewBidListener(ActionListener listener) { ///////// to remove
         if (buttonArr != null){ // check when the page first load during apps startup
             for (JButton btn: buttonArr){
                 btn.addActionListener(listener);
             }
         }
+    }
+
+    public  void addResponseListener(ActionListener listener) {
+        this.respondButton.addActionListener(listener);
     }
 
     /**

@@ -32,8 +32,7 @@ public class LinkController extends Publisher implements ActionListener, Observe
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton thisBtn = (JButton) e.getSource();
-        String bidId = thisBtn.getName();
-        notifySubscribers(bidId);
+        notifySubscribers(thisBtn.getName());
         ViewManagerService.loadPage(linkedPage);
     }
 }

@@ -1,4 +1,4 @@
-package links;
+package unused;
 
 import abstractions.ListenerLinkInterface;
 import abstractions.Publisher;

@@ -18,16 +18,16 @@ import java.net.http.HttpResponse;
  * Coming from FindBidDetails, this class loads (and updates) the appropriate page according to the context of the bid,
  * where tutors can respond with their details or send a message to communicate with the student.
  */
-public class BidResponseLink implements ActionListener {
+public class BidResponseDirector implements ActionListener {
 
     private ListenerLinkInterface findBidDetails;
     private MessagesPage messagesPage;
     private BidResponse bidResponse;
 
-    public BidResponseLink(FindBidDetails findBidDetails, BidResponse bidResponse, MessagesPage messagesPage) {
+    public BidResponseDirector(FindBidDetails findBidDetails, BidResponse bidResponse, MessagesPage messagesPage) {
         this.findBidDetails = findBidDetails;
         this.bidResponse = bidResponse;
-        findBidDetails.addLinkListener(this);
+        findBidDetails.addResponseListener(this);
         bidResponse.addActionListener(this);
         this.messagesPage = messagesPage;
     }

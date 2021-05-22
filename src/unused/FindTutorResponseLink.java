@@ -1,8 +1,9 @@
-package links;
+package unused;
 
 import abstractions.ListenerLinkInterface;
 import abstractions.Publisher;
 import services.ViewManagerService;
+import views.tutor_responds.FindBidDetails;
 import abstractions.ObserverOutputInterface;
 
 import javax.swing.*;
@@ -10,13 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- *  * Updates the SeeTutorResponse page with the messageId and userId before bringing it into view.
+ * Updates the FindTutorResponse page with the messageId and userId before bringing it into view.
  */
-public class SeeTutorResponseLink extends Publisher implements ActionListener, ObserverOutputInterface {
+public class FindTutorResponseLink extends Publisher implements ActionListener, ObserverOutputInterface {
 
     private ListenerLinkInterface inputPage;
 
-    public SeeTutorResponseLink(ListenerLinkInterface inputPage) {
+    public FindTutorResponseLink(ListenerLinkInterface inputPage) {
         super();
         this.inputPage = inputPage;
     }
@@ -26,11 +27,12 @@ public class SeeTutorResponseLink extends Publisher implements ActionListener, O
         JButton thisBtn = (JButton) e.getSource();
         String bidInfo = thisBtn.getName();
         notifySubscribers(bidInfo);
-        ViewManagerService.loadPage(ViewManagerService.SEE_TUTOR_RESPONSE);
+        ViewManagerService.loadPage(ViewManagerService.FIND_TUTOR_RESPONSE);
     }
 
-    @Override
+    @Override //TODO: find out if the addViewBidListener method is even needed (currently works without)
     public void update(String data) {
         inputPage.addLinkListener(this);
     }
+
 }
