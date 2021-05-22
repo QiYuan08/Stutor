@@ -49,6 +49,7 @@ public class BidResponseDirector implements ActionListener {
 
             if (response.statusCode() == 201) { // successfully posted message
                 JOptionPane.showMessageDialog(new JFrame(), "Success", "Response Sent Successfully", JOptionPane.INFORMATION_MESSAGE);
+                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
 
             } else { // failed API call
                 String msg = "Error: " + new JSONObject(response.body()).get("message");
@@ -71,6 +72,7 @@ public class BidResponseDirector implements ActionListener {
             if (messagePatch != null) {
                 if (messagePatch.statusCode() == 200) { // successfully posted message
                     JOptionPane.showMessageDialog(new JFrame(), "Success", "Response Revised Successfully", JOptionPane.INFORMATION_MESSAGE);
+                    ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
                 } else { // failed API call
                     String msg = "Error: " + new JSONObject(messagePatch.body()).get("message");
                     JOptionPane.showMessageDialog(new JFrame(), msg, "Bad Request", JOptionPane.ERROR_MESSAGE);

@@ -26,7 +26,7 @@ public class ViewContracts extends JPanel implements ObserverOutputInterface, Li
     private GridBagConstraints c;
     private JButton viewBidBtn, backBtn;
     private ArrayList<JButton> buttonArr;
-    public String userId;
+    private String userId;
     private boolean isTutor;
 
     public ViewContracts() {
