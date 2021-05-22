@@ -1,7 +1,7 @@
 package views;
 
 import controllers.*;
-import listener.RenewContractListener;
+import controllers.RenewContractController;
 import listener.SendMessageListener;
 import services.ExpireBidService;
 import listener.ExpireContractListener;
@@ -63,18 +63,14 @@ public class Application extends JFrame{
         rootPanel.add(monitoredBids, ViewManagerService.MONITORED_BIDS);
         rootPanel.add(viewContractDetails, ViewManagerService.VIEW_CONTRACT_DETAILS);
 
+
+
         // LISTENERS - process button presses and just go to the next page
 
         ExpireContractListener expireContractListener = new ExpireContractListener(viewContractDetails);
 
         // listener for submit message button to send a message
         SendMessageListener sendMessageListener = new SendMessageListener(messagesPage); // TODO: test with closed bids
-//        sendMessageListener.subscribe(messagesPage);
-
-        // controller to update dashboardPage and viewContracts when tutor/student signed a renewed contract
-        RenewContractListener renewContractListener = new RenewContractListener();
-        renewContractListener.subscribe(dashboardPage);
-//        renewContractListener.subscribe(viewContracts);
 
         // LINKS - process buttons and updates the next page before it loads it
 
@@ -140,7 +136,12 @@ public class Application extends JFrame{
         bidCreateController.subscribe(dashboardPage);
         bidCreateController.subscribe(seeAllBids);
 
-        // listener for for when a bid closes (and a contract is created) so that views wont display old inactive bids
+        // controller to update dashboardPage and viewContracts when tutor/student signed a renewed contract
+        RenewContractController renewContractController = new RenewContractController();
+        renewContractController.subscribe(dashboardPage);
+        renewContractController.subscribe(viewContracts);
+
+        // controller for for when a bid closes (and a contract is created) so that views wont display old inactive bids
         BidClosingController bidClosingController = new BidClosingController();
         findBidDetails.addActionListener(bidClosingController);
         seeTutorResponse.addActionListener(bidClosingController);
@@ -161,7 +162,7 @@ public class Application extends JFrame{
         loginController.subscribe(expireContractListener);
         loginController.subscribe(updateBidService);
         loginController.subscribe(expireBidService);
-        loginController.subscribe(renewContractListener);
+        loginController.subscribe(renewContractController);
 
         this.add(rootPanel);
         this.setVisible(true);

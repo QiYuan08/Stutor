@@ -2,7 +2,7 @@ package views.main_pages;
 
 import abstractions.ObserverInputInterface;
 import abstractions.ObserverOutputInterface;
-import listener.RenewContractListener;
+import controllers.RenewContractController;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import services.ApiRequest;
@@ -11,7 +11,6 @@ import services.ViewManagerService;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.sql.Timestamp;
@@ -264,7 +263,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
 
         backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
 
-        submitButton.addActionListener(new RenewContractListener());
+        submitButton.addActionListener(new RenewContractController());
 
     }
 

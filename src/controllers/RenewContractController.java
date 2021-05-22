@@ -1,24 +1,24 @@
-package listener;
+package controllers;
 
 import abstractions.ObserverInputInterface;
 import abstractions.ObserverOutputInterface;
 import abstractions.Publisher;
 import org.json.JSONObject;
-import utilities.Contract;
-import utilities.RenewContractStrategy;
+import contract_strategy.Contract;
+import contract_strategy.RenewContractStrategy;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class RenewContractListener extends Publisher implements ActionListener, ObserverOutputInterface {
+public class RenewContractController extends Publisher implements ActionListener, ObserverOutputInterface {
 
     private ObserverInputInterface inputPage;
     private Contract contractUtil;
     private String userId;
 
-    public RenewContractListener() {
+    public RenewContractController() {
         super();
         this.contractUtil = new Contract();
         contractUtil.setStrategy(new RenewContractStrategy());

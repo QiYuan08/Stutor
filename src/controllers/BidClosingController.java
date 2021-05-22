@@ -5,8 +5,8 @@ import abstractions.Publisher;
 import abstractions.ObserverInputInterface;
 import abstractions.ObserverOutputInterface;
 import org.json.JSONObject;
-import utilities.SignBidContractStrategy;
-import utilities.Contract;
+import contract_strategy.SignBidContractStrategy;
+import contract_strategy.Contract;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

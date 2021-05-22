@@ -1,4 +1,4 @@
-package utilities;
+package contract_strategy;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
