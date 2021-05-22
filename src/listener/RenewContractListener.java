@@ -32,7 +32,7 @@ public class RenewContractListener extends Publisher implements ActionListener {
 
         } else {
             JSONObject contractId = new JSONObject().put("id", inputPage.retrieveInputs().getString("contractId"));
-            Boolean isTutor = inputPage.retrieveInputs().optBoolean("isTutor");
+            boolean isTutor = inputPage.retrieveInputs().optBoolean("isTutor");
             contractUtil.signContract(contractId, isTutor);
         }
 

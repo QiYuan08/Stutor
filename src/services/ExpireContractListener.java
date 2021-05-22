@@ -46,7 +46,7 @@ public class ExpireContractListener implements ObserverOutputInterface {
                     String msg = "Your contract with " + contract.getJSONObject("secondParty").getString("givenName") + " " +
                             contract.getJSONObject("secondParty").getString("familyName") + " for the subject " +
                             contract.getJSONObject("subject").getString("name") + " is expiring soon! Do you want to view the contract?";
-                    int input = JOptionPane.showConfirmDialog(new JFrame(), msg, "Contract Nearing Expiry", JOptionPane.WARNING_MESSAGE);
+                    int input = JOptionPane.showConfirmDialog(new JFrame(), msg, "Contract Nearing Expiry", JOptionPane.OK_CANCEL_OPTION);
                     if (input == JOptionPane.YES_OPTION) {
                         JSONObject jsonObj = new JSONObject().put("userId", userId).put("contractId", contract.getString("id"));
                         outputPage.update(jsonObj.toString());
