@@ -1,4 +1,4 @@
-package listeners;
+package services;
 
 import abstractions.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -15,14 +15,14 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
-public class ExpireContractListener implements ObserverOutputInterface {
+public class ExpireContractService implements ObserverOutputInterface {
 
     private String userId;
     private JSONObject contract;
     private Instant currentTime;
     private ObserverOutputInterface outputPage;
 
-    public ExpireContractListener(ObserverOutputInterface outputPage) {
+    public ExpireContractService(ObserverOutputInterface outputPage) {
         this.outputPage = outputPage;
     }
 

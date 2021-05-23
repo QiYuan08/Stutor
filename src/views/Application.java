@@ -1,16 +1,18 @@
 package views;
 
-import controllers.*;
+import controllers.BidResponseController;
+import controllers.LinkController;
+import controllers.BidClosingController;
+import controllers.BidCreateController;
+import controllers.LoginController;
 import controllers.RenewContractController;
-import listeners.SendMessageListener;
 import services.ExpireBidService;
-import listeners.ExpireContractListener;
+import services.ExpireContractService;
 import services.UpdateBidService;
 import services.ViewManagerService;
 import views.student_bids.*;
 import views.tutor_responds.*;
 import views.main_pages.*;
-import links.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,45 +67,38 @@ public class Application extends JFrame{
 
 
 
-        // LISTENERS - process button presses and just go to the next page
-
-        ExpireContractListener expireContractListener = new ExpireContractListener(viewContractDetails);
-
-        // listener for submit message button to send a message
-        SendMessageListener sendMessageListener = new SendMessageListener(messagesPage); // TODO: test with closed bids
-
         // LINKS - process buttons and updates the next page before it loads it
 
         // bid to update data between findbidpage, message and response page
-        BidResponseDirector bidResponseDirector = new BidResponseDirector(findBidDetails, bidResponse, messagesPage);
+        BidResponseController bidResponseController = new BidResponseController(findBidDetails, bidResponse, messagesPage);
 
         // link to redirect student to reply to a tutor message
-        ControllerLink seeMessageLink = new ControllerLink(seeTutorResponse, ViewManagerService.MESSAGES_PAGE);
+        LinkController seeMessageLink = new LinkController(seeTutorResponse, ViewManagerService.MESSAGES_PAGE);
         seeMessageLink.subscribe(messagesPage);
 
         // links the buttons for each tutor that responded in findBidDetails page to findTutorResponse page
-        ControllerLink findTutorResponseLink = new ControllerLink(findBidDetails, ViewManagerService.FIND_TUTOR_RESPONSE);
+        LinkController findTutorResponseLink = new LinkController(findBidDetails, ViewManagerService.FIND_TUTOR_RESPONSE);
         findTutorResponseLink.subscribe(findTutorResponse);
 
         // links seeBidDetails page to seeTutorResponse page
-        ControllerLink seeTutorResponseLink = new ControllerLink(seeBidDetails, ViewManagerService.SEE_TUTOR_RESPONSE);
+        LinkController seeTutorResponseLink = new LinkController(seeBidDetails, ViewManagerService.SEE_TUTOR_RESPONSE);
         seeTutorResponseLink.subscribe(seeTutorResponse);
 
-        ControllerLink viewContractDetailController = new ControllerLink(viewContracts, ViewManagerService.VIEW_CONTRACT_DETAILS);
+        LinkController viewContractDetailController = new LinkController(viewContracts, ViewManagerService.VIEW_CONTRACT_DETAILS);
         viewContractDetailController.subscribe(viewContractDetails);
 
         // link seeAllBids and seeBidDetails page
-        ControllerLink seeBidDetailsController = new ControllerLink(seeAllBids, ViewManagerService.SEE_BID_DETAILS);
+        LinkController seeBidDetailsController = new LinkController(seeAllBids, ViewManagerService.SEE_BID_DETAILS);
         seeBidDetailsController.subscribe(seeBidDetails);
         seeBidDetailsController.subscribe(seeTutorResponseLink);
 
         // link findbidpage and findbiddetail page
-        ControllerLink findBidDetailsController = new ControllerLink(findAllBids, ViewManagerService.FIND_BID_DETAILS);
+        LinkController findBidDetailsController = new LinkController(findAllBids, ViewManagerService.FIND_BID_DETAILS);
         findBidDetailsController.subscribe(findBidDetails);
         findBidDetailsController.subscribe(findTutorResponseLink);
 
         // links from the monitored bids to the bid details
-        ControllerLink monitorBidsController = new ControllerLink(monitoredBids, ViewManagerService.FIND_BID_DETAILS);
+        LinkController monitorBidsController = new LinkController(monitoredBids, ViewManagerService.FIND_BID_DETAILS);
         monitorBidsController.subscribe(findBidDetails);
         monitorBidsController.subscribe(findTutorResponseLink);
 
@@ -114,6 +109,8 @@ public class Application extends JFrame{
         ExpireBidService expireBidService = new ExpireBidService();
         //sets the interval before deactivating an open bid and closed bid automatically in minutes and days
         expireBidService.setDuration(720, 7); // only activate when user has logged in
+
+        ExpireContractService expireContractService = new ExpireContractService(viewContractDetails);
 
         UpdateBidService updateBidService = new UpdateBidService();
         updateBidService.subscribe(monitoredBids); // the page need to be updated first with the bid buttons before adding the listeners
@@ -159,7 +156,7 @@ public class Application extends JFrame{
         loginController.subscribe(seeAllBids);
         loginController.subscribe(createBid); // uses userId to check constraints before creating bid
         loginController.subscribe(bidClosingController); // uses the userId to update views when a bid closes
-        loginController.subscribe(expireContractListener);
+        loginController.subscribe(expireContractService);
         loginController.subscribe(updateBidService);
         loginController.subscribe(expireBidService);
         loginController.subscribe(renewContractController);

@@ -1,4 +1,4 @@
-package links;
+package controllers;
 
 import org.json.JSONArray;
 import services.ApiRequest;
@@ -18,13 +18,13 @@ import java.net.http.HttpResponse;
  * Coming from FindBidDetails, this class loads (and updates) the appropriate page according to the context of the bid,
  * where tutors can respond with their details or send a message to communicate with the student.
  */
-public class BidResponseDirector implements ActionListener {
+public class BidResponseController implements ActionListener {
 
     private ListenerLinkInterface findBidDetails;
     private MessagesPage messagesPage;
     private BidResponse bidResponse;
 
-    public BidResponseDirector(FindBidDetails findBidDetails, BidResponse bidResponse, MessagesPage messagesPage) {
+    public BidResponseController(FindBidDetails findBidDetails, BidResponse bidResponse, MessagesPage messagesPage) {
         this.findBidDetails = findBidDetails;
         this.bidResponse = bidResponse;
         findBidDetails.addResponseListener(this);

@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 
@@ -75,6 +76,25 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
         sendMessageButton = new JButton("Send");
         c.gridx = 2;
         this.add(sendMessageButton, c);
+
+        sendMessageButton.addActionListener(new ActionListener() { // TODO: to test sending messages
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JSONObject message = retrieveInputs();
+                HttpResponse<String> response = ApiRequest.post("/message", message.toString());
+                JSONObject data = new JSONObject();
+                data.put("bidId", bidId);
+                data.put("userId", userId);
+                update(data.toString());
+
+                if (response.statusCode() == 201){
+                    JOptionPane.showMessageDialog(new JFrame(), "Message Sent", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    String msg = "Error: " + new JSONObject(response.body()).get("message");
+                    JOptionPane.showMessageDialog(new JFrame(), msg, "Bad request", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 
     @Override
@@ -114,8 +134,8 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
     @Override
     public JSONObject retrieveInputs() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("bidId", this.bidId);
-        jsonObject.put("posterId", this.userId);
+        jsonObject.put("bidId", bidId);
+        jsonObject.put("posterId", userId);
         jsonObject.put("content", messageInput.getText());
         jsonObject.put("additionalInfo", new JSONObject());
         return jsonObject;
