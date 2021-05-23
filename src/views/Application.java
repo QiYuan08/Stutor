@@ -2,9 +2,9 @@ package views;
 
 import controllers.*;
 import controllers.RenewContractController;
-import listener.SendMessageListener;
+import listeners.SendMessageListener;
 import services.ExpireBidService;
-import listener.ExpireContractListener;
+import listeners.ExpireContractListener;
 import services.UpdateBidService;
 import services.ViewManagerService;
 import views.student_bids.*;

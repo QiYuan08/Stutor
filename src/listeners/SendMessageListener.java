@@ -1,4 +1,4 @@
-package listener;
+package listeners;
 
 import abstractions.Publisher;
 import services.ApiRequest;

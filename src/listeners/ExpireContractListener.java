@@ -1,4 +1,4 @@
-package listener;
+package listeners;
 
 import abstractions.ObserverOutputInterface;
 import org.json.JSONArray;
@@ -36,6 +36,14 @@ public class ExpireContractListener implements ObserverOutputInterface {
             contract = (JSONObject) contracts.get(i);
 
             if (contract.getJSONObject("firstParty").getString("id").equals(userId) && !contract.isNull("dateSigned") && !contract.isNull("terminationDate")) {
+                String user;
+                if (contract.getJSONObject("firstParty").getString("id").equals(userId)) {
+                    user = contract.getJSONObject("secondParty").getString("givenName") + " " + contract.getJSONObject("secondParty").getString("familyName");
+                } else if (contract.getJSONObject("secondParty").getString("id").equals(userId)) {
+                    user = contract.getJSONObject("firstParty").getString("givenName") + " " + contract.getJSONObject("firstParty").getString("familyName");
+                } else {
+                    continue;
+                }
                 Instant expiryDate = Instant.parse(contract.getString("expiryDate"));
 
                 LocalDateTime time = LocalDateTime.ofInstant(expiryDate, ZoneOffset.ofHours(0)).minus(30, ChronoUnit.DAYS);
@@ -45,8 +53,7 @@ public class ExpireContractListener implements ObserverOutputInterface {
                 currentTime = ts.toInstant();
 
                 if (currentTime.compareTo(notifyDate) > 0) {
-                    String msg = "Your contract with " + contract.getJSONObject("secondParty").getString("givenName") + " " +
-                            contract.getJSONObject("secondParty").getString("familyName") + " for the subject " +
+                    String msg = "Your contract with " + user + " for the subject " +
                             contract.getJSONObject("subject").getString("name") + " is expiring soon! Do you want to view the contract?";
                     int input = JOptionPane.showConfirmDialog(new JFrame(), msg, "Contract Nearing Expiry", JOptionPane.OK_CANCEL_OPTION);
                     if (input == JOptionPane.YES_OPTION) {
