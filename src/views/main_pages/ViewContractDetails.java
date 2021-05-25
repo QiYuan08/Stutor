@@ -391,8 +391,15 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
      */
     private boolean checkContractsBidsCount(JSONObject user) {
 
-        int counter = user.getJSONObject("additionalInfo").getJSONArray("activeContract").length() +
-                      user.getJSONObject("additionalInfo").getJSONArray("unsignedContract").length();
+        int counter = 0;
+
+        if (user.getJSONObject("additionalInfo").has("activeContract")){
+            counter += user.getJSONObject("additionalInfo").getJSONArray("activeContract").length();
+        }
+
+        if (user.getJSONObject("additionalInfo").has("unsignedContract")){
+            counter += user.getJSONObject("additionalInfo").getJSONArray("unsignedContract").length();
+        }
 
         JSONArray bids = user.getJSONArray("initiatedBids");
         for (int i = 0; i < bids.length(); i++) {
