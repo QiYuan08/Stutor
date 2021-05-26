@@ -2,7 +2,6 @@ package controllers;
 
 import org.json.JSONArray;
 import services.ApiRequest;
-import abstractions.ListenerLinkInterface;
 import services.ViewManagerService;
 import views.tutor_responds.BidResponse;
 import views.main_pages.MessagesPage;
@@ -20,16 +19,16 @@ import java.net.http.HttpResponse;
  */
 public class BidResponseController implements ActionListener {
 
-    private ListenerLinkInterface findBidDetails;
+    private FindBidDetails findBidDetails;
     private MessagesPage messagesPage;
     private BidResponse bidResponse;
 
     public BidResponseController(FindBidDetails findBidDetails, BidResponse bidResponse, MessagesPage messagesPage) {
         this.findBidDetails = findBidDetails;
         this.bidResponse = bidResponse;
+        this.messagesPage = messagesPage;
         findBidDetails.addResponseListener(this);
         bidResponse.addActionListener(this);
-        this.messagesPage = messagesPage;
     }
 
     @Override

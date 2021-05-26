@@ -39,7 +39,7 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
         this.closedCounter = days;
     }
 
-    public void expireBidService() {
+    private void runService() {
         bidClosingTask = new TimerTask() {
 
             @Override
@@ -112,5 +112,5 @@ public class ExpireBidService implements ObserverInputInterface, ObserverOutputI
     }
 
     @Override
-    public void update(String data) {expireBidService();}
+    public void update(String data) {runService();}
 }
