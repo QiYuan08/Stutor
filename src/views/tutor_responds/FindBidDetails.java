@@ -329,7 +329,7 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         }
     }
 
-    public  void addResponseListener(ActionListener listener) {
+    public void addResponseListener(ActionListener listener) {
         this.respondButton.addActionListener(listener);
     }
 

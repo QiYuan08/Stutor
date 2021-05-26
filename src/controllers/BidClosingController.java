@@ -41,7 +41,6 @@ public class BidClosingController extends Publisher implements ObserverOutputInt
         }
         JSONObject jsonBid = inputPage.retrieveInputs();
         closeBid(jsonBid);
-//        if (this.userId == null) {notifySubscribers(this.userId);}
         notifySubscribers(this.userId);
     }
 

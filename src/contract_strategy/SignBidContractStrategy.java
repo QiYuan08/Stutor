@@ -80,7 +80,7 @@ public class SignBidContractStrategy implements ContractStrategy {
 
             msg = "Bid closed successfully and contract created at " + now;
             JOptionPane.showMessageDialog(new JFrame(), msg, "Bid Closed Successfully", JOptionPane.INFORMATION_MESSAGE);
-            if (tutorId.equals("")) { // what is this ah?
+            if (tutorId.equals("")) {
                 ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
             }
         } else {
