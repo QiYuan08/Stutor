@@ -356,13 +356,17 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
         // check if the student is tutor or or student
         JSONObject user = new JSONObject(ApiRequest.get("/user/" + this.userId + "?fields=initiatedBids").body());
         isTutor = user.getBoolean("isTutor");
-        editable = checkContractsBidsCount(user);
+        if (user.getBoolean("isStudent")) {
+            editable = checkContractsBidsCount(user);
+        } else {editable = true;}
 
         if (editable) {
             if (isTutor) {
                 disableEdit();
                 if (contract.isNull("dateSigned")) {
                     submitButton.setText("Sign Contract");
+                    submitButton.setVisible(true);
+                    submitButton.setEnabled(true);
                 } else {
                     submitButton.setVisible(false);
                     submitButton.setEnabled(false);

@@ -35,7 +35,7 @@ public class ExpireContractService implements ObserverOutputInterface {
         for (int i=0; i < contracts.length(); i++) {
             contract = (JSONObject) contracts.get(i);
 
-            if (contract.getJSONObject("firstParty").getString("id").equals(userId) && !contract.isNull("dateSigned") && !contract.isNull("terminationDate")) {
+            if (!contract.isNull("dateSigned") && contract.isNull("terminationDate")) {
                 String user;
                 if (contract.getJSONObject("firstParty").getString("id").equals(userId)) {
                     user = contract.getJSONObject("secondParty").getString("givenName") + " " + contract.getJSONObject("secondParty").getString("familyName");

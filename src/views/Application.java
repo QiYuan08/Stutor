@@ -113,7 +113,7 @@ public class Application extends JFrame{
         ExpireContractService expireContractService = new ExpireContractService(viewContractDetails);
 
         UpdateBidService updateBidService = new UpdateBidService();
-        updateBidService.subscribe(monitoredBids); // the page need to be updated first with the bid buttons before adding the listeners
+        updateBidService.subscribe(monitoredBids);
         updateBidService.subscribe(monitorBidsController);
         updateBidService.subscribe(viewContracts);
         updateBidService.subscribe(viewContractDetailController);

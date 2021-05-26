@@ -21,8 +21,10 @@
 1. [JSON-Java](https://git.infotech.monash.edu/fit3077-s1-2021/StuTor/project/blob/nic/lib/json-20210307.jar)
 
 ### Contributions
-| Tan Chong Ern  | login system and contract development                                         |
+| Contributor    | Task                                                                          |
 |----------------|-------------------------------------------------------------------------------|
+|                | **ASSIGNMENT 2**                                                              |
+| Tan Chong Ern  | login system and contract development                                         |
 | Teh Qi Yuan    | bidding system (open and closed bidding)                                      |
 | Tan Chong Ern  | created main pages and their controllers                                      |
 | Tan Chong Ern  | integrated API interface                                                      |
@@ -31,4 +33,14 @@
 | Teh Qi Yuan    | created a service to implement expiry of bids                                 |
 | Tan Chong Ern  | implemented contract creating and the related controller                      |
 | Both           | refactored and restructured the project for readability and understanding     |
+| Both           | design rationale, video demonstration and class diagram                       |
+|                | **ASSIGNMENT 3**                                                              |
+| Tan Chong Ern  | tutor's monitoring dashboard                                                  |
+| Tan Chong Ern  | contract expiration and renewal                                               |
+| Teh Qi Yuan    | reusing a previous contract                                                   |
+| Tan Chong Ern  | created a service to implement updating the monitor dashboard                 |
+| Teh Qi Yuan    | implemented strategy design pattern for creating and renewing contracts       |
+| Tan Chong Ern  | implemented contract creating and the related controller                      |
+| Both           | refactored and restructured the project for readability and understanding     |
+| Tan Chong Ern  | class diagram                                                                 |
 | Both           | design rationale, video demonstration and class diagram                       |
