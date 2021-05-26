@@ -360,6 +360,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
             editable = checkContractsBidsCount(user);
         } else {editable = true;}
 
+        //TODO: fix cannot sign the fifth contract
         if (editable) {
             if (isTutor) {
                 disableEdit();
@@ -385,7 +386,7 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
             }
 
         } else {
-            this.remove(submitButton);
+            submitButton.setVisible(false);
         }
 
     }
