@@ -18,8 +18,9 @@ public class RenewContractController extends Publisher implements ActionListener
     private Contract contractUtil;
     private String userId;
 
-    public RenewContractController() {
+    public RenewContractController(ObserverInputInterface inputPage) {
         super();
+        inputPage.addActionListener(this);
         this.contractUtil = new Contract();
         contractUtil.setStrategy(new RenewContractStrategy());
     }

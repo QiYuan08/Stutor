@@ -263,8 +263,6 @@ public class ViewContractDetails extends JPanel implements ObserverOutputInterfa
 
         backBtn.addActionListener(e -> ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE));
 
-        submitButton.addActionListener(new RenewContractController());
-
     }
 
     @Override

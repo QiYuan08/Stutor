@@ -134,7 +134,7 @@ public class Application extends JFrame{
         bidCreateController.subscribe(seeAllBids);
 
         // controller to update dashboardPage and viewContracts when tutor/student signed a renewed contract
-        RenewContractController renewContractController = new RenewContractController();
+        RenewContractController renewContractController = new RenewContractController(viewContractDetails);
         renewContractController.subscribe(dashboardPage);
         renewContractController.subscribe(viewContracts);
 
