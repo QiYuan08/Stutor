@@ -15,9 +15,6 @@ import java.awt.event.ActionListener;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-// TODO: refactor time function into a class
-// TODO: view all latest 5 contract not closed contract
-// TODO: refactor createPanel function into a class for findallbid, seeallbid, viewcontract
 public class ViewContracts extends JPanel implements ObserverOutputInterface, ListenerLinkInterface {
 
     private JPanel contentPanel, unsignedContractPanel;
@@ -257,8 +254,6 @@ public class ViewContracts extends JPanel implements ObserverOutputInterface, Li
      * @return JSONArray of the latest 5 contract
      */
     private JSONArray filterContracts(JSONObject user) {
-    //TODO: tutor can see latest 5 signed contracts
-    //TODO: student cannot renew contract if more than 5 contract/ active bid
 
         // check if user is tutor or student
         isTutor = user.getBoolean("isTutor");

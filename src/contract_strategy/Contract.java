@@ -2,7 +2,6 @@ package contract_strategy;
 
 import org.json.JSONObject;
 
-// TODO: talk about contract class in design rationale (extract methods into utility class)
 public class Contract {
 
     private ContractStrategy strategy;

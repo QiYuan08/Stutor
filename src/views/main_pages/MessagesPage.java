@@ -77,7 +77,7 @@ public class MessagesPage extends JPanel implements ObserverInputInterface, Obse
         c.gridx = 2;
         this.add(sendMessageButton, c);
 
-        sendMessageButton.addActionListener(new ActionListener() { // TODO: to test sending messages
+        sendMessageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JSONObject message = retrieveInputs();
