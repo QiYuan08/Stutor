@@ -1,11 +1,6 @@
 package views;
 
-import controllers.BidResponseController;
-import controllers.LinkController;
-import controllers.BidClosingController;
-import controllers.BidCreateController;
-import controllers.LoginController;
-import controllers.RenewContractController;
+import controllers.*;
 import services.ExpireBidService;
 import services.ExpireContractService;
 import services.UpdateBidService;
@@ -137,6 +132,11 @@ public class Application extends JFrame{
         RenewContractController renewContractController = new RenewContractController(viewContractDetails);
         renewContractController.subscribe(dashboardPage);
         renewContractController.subscribe(viewContracts);
+
+        // controller that is triggered when a tutor monitors a bid
+        MonitorBidController monitorBidController = new MonitorBidController(findBidDetails);
+        monitorBidController.subscribe(monitoredBids);
+        monitorBidController.subscribe(findBidDetails);
 
         // controller for for when a bid closes (and a contract is created) so that views wont display old inactive bids
         BidClosingController bidClosingController = new BidClosingController();

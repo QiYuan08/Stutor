@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import services.ApiRequest;
 import services.ViewManagerService;
+import views.tutor_responds.FindBidDetails;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -16,9 +17,10 @@ public class MonitorBidController extends Publisher implements ActionListener {
 
     ObserverInputInterface inputPage;
 
-    public MonitorBidController(ObserverInputInterface inputPage) {
+    public MonitorBidController(FindBidDetails inputPage) {
         super();
         this.inputPage = inputPage;
+        inputPage.addMonitorListener(this);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class MonitorBidController extends Publisher implements ActionListener {
 
             if (pathResponse.statusCode() == 200) {
                 JOptionPane.showMessageDialog(new JFrame(), msg, "Monitoring Bids", JOptionPane.INFORMATION_MESSAGE);
-                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
+                notifySubscribers(userId);
             }
         }
     }

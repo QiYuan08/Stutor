@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 
 public class ApiRequest {
 
-    private static final String API_KEY = "7mDKLTDQbKB66PNnw97PW7rCWF9F7H";
+    private static final String API_KEY = "";
     private static final String ROOT_URL = "https://fit3077.com/api/v2";
     private static HttpResponse<String> response;
 

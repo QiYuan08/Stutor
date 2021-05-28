@@ -23,7 +23,7 @@ public class UpdateBidService extends Publisher implements ObserverOutputInterfa
                 notifySubscribers(userId);
             }
         };
-        bidUpdateTimer.schedule(bidUpdateTask, 10, 15000);
+        bidUpdateTimer.schedule(bidUpdateTask, 10, 5000);
     }
 
     @Override

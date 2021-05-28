@@ -135,7 +135,6 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
         c.gridy = 23;
         this.add(monitorBidButton, c);
 
-        monitorBidButton.addActionListener(new MonitorBidController(this));
     }
 
     /**
@@ -330,8 +329,10 @@ public class FindBidDetails extends JPanel implements ObserverOutputInterface, O
     }
 
     public void addResponseListener(ActionListener listener) {
-        this.respondButton.addActionListener(listener);
+        respondButton.addActionListener(listener);
     }
+
+    public void addMonitorListener(ActionListener listener) {monitorBidButton.addActionListener(listener);}
 
     /**
      * called by BidClosingController, which is activate by buyoutBtn
