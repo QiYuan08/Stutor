@@ -48,7 +48,7 @@ public class BidResponseController implements ActionListener {
 
             if (response.statusCode() == 201) { // successfully posted message
                 JOptionPane.showMessageDialog(new JFrame(), "Success", "Response Sent Successfully", JOptionPane.INFORMATION_MESSAGE);
-                ViewManagerService.loadPage(ViewManagerService.FIND_BID_DETAILS);
+                ViewManagerService.loadPage(ViewManagerService.DASHBOARD_PAGE);
 
             } else { // failed API call
                 String msg = "Error: " + new JSONObject(response.body()).get("message");
